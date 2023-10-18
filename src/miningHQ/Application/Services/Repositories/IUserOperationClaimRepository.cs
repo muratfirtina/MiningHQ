@@ -3,4 +3,4 @@ using Core.Security.Entities;
 
 namespace Application.Services.Repositories;
 
-public interface IUserOperationClaimRepository : IAsyncRepository<UserOperationClaim, int>, IRepository<UserOperationClaim, int> { }
+public interface IUserOperationClaimRepository : IAsyncRepository<UserOperationClaim, Guid>, IRepository<UserOperationClaim, Guid> { }

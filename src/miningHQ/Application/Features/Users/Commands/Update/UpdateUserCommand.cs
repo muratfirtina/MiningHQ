@@ -12,7 +12,7 @@ namespace Application.Features.Users.Commands.Update;
 
 public class UpdateUserCommand : IRequest<UpdatedUserResponse>, ISecuredRequest
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string Email { get; set; }
@@ -26,7 +26,7 @@ public class UpdateUserCommand : IRequest<UpdatedUserResponse>, ISecuredRequest
         Password = string.Empty;
     }
 
-    public UpdateUserCommand(int id, string firstName, string lastName, string email, string password)
+    public UpdateUserCommand(Guid id, string firstName, string lastName, string email, string password)
     {
         Id = id;
         FirstName = firstName;

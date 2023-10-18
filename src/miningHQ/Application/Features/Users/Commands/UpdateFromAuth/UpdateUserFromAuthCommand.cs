@@ -10,7 +10,7 @@ namespace Application.Features.Users.Commands.UpdateFromAuth;
 
 public class UpdateUserFromAuthCommand : IRequest<UpdatedUserFromAuthResponse>
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string Password { get; set; }
@@ -23,7 +23,7 @@ public class UpdateUserFromAuthCommand : IRequest<UpdatedUserFromAuthResponse>
         Password = string.Empty;
     }
 
-    public UpdateUserFromAuthCommand(int id, string firstName, string lastName, string password)
+    public UpdateUserFromAuthCommand(Guid id, string firstName, string lastName, string password)
     {
         Id = id;
         FirstName = firstName;

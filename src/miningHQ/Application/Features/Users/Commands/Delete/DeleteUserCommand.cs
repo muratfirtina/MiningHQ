@@ -11,7 +11,7 @@ namespace Application.Features.Users.Commands.Delete;
 
 public class DeleteUserCommand : IRequest<DeletedUserResponse>, ISecuredRequest
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     public string[] Roles => new[] { Admin, Write, UsersOperationClaims.Delete };
 

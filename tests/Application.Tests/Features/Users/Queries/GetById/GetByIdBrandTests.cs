@@ -2,6 +2,7 @@
 using Application.Tests.Mocks.FakeData;
 using Application.Tests.Mocks.Repositories;
 using Core.CrossCuttingConcerns.Exceptions.Types;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -24,7 +25,7 @@ public class GetByIdUserTests : UserMockRepository
     [Fact]
     public async Task GetByIdUserShouldSuccessfully()
     {
-        _query.Id = 1;
+        _query.Id = new Guid("729c40f5-0859-48d7-a388-451520c1289c");
 
         GetByIdUserResponse result = await _handler.Handle(_query, CancellationToken.None);
 
@@ -34,7 +35,7 @@ public class GetByIdUserTests : UserMockRepository
     [Fact]
     public async Task UserIdNotExistsShouldReturnError()
     {
-        _query.Id = 6;
+        _query.Id = new Guid("1123");
 
         async Task Action() => await _handler.Handle(_query, CancellationToken.None);
 

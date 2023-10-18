@@ -53,7 +53,7 @@ public class AuthManager : IAuthService
         return addedRefreshToken;
     }
 
-    public async Task DeleteOldRefreshTokens(int userId)
+    public async Task DeleteOldRefreshTokens(Guid userId)
     {
         List<RefreshToken> refreshTokens = await _refreshTokenRepository
             .Query()

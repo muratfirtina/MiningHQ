@@ -10,7 +10,7 @@ namespace Application.Features.Auth.Commands.VerifyOtpAuthenticator;
 
 public class VerifyOtpAuthenticatorCommand : IRequest
 {
-    public int UserId { get; set; }
+    public Guid UserId { get; set; }
     public string ActivationCode { get; set; }
 
     public VerifyOtpAuthenticatorCommand()
@@ -18,7 +18,7 @@ public class VerifyOtpAuthenticatorCommand : IRequest
         ActivationCode = string.Empty;
     }
 
-    public VerifyOtpAuthenticatorCommand(int userId, string activationCode)
+    public VerifyOtpAuthenticatorCommand(Guid userId, string activationCode)
     {
         UserId = userId;
         ActivationCode = activationCode;

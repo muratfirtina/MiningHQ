@@ -1,4 +1,4 @@
-﻿using Application.Services.AuthenticatorService;
+using Application.Services.AuthenticatorService;
 using Application.Services.AuthService;
 using Application.Services.UsersService;
 using Core.Application.Pipelines.Authorization;
@@ -15,6 +15,20 @@ using Core.Mailing.MailKitImplementations;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using Application.Services.Brands;
+using Application.Services.DailyFuelConsumptionDatas;
+using Application.Services.MaintenanceTypes;
+using Application.Services.Maintenances;
+using Application.Services.Jobs;
+using Application.Services.LeaveUsages;
+using Application.Services.MachineTypes;
+using Application.Services.Quarries;
+using Application.Services.DailyWorkDatas;
+using Application.Services.Models;
+using Application.Services.EmployeeLeaves;
+using Application.Services.Machines;
+using Application.Services.Files;
+using Application.Services.Employees;
 
 namespace Application;
 
@@ -45,6 +59,20 @@ public static class ApplicationServiceRegistration
         services.AddScoped<IAuthenticatorService, AuthenticatorManager>();
         services.AddScoped<IUserService, UserManager>();
 
+        services.AddScoped<IBrandsService, BrandsManager>();
+        services.AddScoped<IDailyFuelConsumptionDatasService, DailyFuelConsumptionDatasManager>();
+        services.AddScoped<IMaintenanceTypesService, MaintenanceTypesManager>();
+        services.AddScoped<IMaintenancesService, MaintenancesManager>();
+        services.AddScoped<IJobsService, JobsManager>();
+        services.AddScoped<ILeaveUsagesService, LeaveUsagesManager>();
+        services.AddScoped<IMachineTypesService, MachineTypesManager>();
+        services.AddScoped<IQuarriesService, QuarriesManager>();
+        services.AddScoped<IDailyWorkDatasService, DailyWorkDatasManager>();
+        services.AddScoped<IModelsService, ModelsManager>();
+        services.AddScoped<IEmployeeLeavesService, EmployeeLeavesManager>();
+        services.AddScoped<IMachinesService, MachinesManager>();
+        services.AddScoped<IFilesService, FilesManager>();
+        services.AddScoped<IEmployeesService, EmployeesManager>();
         return services;
     }
 

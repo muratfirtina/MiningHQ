@@ -9,7 +9,7 @@ namespace Application.Features.Auth.Commands.EnableOtpAuthenticator;
 
 public class EnableOtpAuthenticatorCommand : IRequest<EnabledOtpAuthenticatorResponse>
 {
-    public int UserId { get; set; }
+    public Guid UserId { get; set; }
 
     public class EnableOtpAuthenticatorCommandHandler : IRequestHandler<EnableOtpAuthenticatorCommand, EnabledOtpAuthenticatorResponse>
     {

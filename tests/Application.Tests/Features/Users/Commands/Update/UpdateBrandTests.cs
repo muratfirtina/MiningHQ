@@ -4,6 +4,7 @@ using Application.Tests.Mocks.Repositories;
 using Core.CrossCuttingConcerns.Exceptions.Types;
 using Core.Test.Application.Constants;
 using FluentValidation.Results;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -53,7 +54,7 @@ public class UpdateUserTests : UserMockRepository
     [Fact]
     public async Task UpdateShouldSuccessfully()
     {
-        _command.Id = 1;
+        _command.Id = new Guid("729c40f5-0859-48d7-a388-451520c1289c");
         _command.FirstName = "First";
         _command.LastName = "Last";
         _command.Email = "test@email.com";
@@ -67,7 +68,7 @@ public class UpdateUserTests : UserMockRepository
     [Fact]
     public async Task UserIdNotExistsShouldReturnError()
     {
-        _command.Id = 6;
+        _command.Id = new Guid("1123");
         _command.FirstName = "First";
         _command.LastName = "Last";
         _command.Email = "test@email.com";

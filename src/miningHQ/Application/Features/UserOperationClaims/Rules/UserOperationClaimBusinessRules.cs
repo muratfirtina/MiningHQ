@@ -22,7 +22,7 @@ public class UserOperationClaimBusinessRules : BaseBusinessRules
         return Task.CompletedTask;
     }
 
-    public async Task UserOperationClaimIdShouldExistWhenSelected(int id)
+    public async Task UserOperationClaimIdShouldExistWhenSelected(Guid id)
     {
         bool doesExist = await _userOperationClaimRepository.AnyAsync(predicate: b => b.Id == id);
         if (!doesExist)
@@ -36,14 +36,14 @@ public class UserOperationClaimBusinessRules : BaseBusinessRules
         return Task.CompletedTask;
     }
 
-    public async Task UserShouldNotHasOperationClaimAlreadyWhenInsert(int userId, int operationClaimId)
+    public async Task UserShouldNotHasOperationClaimAlreadyWhenInsert(Guid userId, int operationClaimId)
     {
         bool doesExist = await _userOperationClaimRepository.AnyAsync(u => u.UserId == userId && u.OperationClaimId == operationClaimId);
         if (doesExist)
             throw new BusinessException(UserOperationClaimsMessages.UserOperationClaimAlreadyExists);
     }
 
-    public async Task UserShouldNotHasOperationClaimAlreadyWhenUpdated(int id, int userId, int operationClaimId)
+    public async Task UserShouldNotHasOperationClaimAlreadyWhenUpdated(Guid id, Guid userId, int operationClaimId)
     {
         bool doesExist = await _userOperationClaimRepository.AnyAsync(
             predicate: uoc => uoc.Id == id && uoc.UserId == userId && uoc.OperationClaimId == operationClaimId

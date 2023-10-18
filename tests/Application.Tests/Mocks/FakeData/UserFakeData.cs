@@ -5,20 +5,20 @@ using System.Collections.Generic;
 
 namespace Application.Tests.Mocks.FakeData;
 
-public class UserFakeData : BaseFakeData<User, int>
+public class UserFakeData : BaseFakeData<User, Guid>
 {
     public override List<User> CreateFakeData()
     {
-        int id = 0;
+        Guid id = Guid.Empty;
         List<User> data =
             new()
             {
                 new User
                 {
-                    Id = ++id,
-                    FirstName = "Engin",
-                    LastName = "Demiroğ",
-                    Email = "example@email.com",
+                    Id = Guid.NewGuid(),
+                    FirstName = "Denekadı1",
+                    LastName = "Denek1soyadı",
+                    Email = "denek1@email.com",
                     PasswordHash = new byte[] { },
                     PasswordSalt = new byte[] { },
                     Status = true,
@@ -27,10 +27,10 @@ public class UserFakeData : BaseFakeData<User, int>
                 },
                 new User
                 {
-                    Id = ++id,
-                    FirstName = "Ahmet",
-                    LastName = "Çetinkaya",
-                    Email = "example2@email.com",
+                    Id = Guid.NewGuid(),
+                    FirstName = "Denekadı2",
+                    LastName = "Denek2soyadı",
+                    Email = "denek2@email.com",
                     PasswordHash = new byte[] { },
                     PasswordSalt = new byte[] { },
                     Status = true,

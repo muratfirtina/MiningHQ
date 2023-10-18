@@ -29,7 +29,7 @@ public class UserOperationClaimConfiguration : IEntityTypeConfiguration<UserOper
     {
         List<UserOperationClaim> userOperationClaims = new();
 
-        UserOperationClaim adminUserOperationClaim = new(id: 1, userId: 1, operationClaimId: 1);
+        UserOperationClaim adminUserOperationClaim = new(id: new Guid("be950fd7-5f83-4858-90bb-3c047884b969"), userId: new Guid("729c40f5-0859-48d7-a388-451520c1289c"), operationClaimId: 1);
         userOperationClaims.Add(adminUserOperationClaim);
 
         return userOperationClaims;

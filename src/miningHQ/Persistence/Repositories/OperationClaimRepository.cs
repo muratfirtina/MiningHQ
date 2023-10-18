@@ -5,8 +5,8 @@ using Persistence.Contexts;
 
 namespace Persistence.Repositories;
 
-public class OperationClaimRepository : EfRepositoryBase<OperationClaim, int, BaseDbContext>, IOperationClaimRepository
+public class OperationClaimRepository : EfRepositoryBase<OperationClaim, int, MiningHQDbContext>, IOperationClaimRepository
 {
-    public OperationClaimRepository(BaseDbContext context)
+    public OperationClaimRepository(MiningHQDbContext context)
         : base(context) { }
 }

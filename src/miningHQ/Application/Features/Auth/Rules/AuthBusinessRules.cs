@@ -82,7 +82,7 @@ public class AuthBusinessRules : BaseBusinessRules
             throw new BusinessException(AuthMessages.UserMailAlreadyExists);
     }
 
-    public async Task UserPasswordShouldBeMatch(int id, string password)
+    public async Task UserPasswordShouldBeMatch(Guid id, string password)
     {
         User? user = await _userRepository.GetAsync(predicate: u => u.Id == id, enableTracking: false);
         await UserShouldBeExistsWhenSelected(user);

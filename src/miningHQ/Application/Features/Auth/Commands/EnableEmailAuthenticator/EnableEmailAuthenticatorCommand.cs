@@ -13,7 +13,7 @@ namespace Application.Features.Auth.Commands.EnableEmailAuthenticator;
 
 public class EnableEmailAuthenticatorCommand : IRequest
 {
-    public int UserId { get; set; }
+    public Guid UserId { get; set; }
     public string VerifyEmailUrlPrefix { get; set; }
 
     public EnableEmailAuthenticatorCommand()
@@ -21,7 +21,7 @@ public class EnableEmailAuthenticatorCommand : IRequest
         VerifyEmailUrlPrefix = string.Empty;
     }
 
-    public EnableEmailAuthenticatorCommand(int userId, string verifyEmailUrlPrefix)
+    public EnableEmailAuthenticatorCommand(Guid userId, string verifyEmailUrlPrefix)
     {
         UserId = userId;
         VerifyEmailUrlPrefix = verifyEmailUrlPrefix;
