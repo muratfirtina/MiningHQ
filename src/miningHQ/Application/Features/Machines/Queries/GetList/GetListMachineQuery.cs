@@ -12,7 +12,7 @@ using static Application.Features.Machines.Constants.MachinesOperationClaims;
 
 namespace Application.Features.Machines.Queries.GetList;
 
-public class GetListMachineQuery : IRequest<GetListResponse<GetListMachineListItemDto>>, ISecuredRequest, ICachableRequest
+public class GetListMachineQuery : IRequest<GetListResponse<GetListMachineListItemDto>>//, ISecuredRequest, ICachableRequest
 {
     public PageRequest PageRequest { get; set; }
 

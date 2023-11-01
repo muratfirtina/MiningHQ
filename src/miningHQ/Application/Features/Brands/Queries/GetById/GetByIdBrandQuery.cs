@@ -9,7 +9,7 @@ using static Application.Features.Brands.Constants.BrandsOperationClaims;
 
 namespace Application.Features.Brands.Queries.GetById;
 
-public class GetByIdBrandQuery : IRequest<GetByIdBrandResponse>, ISecuredRequest
+public class GetByIdBrandQuery : IRequest<GetByIdBrandResponse>//, ISecuredRequest
 {
     public Guid Id { get; set; }
 

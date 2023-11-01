@@ -5,11 +5,12 @@ using AutoMapper;
 using Domain.Entities;
 using Core.Application.Pipelines.Authorization;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using static Application.Features.Employees.Constants.EmployeesOperationClaims;
 
 namespace Application.Features.Employees.Queries.GetById;
 
-public class GetByIdEmployeeQuery : IRequest<GetByIdEmployeeResponse>, ISecuredRequest
+public class GetByIdEmployeeQuery : IRequest<GetByIdEmployeeResponse>//, ISecuredRequest
 {
     public Guid Id { get; set; }
 
@@ -30,7 +31,10 @@ public class GetByIdEmployeeQuery : IRequest<GetByIdEmployeeResponse>, ISecuredR
 
         public async Task<GetByIdEmployeeResponse> Handle(GetByIdEmployeeQuery request, CancellationToken cancellationToken)
         {
-            Employee? employee = await _employeeRepository.GetAsync(predicate: e => e.Id == request.Id, cancellationToken: cancellationToken);
+            Employee? employee = await _employeeRepository.GetAsync
+                (predicate: e => e.Id == request.Id,
+                    include: e=>e.Include(e=>e.Job)
+                        .Include(e=>e.Quarry) ,cancellationToken: cancellationToken);
             await _employeeBusinessRules.EmployeeShouldExistWhenSelected(employee);
 
             GetByIdEmployeeResponse response = _mapper.Map<GetByIdEmployeeResponse>(employee);

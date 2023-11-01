@@ -12,7 +12,7 @@ using static Application.Features.Quarries.Constants.QuarriesOperationClaims;
 
 namespace Application.Features.Quarries.Commands.Update;
 
-public class UpdateQuarryCommand : IRequest<UpdatedQuarryResponse>, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
+public class UpdateQuarryCommand : IRequest<UpdatedQuarryResponse>//, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
 {
     public Guid Id { get; set; }
     public string Name { get; set; }

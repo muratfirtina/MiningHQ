@@ -12,7 +12,7 @@ using static Application.Features.Brands.Constants.BrandsOperationClaims;
 
 namespace Application.Features.Brands.Commands.Create;
 
-public class CreateBrandCommand : IRequest<CreatedBrandResponse>, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
+public class CreateBrandCommand : IRequest<CreatedBrandResponse>//,ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
 {
     public string Name { get; set; }
 

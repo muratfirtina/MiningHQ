@@ -13,7 +13,7 @@ using static Application.Features.Quarries.Constants.QuarriesOperationClaims;
 
 namespace Application.Features.Quarries.Commands.Delete;
 
-public class DeleteQuarryCommand : IRequest<DeletedQuarryResponse>, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
+public class DeleteQuarryCommand : IRequest<DeletedQuarryResponse>//, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
 {
     public Guid Id { get; set; }
 

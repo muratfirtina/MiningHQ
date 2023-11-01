@@ -1,6 +1,7 @@
 using Application.Features.Employees.Commands.Create;
 using Application.Features.Employees.Commands.Delete;
 using Application.Features.Employees.Commands.Update;
+using Application.Features.Employees.Dtos;
 using Application.Features.Employees.Queries.GetById;
 using Application.Features.Employees.Queries.GetList;
 using AutoMapper;
@@ -22,6 +23,7 @@ public class MappingProfiles : Profile
         CreateMap<Employee, DeletedEmployeeResponse>().ReverseMap();
         CreateMap<Employee, GetByIdEmployeeResponse>().ReverseMap();
         CreateMap<Employee, GetListEmployeeListItemDto>().ReverseMap();
+        
         CreateMap<IPaginate<Employee>, GetListResponse<GetListEmployeeListItemDto>>().ReverseMap();
     }
 }

@@ -9,7 +9,7 @@ using static Application.Features.Jobs.Constants.JobsOperationClaims;
 
 namespace Application.Features.Jobs.Queries.GetById;
 
-public class GetByIdJobQuery : IRequest<GetByIdJobResponse>, ISecuredRequest
+public class GetByIdJobQuery : IRequest<GetByIdJobResponse>//, ISecuredRequest
 {
     public Guid Id { get; set; }
 

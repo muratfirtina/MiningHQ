@@ -9,7 +9,7 @@ using static Application.Features.Models.Constants.ModelsOperationClaims;
 
 namespace Application.Features.Models.Queries.GetById;
 
-public class GetByIdModelQuery : IRequest<GetByIdModelResponse>, ISecuredRequest
+public class GetByIdModelQuery : IRequest<GetByIdModelResponse>//, ISecuredRequest
 {
     public Guid Id { get; set; }
 

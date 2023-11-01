@@ -12,7 +12,7 @@ using static Application.Features.MachineTypes.Constants.MachineTypesOperationCl
 
 namespace Application.Features.MachineTypes.Commands.Create;
 
-public class CreateMachineTypeCommand : IRequest<CreatedMachineTypeResponse>, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
+public class CreateMachineTypeCommand : IRequest<CreatedMachineTypeResponse>//, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
 {
     public string Name { get; set; }
 

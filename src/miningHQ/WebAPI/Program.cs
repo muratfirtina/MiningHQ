@@ -52,7 +52,7 @@ builder.Services.AddCors(
     opt =>
         opt.AddDefaultPolicy(p =>
         {
-            p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+            p.WithOrigins("http://localhost:4200","https://localhost:4200").AllowAnyMethod().AllowAnyHeader();
         })
 );
 builder.Services.AddSwaggerGen(opt =>

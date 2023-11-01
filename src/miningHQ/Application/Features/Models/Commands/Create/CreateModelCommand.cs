@@ -12,7 +12,7 @@ using static Application.Features.Models.Constants.ModelsOperationClaims;
 
 namespace Application.Features.Models.Commands.Create;
 
-public class CreateModelCommand : IRequest<CreatedModelResponse>, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
+public class CreateModelCommand : IRequest<CreatedModelResponse>//, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
 {
     public Guid BrandId { get; set; }
     public string Name { get; set; }

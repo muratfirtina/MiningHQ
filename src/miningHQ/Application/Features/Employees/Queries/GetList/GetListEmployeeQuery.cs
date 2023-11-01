@@ -8,13 +8,19 @@ using Core.Application.Requests;
 using Core.Application.Responses;
 using Core.Persistence.Paging;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using static Application.Features.Employees.Constants.EmployeesOperationClaims;
 
 namespace Application.Features.Employees.Queries.GetList;
 
-public class GetListEmployeeQuery : IRequest<GetListResponse<GetListEmployeeListItemDto>>, ISecuredRequest, ICachableRequest
+public class GetListEmployeeQuery : IRequest<GetListResponse<GetListEmployeeListItemDto>>//, ISecuredRequest, ICachableRequest
 {
     public PageRequest PageRequest { get; set; }
+    
+    public GetListEmployeeQuery(int pageIndex = 0, int pageSize = 10)
+    {
+        PageRequest = new PageRequest { PageIndex = pageIndex, PageSize = pageSize };
+    }
 
     public string[] Roles => new[] { Admin, Read };
 
@@ -36,14 +42,38 @@ public class GetListEmployeeQuery : IRequest<GetListResponse<GetListEmployeeList
 
         public async Task<GetListResponse<GetListEmployeeListItemDto>> Handle(GetListEmployeeQuery request, CancellationToken cancellationToken)
         {
-            IPaginate<Employee> employees = await _employeeRepository.GetListAsync(
-                index: request.PageRequest.PageIndex,
-                size: request.PageRequest.PageSize, 
-                cancellationToken: cancellationToken
-            );
+            if (request.PageRequest.PageIndex == -1 && request.PageRequest.PageSize == -1)
+            {
+                
+                var allEmployees = await _employeeRepository.GetAllAsync(
+                    include:e => e.Include(e => e.Job).Include(e => e.Quarry)
+                    );
+                var employeeDtos = _mapper.Map<List<GetListEmployeeListItemDto>>(allEmployees);
 
-            GetListResponse<GetListEmployeeListItemDto> response = _mapper.Map<GetListResponse<GetListEmployeeListItemDto>>(employees);
-            return response;
+                return new GetListResponse<GetListEmployeeListItemDto>
+                {
+                    Items = employeeDtos,
+                    Index = -1,
+                    Size = -1,
+                    Count = allEmployees.Count,
+                    Pages = -1,
+                    HasPrevious = false,
+                    HasNext = false
+                };
+            }
+            else
+            {
+                
+                IPaginate<Employee> employees = await _employeeRepository.GetListAsync(
+                    index: request.PageRequest.PageIndex,
+                    size: request.PageRequest.PageSize,
+                    include: e => e.Include(e => e.Job).Include(e => e.Quarry),
+                    cancellationToken: cancellationToken
+                );
+
+                GetListResponse<GetListEmployeeListItemDto> response = _mapper.Map<GetListResponse<GetListEmployeeListItemDto>>(employees);
+                return response;
+            }
         }
     }
 }

@@ -12,7 +12,7 @@ using static Application.Features.Machines.Constants.MachinesOperationClaims;
 
 namespace Application.Features.Machines.Commands.Update;
 
-public class UpdateMachineCommand : IRequest<UpdatedMachineResponse>, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
+public class UpdateMachineCommand : IRequest<UpdatedMachineResponse>//, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
 {
     public Guid Id { get; set; }
     public Guid ModelId { get; set; }

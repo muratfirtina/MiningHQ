@@ -12,7 +12,7 @@ using static Application.Features.Quarries.Constants.QuarriesOperationClaims;
 
 namespace Application.Features.Quarries.Queries.GetList;
 
-public class GetListQuarryQuery : IRequest<GetListResponse<GetListQuarryListItemDto>>, ISecuredRequest, ICachableRequest
+public class GetListQuarryQuery : IRequest<GetListResponse<GetListQuarryListItemDto>>//, ISecuredRequest, ICachableRequest
 {
     public PageRequest PageRequest { get; set; }
 

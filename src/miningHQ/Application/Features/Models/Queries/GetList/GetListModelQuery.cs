@@ -12,7 +12,7 @@ using static Application.Features.Models.Constants.ModelsOperationClaims;
 
 namespace Application.Features.Models.Queries.GetList;
 
-public class GetListModelQuery : IRequest<GetListResponse<GetListModelListItemDto>>, ISecuredRequest, ICachableRequest
+public class GetListModelQuery : IRequest<GetListResponse<GetListModelListItemDto>>//, ISecuredRequest, ICachableRequest
 {
     public PageRequest PageRequest { get; set; }
 

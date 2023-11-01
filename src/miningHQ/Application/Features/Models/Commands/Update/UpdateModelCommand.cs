@@ -12,7 +12,7 @@ using static Application.Features.Models.Constants.ModelsOperationClaims;
 
 namespace Application.Features.Models.Commands.Update;
 
-public class UpdateModelCommand : IRequest<UpdatedModelResponse>, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
+public class UpdateModelCommand : IRequest<UpdatedModelResponse>//, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
 {
     public Guid Id { get; set; }
     public Guid BrandId { get; set; }

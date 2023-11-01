@@ -9,7 +9,7 @@ using static Application.Features.MachineTypes.Constants.MachineTypesOperationCl
 
 namespace Application.Features.MachineTypes.Queries.GetById;
 
-public class GetByIdMachineTypeQuery : IRequest<GetByIdMachineTypeResponse>, ISecuredRequest
+public class GetByIdMachineTypeQuery : IRequest<GetByIdMachineTypeResponse>//, ISecuredRequest
 {
     public Guid Id { get; set; }
 

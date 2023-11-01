@@ -13,7 +13,7 @@ using static Application.Features.MachineTypes.Constants.MachineTypesOperationCl
 
 namespace Application.Features.MachineTypes.Commands.Delete;
 
-public class DeleteMachineTypeCommand : IRequest<DeletedMachineTypeResponse>, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
+public class DeleteMachineTypeCommand : IRequest<DeletedMachineTypeResponse>//, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
 {
     public Guid Id { get; set; }
 

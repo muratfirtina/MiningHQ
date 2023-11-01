@@ -8,11 +8,12 @@ using Core.Application.Requests;
 using Core.Application.Responses;
 using Core.Persistence.Paging;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using static Application.Features.Jobs.Constants.JobsOperationClaims;
 
 namespace Application.Features.Jobs.Queries.GetList;
 
-public class GetListJobQuery : IRequest<GetListResponse<GetListJobListItemDto>>, ISecuredRequest, ICachableRequest
+public class GetListJobQuery : IRequest<GetListResponse<GetListJobListItemDto>>//, ISecuredRequest, ICachableRequest
 {
     public PageRequest PageRequest { get; set; }
 
@@ -36,14 +37,40 @@ public class GetListJobQuery : IRequest<GetListResponse<GetListJobListItemDto>>,
 
         public async Task<GetListResponse<GetListJobListItemDto>> Handle(GetListJobQuery request, CancellationToken cancellationToken)
         {
-            IPaginate<Job> jobs = await _jobRepository.GetListAsync(
-                index: request.PageRequest.PageIndex,
-                size: request.PageRequest.PageSize, 
-                cancellationToken: cancellationToken
-            );
-
-            GetListResponse<GetListJobListItemDto> response = _mapper.Map<GetListResponse<GetListJobListItemDto>>(jobs);
-            return response;
+            if (request.PageRequest.PageIndex == -1 && request.PageRequest.PageSize == -1)
+            {
+                // Sayfalama yapmadan tüm listeyi çek
+                var allJobs = await _jobRepository.GetAllAsync(
+                    include:e => e.Include(e => e.Employees)
+                    );
+                var jobDtos = _mapper.Map<List<GetListJobListItemDto>>(allJobs);
+                
+                return new GetListResponse<GetListJobListItemDto>
+                {
+                    Items = jobDtos,
+                    Index = -1,
+                    Size = -1,
+                    Count = allJobs.Count,
+                    Pages = -1,
+                    HasPrevious = false,
+                    HasNext = false
+                };
+            }
+            else
+            {
+                // Sayfalama işlemi
+                IPaginate<Job> jobs = await _jobRepository.GetListAsync(
+                    index: request.PageRequest.PageIndex,
+                    size: request.PageRequest.PageSize,
+                    
+                    cancellationToken: cancellationToken
+                );
+                
+                GetListResponse<GetListJobListItemDto> response = _mapper.Map<GetListResponse<GetListJobListItemDto>>(jobs);
+                return response;
+            }
+            
+            
         }
     }
 }

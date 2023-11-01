@@ -12,7 +12,7 @@ using static Application.Features.MachineTypes.Constants.MachineTypesOperationCl
 
 namespace Application.Features.MachineTypes.Commands.Update;
 
-public class UpdateMachineTypeCommand : IRequest<UpdatedMachineTypeResponse>, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
+public class UpdateMachineTypeCommand : IRequest<UpdatedMachineTypeResponse>//, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
 {
     public Guid Id { get; set; }
     public string Name { get; set; }

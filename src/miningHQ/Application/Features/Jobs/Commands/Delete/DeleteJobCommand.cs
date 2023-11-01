@@ -13,7 +13,7 @@ using static Application.Features.Jobs.Constants.JobsOperationClaims;
 
 namespace Application.Features.Jobs.Commands.Delete;
 
-public class DeleteJobCommand : IRequest<DeletedJobResponse>, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
+public class DeleteJobCommand : IRequest<DeletedJobResponse>//, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
 {
     public Guid Id { get; set; }
 

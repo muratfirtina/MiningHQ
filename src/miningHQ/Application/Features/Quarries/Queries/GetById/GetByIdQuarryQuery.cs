@@ -9,7 +9,7 @@ using static Application.Features.Quarries.Constants.QuarriesOperationClaims;
 
 namespace Application.Features.Quarries.Queries.GetById;
 
-public class GetByIdQuarryQuery : IRequest<GetByIdQuarryResponse>, ISecuredRequest
+public class GetByIdQuarryQuery : IRequest<GetByIdQuarryResponse>//, ISecuredRequest
 {
     public Guid Id { get; set; }
 

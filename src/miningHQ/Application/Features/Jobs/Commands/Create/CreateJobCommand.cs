@@ -12,7 +12,7 @@ using static Application.Features.Jobs.Constants.JobsOperationClaims;
 
 namespace Application.Features.Jobs.Commands.Create;
 
-public class CreateJobCommand : IRequest<CreatedJobResponse>, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
+public class CreateJobCommand : IRequest<CreatedJobResponse>//, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
 {
     public string Name { get; set; }
     public string? Description { get; set; }
