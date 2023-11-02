@@ -20,7 +20,7 @@ public class GetListModelQuery : IRequest<GetListResponse<GetListModelListItemDt
 
     public bool BypassCache { get; }
     public string CacheKey => $"GetListModels({PageRequest.PageIndex},{PageRequest.PageSize})";
-    public string CacheGroupKey => "GetModels";
+    public string[] CacheGroupKey =>new[]{ "GetModels"};
     public TimeSpan? SlidingExpiration { get; }
 
     public class GetListModelQueryHandler : IRequestHandler<GetListModelQuery, GetListResponse<GetListModelListItemDto>>

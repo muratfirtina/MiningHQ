@@ -12,7 +12,7 @@ using static Application.Features.EmployeeLeaves.Constants.EmployeeLeavesOperati
 
 namespace Application.Features.EmployeeLeaves.Commands.Create;
 
-public class CreateEmployeeLeaveCommand : IRequest<CreatedEmployeeLeaveResponse>, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
+public class CreateEmployeeLeaveCommand : IRequest<CreatedEmployeeLeaveResponse>//, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
 {
     public Guid Id { get; set; }
     public Guid EmployeeId { get; set; }
@@ -23,7 +23,7 @@ public class CreateEmployeeLeaveCommand : IRequest<CreatedEmployeeLeaveResponse>
 
     public bool BypassCache { get; }
     public string? CacheKey { get; }
-    public string CacheGroupKey => "GetEmployeeLeaves";
+    public string[] CacheGroupKey => new[] {"GetEmployeeLeaves"};
 
     public class CreateEmployeeLeaveCommandHandler : IRequestHandler<CreateEmployeeLeaveCommand, CreatedEmployeeLeaveResponse>
     {

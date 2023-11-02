@@ -1,5 +1,4 @@
 using Application.Features.Brands.Constants;
-using Application.Features.Brands.Constants;
 using Application.Features.Brands.Rules;
 using Application.Services.Repositories;
 using AutoMapper;
@@ -21,7 +20,7 @@ public class DeleteBrandCommand : IRequest<DeletedBrandResponse>//, ISecuredRequ
 
     public bool BypassCache { get; }
     public string? CacheKey { get; }
-    public string CacheGroupKey => "GetBrands";
+    public string[] CacheGroupKey =>new[] { "GetBrands" };
 
     public class DeleteBrandCommandHandler : IRequestHandler<DeleteBrandCommand, DeletedBrandResponse>
     {

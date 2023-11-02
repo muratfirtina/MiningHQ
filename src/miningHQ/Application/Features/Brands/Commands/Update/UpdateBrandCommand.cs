@@ -21,7 +21,7 @@ public class UpdateBrandCommand : IRequest<UpdatedBrandResponse>//, ISecuredRequ
 
     public bool BypassCache { get; }
     public string? CacheKey { get; }
-    public string CacheGroupKey => "GetBrands";
+    public string[] CacheGroupKey => new[] {"GetBrands"};
 
     public class UpdateBrandCommandHandler : IRequestHandler<UpdateBrandCommand, UpdatedBrandResponse>
     {

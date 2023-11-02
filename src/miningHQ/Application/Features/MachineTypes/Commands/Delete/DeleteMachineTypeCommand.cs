@@ -21,7 +21,7 @@ public class DeleteMachineTypeCommand : IRequest<DeletedMachineTypeResponse>//, 
 
     public bool BypassCache { get; }
     public string? CacheKey { get; }
-    public string CacheGroupKey => "GetMachineTypes";
+    public string[] CacheGroupKey =>new[] {"GetMachineTypes"};
 
     public class DeleteMachineTypeCommandHandler : IRequestHandler<DeleteMachineTypeCommand, DeletedMachineTypeResponse>
     {

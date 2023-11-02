@@ -13,7 +13,7 @@ using static Application.Features.EmployeeLeaves.Constants.EmployeeLeavesOperati
 
 namespace Application.Features.EmployeeLeaves.Commands.Delete;
 
-public class DeleteEmployeeLeaveCommand : IRequest<DeletedEmployeeLeaveResponse>, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
+public class DeleteEmployeeLeaveCommand : IRequest<DeletedEmployeeLeaveResponse>//, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
 {
     public Guid Id { get; set; }
 
@@ -21,7 +21,7 @@ public class DeleteEmployeeLeaveCommand : IRequest<DeletedEmployeeLeaveResponse>
 
     public bool BypassCache { get; }
     public string? CacheKey { get; }
-    public string CacheGroupKey => "GetEmployeeLeaves";
+    public string[] CacheGroupKey => new [] {"GetEmployeeLeaves"};
 
     public class DeleteEmployeeLeaveCommandHandler : IRequestHandler<DeleteEmployeeLeaveCommand, DeletedEmployeeLeaveResponse>
     {

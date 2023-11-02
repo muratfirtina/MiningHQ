@@ -13,7 +13,7 @@ using File = Domain.Entities.File;
 
 namespace Application.Features.Files.Queries.GetList;
 
-public class GetListFileQuery : IRequest<GetListResponse<GetListFileListItemDto>>, ISecuredRequest, ICachableRequest
+public class GetListFileQuery : IRequest<GetListResponse<GetListFileListItemDto>>//, ISecuredRequest, ICachableRequest
 {
     public PageRequest PageRequest { get; set; }
 
@@ -21,7 +21,7 @@ public class GetListFileQuery : IRequest<GetListResponse<GetListFileListItemDto>
 
     public bool BypassCache { get; }
     public string CacheKey => $"GetListFiles({PageRequest.PageIndex},{PageRequest.PageSize})";
-    public string CacheGroupKey => "GetFiles";
+    public string[] CacheGroupKey => new[] {"GetFiles"};
     public TimeSpan? SlidingExpiration { get; }
 
     public class GetListFileQueryHandler : IRequestHandler<GetListFileQuery, GetListResponse<GetListFileListItemDto>>

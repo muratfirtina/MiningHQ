@@ -12,7 +12,7 @@ using static Application.Features.MaintenanceTypes.Constants.MaintenanceTypesOpe
 
 namespace Application.Features.MaintenanceTypes.Commands.Create;
 
-public class CreateMaintenanceTypeCommand : IRequest<CreatedMaintenanceTypeResponse>, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
+public class CreateMaintenanceTypeCommand : IRequest<CreatedMaintenanceTypeResponse>//, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
 {
     public string Name { get; set; }
 
@@ -20,7 +20,7 @@ public class CreateMaintenanceTypeCommand : IRequest<CreatedMaintenanceTypeRespo
 
     public bool BypassCache { get; }
     public string? CacheKey { get; }
-    public string CacheGroupKey => "GetMaintenanceTypes";
+    public string[] CacheGroupKey => new[] {"GetMaintenanceTypes"};
 
     public class CreateMaintenanceTypeCommandHandler : IRequestHandler<CreateMaintenanceTypeCommand, CreatedMaintenanceTypeResponse>
     {

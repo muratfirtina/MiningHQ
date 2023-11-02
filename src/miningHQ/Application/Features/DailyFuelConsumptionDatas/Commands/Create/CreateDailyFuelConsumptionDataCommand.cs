@@ -12,7 +12,7 @@ using static Application.Features.DailyFuelConsumptionDatas.Constants.DailyFuelC
 
 namespace Application.Features.DailyFuelConsumptionDatas.Commands.Create;
 
-public class CreateDailyFuelConsumptionDataCommand : IRequest<CreatedDailyFuelConsumptionDataResponse>, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
+public class CreateDailyFuelConsumptionDataCommand : IRequest<CreatedDailyFuelConsumptionDataResponse>//, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
 {
     public DateTime Date { get; set; }
     public double FuelConsumption { get; set; }
@@ -23,7 +23,7 @@ public class CreateDailyFuelConsumptionDataCommand : IRequest<CreatedDailyFuelCo
 
     public bool BypassCache { get; }
     public string? CacheKey { get; }
-    public string CacheGroupKey => "GetDailyFuelConsumptionDatas";
+    public string[] CacheGroupKey => new[] {"GetDailyFuelConsumptionDatas"};
 
     public class CreateDailyFuelConsumptionDataCommandHandler : IRequestHandler<CreateDailyFuelConsumptionDataCommand, CreatedDailyFuelConsumptionDataResponse>
     {

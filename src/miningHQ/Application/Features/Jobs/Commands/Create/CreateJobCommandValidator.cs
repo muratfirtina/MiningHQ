@@ -7,6 +7,5 @@ public class CreateJobCommandValidator : AbstractValidator<CreateJobCommand>
     public CreateJobCommandValidator()
     {
         RuleFor(c => c.Name).NotEmpty();
-        RuleFor(c => c.Description).NotEmpty();
     }
 }

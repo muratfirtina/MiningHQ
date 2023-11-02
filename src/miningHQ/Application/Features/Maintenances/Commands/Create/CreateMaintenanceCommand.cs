@@ -12,7 +12,7 @@ using static Application.Features.Maintenances.Constants.MaintenancesOperationCl
 
 namespace Application.Features.Maintenances.Commands.Create;
 
-public class CreateMaintenanceCommand : IRequest<CreatedMaintenanceResponse>, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
+public class CreateMaintenanceCommand : IRequest<CreatedMaintenanceResponse>//, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
 {
     public Guid MachineId { get; set; }
     public Machine Machine { get; set; }
@@ -27,7 +27,7 @@ public class CreateMaintenanceCommand : IRequest<CreatedMaintenanceResponse>, IS
 
     public bool BypassCache { get; }
     public string? CacheKey { get; }
-    public string CacheGroupKey => "GetMaintenances";
+    public string[] CacheGroupKey => new[] {"GetMaintenances"};
 
     public class CreateMaintenanceCommandHandler : IRequestHandler<CreateMaintenanceCommand, CreatedMaintenanceResponse>
     {

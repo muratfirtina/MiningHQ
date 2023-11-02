@@ -21,7 +21,7 @@ public class UpdateMachineTypeCommand : IRequest<UpdatedMachineTypeResponse>//, 
 
     public bool BypassCache { get; }
     public string? CacheKey { get; }
-    public string CacheGroupKey => "GetMachineTypes";
+    public string[] CacheGroupKey =>new[]{ "GetMachineTypes"};
 
     public class UpdateMachineTypeCommandHandler : IRequestHandler<UpdateMachineTypeCommand, UpdatedMachineTypeResponse>
     {

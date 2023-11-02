@@ -12,7 +12,7 @@ using static Application.Features.MaintenanceTypes.Constants.MaintenanceTypesOpe
 
 namespace Application.Features.MaintenanceTypes.Queries.GetList;
 
-public class GetListMaintenanceTypeQuery : IRequest<GetListResponse<GetListMaintenanceTypeListItemDto>>, ISecuredRequest, ICachableRequest
+public class GetListMaintenanceTypeQuery : IRequest<GetListResponse<GetListMaintenanceTypeListItemDto>>//, ISecuredRequest, ICachableRequest
 {
     public PageRequest PageRequest { get; set; }
 
@@ -20,7 +20,7 @@ public class GetListMaintenanceTypeQuery : IRequest<GetListResponse<GetListMaint
 
     public bool BypassCache { get; }
     public string CacheKey => $"GetListMaintenanceTypes({PageRequest.PageIndex},{PageRequest.PageSize})";
-    public string CacheGroupKey => "GetMaintenanceTypes";
+    public string[] CacheGroupKey =>new[] {"GetMaintenanceTypes"};
     public TimeSpan? SlidingExpiration { get; }
 
     public class GetListMaintenanceTypeQueryHandler : IRequestHandler<GetListMaintenanceTypeQuery, GetListResponse<GetListMaintenanceTypeListItemDto>>

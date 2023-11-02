@@ -1,5 +1,4 @@
 using Application.Features.DailyWorkDatas.Constants;
-using Application.Features.DailyWorkDatas.Constants;
 using Application.Features.DailyWorkDatas.Rules;
 using Application.Services.Repositories;
 using AutoMapper;
@@ -13,7 +12,7 @@ using static Application.Features.DailyWorkDatas.Constants.DailyWorkDatasOperati
 
 namespace Application.Features.DailyWorkDatas.Commands.Delete;
 
-public class DeleteDailyWorkDataCommand : IRequest<DeletedDailyWorkDataResponse>, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
+public class DeleteDailyWorkDataCommand : IRequest<DeletedDailyWorkDataResponse>//, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
 {
     public Guid Id { get; set; }
 
@@ -21,7 +20,7 @@ public class DeleteDailyWorkDataCommand : IRequest<DeletedDailyWorkDataResponse>
 
     public bool BypassCache { get; }
     public string? CacheKey { get; }
-    public string CacheGroupKey => "GetDailyWorkDatas";
+    public string[] CacheGroupKey => new[] {"GetDailyWorkDatas"};
 
     public class DeleteDailyWorkDataCommandHandler : IRequestHandler<DeleteDailyWorkDataCommand, DeletedDailyWorkDataResponse>
     {

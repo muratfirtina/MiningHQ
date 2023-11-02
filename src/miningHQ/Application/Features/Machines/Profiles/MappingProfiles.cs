@@ -21,7 +21,9 @@ public class MappingProfiles : Profile
         CreateMap<Machine, DeleteMachineCommand>().ReverseMap();
         CreateMap<Machine, DeletedMachineResponse>().ReverseMap();
         CreateMap<Machine, GetByIdMachineResponse>().ReverseMap();
-        CreateMap<Machine, GetListMachineListItemDto>().ReverseMap();
+        CreateMap<Machine, GetListMachineListItemDto>()
+        .ForMember(d => d.BrandName, opt => opt.MapFrom(s => s.Model.Brand.Name))
+        .ReverseMap();
         CreateMap<IPaginate<Machine>, GetListResponse<GetListMachineListItemDto>>().ReverseMap();
     }
 }

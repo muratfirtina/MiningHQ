@@ -13,7 +13,7 @@ using File = Domain.Entities.File;
 
 namespace Application.Features.Files.Commands.Update;
 
-public class UpdateFileCommand : IRequest<UpdatedFileResponse>, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
+public class UpdateFileCommand : IRequest<UpdatedFileResponse>//, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
 {
     public Guid Id { get; set; }
     public string Name { get; set; }
@@ -24,7 +24,7 @@ public class UpdateFileCommand : IRequest<UpdatedFileResponse>, ISecuredRequest,
 
     public bool BypassCache { get; }
     public string? CacheKey { get; }
-    public string CacheGroupKey => "GetFiles";
+    public string[] CacheGroupKey => new[] {"GetFiles"};
 
     public class UpdateFileCommandHandler : IRequestHandler<UpdateFileCommand, UpdatedFileResponse>
     {

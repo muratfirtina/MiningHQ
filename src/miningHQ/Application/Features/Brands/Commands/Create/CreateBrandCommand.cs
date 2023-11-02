@@ -20,7 +20,7 @@ public class CreateBrandCommand : IRequest<CreatedBrandResponse>//,ISecuredReque
 
     public bool BypassCache { get; }
     public string? CacheKey { get; }
-    public string CacheGroupKey => "GetBrands";
+    public string[] CacheGroupKey => new[] {"GetBrands"};
 
     public class CreateBrandCommandHandler : IRequestHandler<CreateBrandCommand, CreatedBrandResponse>
     {

@@ -13,7 +13,7 @@ using static Application.Features.LeaveUsages.Constants.LeaveUsagesOperationClai
 
 namespace Application.Features.LeaveUsages.Commands.Delete;
 
-public class DeleteLeaveUsageCommand : IRequest<DeletedLeaveUsageResponse>, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
+public class DeleteLeaveUsageCommand : IRequest<DeletedLeaveUsageResponse>//, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
 {
     public Guid Id { get; set; }
 
@@ -21,7 +21,7 @@ public class DeleteLeaveUsageCommand : IRequest<DeletedLeaveUsageResponse>, ISec
 
     public bool BypassCache { get; }
     public string? CacheKey { get; }
-    public string CacheGroupKey => "GetLeaveUsages";
+    public string[] CacheGroupKey => new[] {"GetLeaveUsages"};
 
     public class DeleteLeaveUsageCommandHandler : IRequestHandler<DeleteLeaveUsageCommand, DeletedLeaveUsageResponse>
     {

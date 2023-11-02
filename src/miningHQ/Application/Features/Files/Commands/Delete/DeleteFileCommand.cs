@@ -14,7 +14,7 @@ using File = Domain.Entities.File;
 
 namespace Application.Features.Files.Commands.Delete;
 
-public class DeleteFileCommand : IRequest<DeletedFileResponse>, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
+public class DeleteFileCommand : IRequest<DeletedFileResponse>//, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
 {
     public Guid Id { get; set; }
 
@@ -22,7 +22,7 @@ public class DeleteFileCommand : IRequest<DeletedFileResponse>, ISecuredRequest,
 
     public bool BypassCache { get; }
     public string? CacheKey { get; }
-    public string CacheGroupKey => "GetFiles";
+    public string[] CacheGroupKey => new[] {"GetFiles"};
 
     public class DeleteFileCommandHandler : IRequestHandler<DeleteFileCommand, DeletedFileResponse>
     {

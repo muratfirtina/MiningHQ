@@ -1,5 +1,4 @@
 using Application.Features.DailyFuelConsumptionDatas.Constants;
-using Application.Features.DailyFuelConsumptionDatas.Constants;
 using Application.Features.DailyFuelConsumptionDatas.Rules;
 using Application.Services.Repositories;
 using AutoMapper;
@@ -13,7 +12,7 @@ using static Application.Features.DailyFuelConsumptionDatas.Constants.DailyFuelC
 
 namespace Application.Features.DailyFuelConsumptionDatas.Commands.Delete;
 
-public class DeleteDailyFuelConsumptionDataCommand : IRequest<DeletedDailyFuelConsumptionDataResponse>, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
+public class DeleteDailyFuelConsumptionDataCommand : IRequest<DeletedDailyFuelConsumptionDataResponse>//, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
 {
     public Guid Id { get; set; }
 
@@ -21,7 +20,7 @@ public class DeleteDailyFuelConsumptionDataCommand : IRequest<DeletedDailyFuelCo
 
     public bool BypassCache { get; }
     public string? CacheKey { get; }
-    public string CacheGroupKey => "GetDailyFuelConsumptionDatas";
+    public string[] CacheGroupKey => new[] {"GetDailyFuelConsumptionDatas"};
 
     public class DeleteDailyFuelConsumptionDataCommandHandler : IRequestHandler<DeleteDailyFuelConsumptionDataCommand, DeletedDailyFuelConsumptionDataResponse>
     {

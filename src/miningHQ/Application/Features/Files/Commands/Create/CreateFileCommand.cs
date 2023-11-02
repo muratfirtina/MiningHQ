@@ -13,7 +13,7 @@ using File = Domain.Entities.File;
 
 namespace Application.Features.Files.Commands.Create;
 
-public class CreateFileCommand : IRequest<CreatedFileResponse>, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
+public class CreateFileCommand : IRequest<CreatedFileResponse>//, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
 {
     public string Name { get; set; }
     public string Path { get; set; }
@@ -23,7 +23,7 @@ public class CreateFileCommand : IRequest<CreatedFileResponse>, ISecuredRequest,
 
     public bool BypassCache { get; }
     public string? CacheKey { get; }
-    public string CacheGroupKey => "GetFiles";
+    public string[] CacheGroupKey => new[] {"GetFiles"};
 
     public class CreateFileCommandHandler : IRequestHandler<CreateFileCommand, CreatedFileResponse>
     {

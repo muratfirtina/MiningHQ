@@ -34,7 +34,7 @@ public class UpdateEmployeeCommand : IRequest<UpdatedEmployeeResponse>//, ISecur
 
     public bool BypassCache { get; }
     public string? CacheKey { get; }
-    public string CacheGroupKey => "GetEmployees";
+    public string[] CacheGroupKey => new[] {"GetEmployees"};
 
     public class UpdateEmployeeCommandHandler : IRequestHandler<UpdateEmployeeCommand, UpdatedEmployeeResponse>
     {

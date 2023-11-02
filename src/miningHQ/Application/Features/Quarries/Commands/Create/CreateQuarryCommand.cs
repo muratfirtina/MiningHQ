@@ -20,7 +20,7 @@ public class CreateQuarryCommand : IRequest<CreatedQuarryResponse>//, ISecuredRe
 
     public bool BypassCache { get; }
     public string? CacheKey { get; }
-    public string CacheGroupKey => "GetQuarries";
+    public string[] CacheGroupKey =>new[] {"GetQuarries"};
 
     public class CreateQuarryCommandHandler : IRequestHandler<CreateQuarryCommand, CreatedQuarryResponse>
     {

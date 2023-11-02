@@ -12,7 +12,6 @@ public class JobConfiguration : IEntityTypeConfiguration<Job>
 
         builder.Property(j => j.Id).HasColumnName("Id").IsRequired();
         builder.Property(j => j.Name).HasColumnName("Name");
-        builder.Property(j => j.Description).HasColumnName("Description");
         builder.Property(j => j.CreatedDate).HasColumnName("CreatedDate").IsRequired();
         builder.Property(j => j.UpdatedDate).HasColumnName("UpdatedDate");
         builder.Property(j => j.DeletedDate).HasColumnName("DeletedDate");

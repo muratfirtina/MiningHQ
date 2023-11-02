@@ -9,7 +9,7 @@ using static Application.Features.DailyFuelConsumptionDatas.Constants.DailyFuelC
 
 namespace Application.Features.DailyFuelConsumptionDatas.Queries.GetById;
 
-public class GetByIdDailyFuelConsumptionDataQuery : IRequest<GetByIdDailyFuelConsumptionDataResponse>, ISecuredRequest
+public class GetByIdDailyFuelConsumptionDataQuery : IRequest<GetByIdDailyFuelConsumptionDataResponse>//, ISecuredRequest
 {
     public Guid Id { get; set; }
 

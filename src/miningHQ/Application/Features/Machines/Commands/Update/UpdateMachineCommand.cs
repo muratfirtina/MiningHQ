@@ -28,7 +28,7 @@ public class UpdateMachineCommand : IRequest<UpdatedMachineResponse>//, ISecured
 
     public bool BypassCache { get; }
     public string? CacheKey { get; }
-    public string CacheGroupKey => "GetMachines";
+    public string[] CacheGroupKey =>new[] {"GetMachines"};
 
     public class UpdateMachineCommandHandler : IRequestHandler<UpdateMachineCommand, UpdatedMachineResponse>
     {

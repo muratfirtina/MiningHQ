@@ -9,7 +9,7 @@ using static Application.Features.LeaveUsages.Constants.LeaveUsagesOperationClai
 
 namespace Application.Features.LeaveUsages.Queries.GetById;
 
-public class GetByIdLeaveUsageQuery : IRequest<GetByIdLeaveUsageResponse>, ISecuredRequest
+public class GetByIdLeaveUsageQuery : IRequest<GetByIdLeaveUsageResponse>//, ISecuredRequest
 {
     public Guid Id { get; set; }
 

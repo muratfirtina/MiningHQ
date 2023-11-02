@@ -16,13 +16,11 @@ public class UpdateJobCommand : IRequest<UpdatedJobResponse>//, ISecuredRequest,
 {
     public Guid Id { get; set; }
     public string Name { get; set; }
-    public string? Description { get; set; }
-
     public string[] Roles => new[] { Admin, Write, JobsOperationClaims.Update };
 
     public bool BypassCache { get; }
     public string? CacheKey { get; }
-    public string CacheGroupKey => "GetJobs";
+    public string[] CacheGroupKey =>new[] {"GetJobs"};
 
     public class UpdateJobCommandHandler : IRequestHandler<UpdateJobCommand, UpdatedJobResponse>
     {

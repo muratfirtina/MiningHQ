@@ -20,7 +20,7 @@ public class CreateMachineTypeCommand : IRequest<CreatedMachineTypeResponse>//, 
 
     public bool BypassCache { get; }
     public string? CacheKey { get; }
-    public string CacheGroupKey => "GetMachineTypes";
+    public string[] CacheGroupKey =>new[] {"GetMachineTypes"};
 
     public class CreateMachineTypeCommandHandler : IRequestHandler<CreateMachineTypeCommand, CreatedMachineTypeResponse>
     {

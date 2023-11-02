@@ -20,7 +20,7 @@ public class GetListQuarryQuery : IRequest<GetListResponse<GetListQuarryListItem
 
     public bool BypassCache { get; }
     public string CacheKey => $"GetListQuarries({PageRequest.PageIndex},{PageRequest.PageSize})";
-    public string CacheGroupKey => "GetQuarries";
+    public string[] CacheGroupKey =>new[] {"GetQuarries"};
     public TimeSpan? SlidingExpiration { get; }
 
     public class GetListQuarryQueryHandler : IRequestHandler<GetListQuarryQuery, GetListResponse<GetListQuarryListItemDto>>

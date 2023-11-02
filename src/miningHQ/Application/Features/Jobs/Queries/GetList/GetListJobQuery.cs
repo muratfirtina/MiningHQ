@@ -21,7 +21,7 @@ public class GetListJobQuery : IRequest<GetListResponse<GetListJobListItemDto>>/
 
     public bool BypassCache { get; }
     public string CacheKey => $"GetListJobs({PageRequest.PageIndex},{PageRequest.PageSize})";
-    public string CacheGroupKey => "GetJobs";
+    public string[] CacheGroupKey =>new[]{"GetJobs"};
     public TimeSpan? SlidingExpiration { get; }
 
     public class GetListJobQueryHandler : IRequestHandler<GetListJobQuery, GetListResponse<GetListJobListItemDto>>

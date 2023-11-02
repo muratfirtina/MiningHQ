@@ -12,7 +12,7 @@ using static Application.Features.DailyWorkDatas.Constants.DailyWorkDatasOperati
 
 namespace Application.Features.DailyWorkDatas.Commands.Update;
 
-public class UpdateDailyWorkDataCommand : IRequest<UpdatedDailyWorkDataResponse>, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
+public class UpdateDailyWorkDataCommand : IRequest<UpdatedDailyWorkDataResponse>//, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
 {
     public Guid Id { get; set; }
     public DateTime Date { get; set; }
@@ -24,7 +24,7 @@ public class UpdateDailyWorkDataCommand : IRequest<UpdatedDailyWorkDataResponse>
 
     public bool BypassCache { get; }
     public string? CacheKey { get; }
-    public string CacheGroupKey => "GetDailyWorkDatas";
+    public string[] CacheGroupKey => new[] {"GetDailyWorkDatas"};
 
     public class UpdateDailyWorkDataCommandHandler : IRequestHandler<UpdateDailyWorkDataCommand, UpdatedDailyWorkDataResponse>
     {

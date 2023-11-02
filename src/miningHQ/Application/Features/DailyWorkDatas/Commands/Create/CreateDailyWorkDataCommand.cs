@@ -12,7 +12,7 @@ using static Application.Features.DailyWorkDatas.Constants.DailyWorkDatasOperati
 
 namespace Application.Features.DailyWorkDatas.Commands.Create;
 
-public class CreateDailyWorkDataCommand : IRequest<CreatedDailyWorkDataResponse>, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
+public class CreateDailyWorkDataCommand : IRequest<CreatedDailyWorkDataResponse>//, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
 {
     public DateTime Date { get; set; }
     public int WorkingHoursOrKm { get; set; }
@@ -23,7 +23,7 @@ public class CreateDailyWorkDataCommand : IRequest<CreatedDailyWorkDataResponse>
 
     public bool BypassCache { get; }
     public string? CacheKey { get; }
-    public string CacheGroupKey => "GetDailyWorkDatas";
+    public string[] CacheGroupKey => new[] {"GetDailyWorkDatas"};
 
     public class CreateDailyWorkDataCommandHandler : IRequestHandler<CreateDailyWorkDataCommand, CreatedDailyWorkDataResponse>
     {

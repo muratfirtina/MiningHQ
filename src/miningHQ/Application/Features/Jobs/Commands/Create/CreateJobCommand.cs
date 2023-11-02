@@ -15,13 +15,12 @@ namespace Application.Features.Jobs.Commands.Create;
 public class CreateJobCommand : IRequest<CreatedJobResponse>//, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
 {
     public string Name { get; set; }
-    public string? Description { get; set; }
 
     public string[] Roles => new[] { Admin, Write, JobsOperationClaims.Create };
 
     public bool BypassCache { get; }
     public string? CacheKey { get; }
-    public string CacheGroupKey => "GetJobs";
+    public string[] CacheGroupKey => new[] {"GetJobs"};
 
     public class CreateJobCommandHandler : IRequestHandler<CreateJobCommand, CreatedJobResponse>
     {

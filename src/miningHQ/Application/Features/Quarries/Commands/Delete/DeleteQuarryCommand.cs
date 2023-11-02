@@ -21,7 +21,7 @@ public class DeleteQuarryCommand : IRequest<DeletedQuarryResponse>//, ISecuredRe
 
     public bool BypassCache { get; }
     public string? CacheKey { get; }
-    public string CacheGroupKey => "GetQuarries";
+    public string[] CacheGroupKey =>new[] {"GetQuarries"};
 
     public class DeleteQuarryCommandHandler : IRequestHandler<DeleteQuarryCommand, DeletedQuarryResponse>
     {

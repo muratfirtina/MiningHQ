@@ -21,7 +21,7 @@ public class DeleteJobCommand : IRequest<DeletedJobResponse>//, ISecuredRequest,
 
     public bool BypassCache { get; }
     public string? CacheKey { get; }
-    public string CacheGroupKey => "GetJobs";
+    public string[] CacheGroupKey =>new[] {"GetJobs"};
 
     public class DeleteJobCommandHandler : IRequestHandler<DeleteJobCommand, DeletedJobResponse>
     {

@@ -12,7 +12,7 @@ using static Application.Features.EmployeeLeaves.Constants.EmployeeLeavesOperati
 
 namespace Application.Features.EmployeeLeaves.Queries.GetList;
 
-public class GetListEmployeeLeaveQuery : IRequest<GetListResponse<GetListEmployeeLeaveListItemDto>>, ISecuredRequest, ICachableRequest
+public class GetListEmployeeLeaveQuery : IRequest<GetListResponse<GetListEmployeeLeaveListItemDto>>//, ISecuredRequest, ICachableRequest
 {
     public PageRequest PageRequest { get; set; }
 
@@ -20,7 +20,7 @@ public class GetListEmployeeLeaveQuery : IRequest<GetListResponse<GetListEmploye
 
     public bool BypassCache { get; }
     public string CacheKey => $"GetListEmployeeLeaves({PageRequest.PageIndex},{PageRequest.PageSize})";
-    public string CacheGroupKey => "GetEmployeeLeaves";
+    public string[] CacheGroupKey => new[] {"GetEmployeeLeaves"};
     public TimeSpan? SlidingExpiration { get; }
 
     public class GetListEmployeeLeaveQueryHandler : IRequestHandler<GetListEmployeeLeaveQuery, GetListResponse<GetListEmployeeLeaveListItemDto>>

@@ -12,7 +12,7 @@ using static Application.Features.LeaveUsages.Constants.LeaveUsagesOperationClai
 
 namespace Application.Features.LeaveUsages.Commands.Update;
 
-public class UpdateLeaveUsageCommand : IRequest<UpdatedLeaveUsageResponse>, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
+public class UpdateLeaveUsageCommand : IRequest<UpdatedLeaveUsageResponse>//, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
 {
     public Guid Id { get; set; }
     public Guid EmployeeLeaveId { get; set; }
@@ -24,7 +24,7 @@ public class UpdateLeaveUsageCommand : IRequest<UpdatedLeaveUsageResponse>, ISec
 
     public bool BypassCache { get; }
     public string? CacheKey { get; }
-    public string CacheGroupKey => "GetLeaveUsages";
+    public string[] CacheGroupKey => new[] {"GetLeaveUsages"};
 
     public class UpdateLeaveUsageCommandHandler : IRequestHandler<UpdateLeaveUsageCommand, UpdatedLeaveUsageResponse>
     {

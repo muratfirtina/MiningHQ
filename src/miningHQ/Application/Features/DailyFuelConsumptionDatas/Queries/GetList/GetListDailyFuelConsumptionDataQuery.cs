@@ -12,7 +12,7 @@ using static Application.Features.DailyFuelConsumptionDatas.Constants.DailyFuelC
 
 namespace Application.Features.DailyFuelConsumptionDatas.Queries.GetList;
 
-public class GetListDailyFuelConsumptionDataQuery : IRequest<GetListResponse<GetListDailyFuelConsumptionDataListItemDto>>, ISecuredRequest, ICachableRequest
+public class GetListDailyFuelConsumptionDataQuery : IRequest<GetListResponse<GetListDailyFuelConsumptionDataListItemDto>>//, ISecuredRequest, ICachableRequest
 {
     public PageRequest PageRequest { get; set; }
 
@@ -20,7 +20,7 @@ public class GetListDailyFuelConsumptionDataQuery : IRequest<GetListResponse<Get
 
     public bool BypassCache { get; }
     public string CacheKey => $"GetListDailyFuelConsumptionDatas({PageRequest.PageIndex},{PageRequest.PageSize})";
-    public string CacheGroupKey => "GetDailyFuelConsumptionDatas";
+    public string[] CacheGroupKey =>new[] {"GetDailyFuelConsumptionDatas"};
     public TimeSpan? SlidingExpiration { get; }
 
     public class GetListDailyFuelConsumptionDataQueryHandler : IRequestHandler<GetListDailyFuelConsumptionDataQuery, GetListResponse<GetListDailyFuelConsumptionDataListItemDto>>

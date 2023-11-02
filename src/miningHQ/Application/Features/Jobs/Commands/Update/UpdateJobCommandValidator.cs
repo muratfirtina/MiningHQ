@@ -8,6 +8,5 @@ public class UpdateJobCommandValidator : AbstractValidator<UpdateJobCommand>
     {
         RuleFor(c => c.Id).NotEmpty();
         RuleFor(c => c.Name).NotEmpty();
-        RuleFor(c => c.Description).NotEmpty();
     }
 }

@@ -10,7 +10,7 @@ using File = Domain.Entities.File;
 
 namespace Application.Features.Files.Queries.GetById;
 
-public class GetByIdFileQuery : IRequest<GetByIdFileResponse>, ISecuredRequest
+public class GetByIdFileQuery : IRequest<GetByIdFileResponse>//, ISecuredRequest
 {
     public Guid Id { get; set; }
 

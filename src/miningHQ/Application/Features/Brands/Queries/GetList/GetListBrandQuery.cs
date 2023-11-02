@@ -20,7 +20,7 @@ public class GetListBrandQuery : IRequest<GetListResponse<GetListBrandListItemDt
 
     public bool BypassCache { get; }
     public string CacheKey => $"GetListBrands({PageRequest.PageIndex},{PageRequest.PageSize})";
-    public string CacheGroupKey => "GetBrands";
+    public string[] CacheGroupKey => new[] {"GetBrands"};
     public TimeSpan? SlidingExpiration { get; }
 
     public class GetListBrandQueryHandler : IRequestHandler<GetListBrandQuery, GetListResponse<GetListBrandListItemDto>>

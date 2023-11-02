@@ -13,7 +13,7 @@ using static Application.Features.MaintenanceTypes.Constants.MaintenanceTypesOpe
 
 namespace Application.Features.MaintenanceTypes.Commands.Delete;
 
-public class DeleteMaintenanceTypeCommand : IRequest<DeletedMaintenanceTypeResponse>, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
+public class DeleteMaintenanceTypeCommand : IRequest<DeletedMaintenanceTypeResponse>//, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
 {
     public Guid Id { get; set; }
 
@@ -21,7 +21,7 @@ public class DeleteMaintenanceTypeCommand : IRequest<DeletedMaintenanceTypeRespo
 
     public bool BypassCache { get; }
     public string? CacheKey { get; }
-    public string CacheGroupKey => "GetMaintenanceTypes";
+    public string[] CacheGroupKey => new[]{"GetMaintenanceTypes"};
 
     public class DeleteMaintenanceTypeCommandHandler : IRequestHandler<DeleteMaintenanceTypeCommand, DeletedMaintenanceTypeResponse>
     {

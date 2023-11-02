@@ -21,7 +21,7 @@ public class DeleteModelCommand : IRequest<DeletedModelResponse>//, ISecuredRequ
 
     public bool BypassCache { get; }
     public string? CacheKey { get; }
-    public string CacheGroupKey => "GetModels";
+    public string[] CacheGroupKey =>new[] {"GetModels"};
 
     public class DeleteModelCommandHandler : IRequestHandler<DeleteModelCommand, DeletedModelResponse>
     {

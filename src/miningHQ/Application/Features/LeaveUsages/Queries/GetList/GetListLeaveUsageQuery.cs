@@ -12,7 +12,7 @@ using static Application.Features.LeaveUsages.Constants.LeaveUsagesOperationClai
 
 namespace Application.Features.LeaveUsages.Queries.GetList;
 
-public class GetListLeaveUsageQuery : IRequest<GetListResponse<GetListLeaveUsageListItemDto>>, ISecuredRequest, ICachableRequest
+public class GetListLeaveUsageQuery : IRequest<GetListResponse<GetListLeaveUsageListItemDto>>//, ISecuredRequest, ICachableRequest
 {
     public PageRequest PageRequest { get; set; }
 
@@ -20,7 +20,7 @@ public class GetListLeaveUsageQuery : IRequest<GetListResponse<GetListLeaveUsage
 
     public bool BypassCache { get; }
     public string CacheKey => $"GetListLeaveUsages({PageRequest.PageIndex},{PageRequest.PageSize})";
-    public string CacheGroupKey => "GetLeaveUsages";
+    public string[] CacheGroupKey =>new[] {"GetLeaveUsages"};
     public TimeSpan? SlidingExpiration { get; }
 
     public class GetListLeaveUsageQueryHandler : IRequestHandler<GetListLeaveUsageQuery, GetListResponse<GetListLeaveUsageListItemDto>>

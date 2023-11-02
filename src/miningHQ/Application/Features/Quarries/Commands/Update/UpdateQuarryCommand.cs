@@ -21,7 +21,7 @@ public class UpdateQuarryCommand : IRequest<UpdatedQuarryResponse>//, ISecuredRe
 
     public bool BypassCache { get; }
     public string? CacheKey { get; }
-    public string CacheGroupKey => "GetQuarries";
+    public string[] CacheGroupKey =>new[] {"GetQuarries"};
 
     public class UpdateQuarryCommandHandler : IRequestHandler<UpdateQuarryCommand, UpdatedQuarryResponse>
     {

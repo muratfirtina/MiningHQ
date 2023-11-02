@@ -9,7 +9,7 @@ using static Application.Features.DailyWorkDatas.Constants.DailyWorkDatasOperati
 
 namespace Application.Features.DailyWorkDatas.Queries.GetById;
 
-public class GetByIdDailyWorkDataQuery : IRequest<GetByIdDailyWorkDataResponse>, ISecuredRequest
+public class GetByIdDailyWorkDataQuery : IRequest<GetByIdDailyWorkDataResponse>//, ISecuredRequest
 {
     public Guid Id { get; set; }
 

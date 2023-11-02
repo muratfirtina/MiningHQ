@@ -12,7 +12,7 @@ using static Application.Features.DailyWorkDatas.Constants.DailyWorkDatasOperati
 
 namespace Application.Features.DailyWorkDatas.Queries.GetList;
 
-public class GetListDailyWorkDataQuery : IRequest<GetListResponse<GetListDailyWorkDataListItemDto>>, ISecuredRequest, ICachableRequest
+public class GetListDailyWorkDataQuery : IRequest<GetListResponse<GetListDailyWorkDataListItemDto>>//, ISecuredRequest, ICachableRequest
 {
     public PageRequest PageRequest { get; set; }
 
@@ -20,7 +20,7 @@ public class GetListDailyWorkDataQuery : IRequest<GetListResponse<GetListDailyWo
 
     public bool BypassCache { get; }
     public string CacheKey => $"GetListDailyWorkDatas({PageRequest.PageIndex},{PageRequest.PageSize})";
-    public string CacheGroupKey => "GetDailyWorkDatas";
+    public string[] CacheGroupKey => new[] {"GetDailyWorkDatas"};
     public TimeSpan? SlidingExpiration { get; }
 
     public class GetListDailyWorkDataQueryHandler : IRequestHandler<GetListDailyWorkDataQuery, GetListResponse<GetListDailyWorkDataListItemDto>>

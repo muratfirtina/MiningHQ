@@ -21,7 +21,7 @@ public class DeleteEmployeeCommand : IRequest<DeletedEmployeeResponse>//, ISecur
 
     public bool BypassCache { get; }
     public string? CacheKey { get; }
-    public string CacheGroupKey => "GetEmployees";
+    public string[] CacheGroupKey =>new[] {"GetEmployees"};
 
     public class DeleteEmployeeCommandHandler : IRequestHandler<DeleteEmployeeCommand, DeletedEmployeeResponse>
     {

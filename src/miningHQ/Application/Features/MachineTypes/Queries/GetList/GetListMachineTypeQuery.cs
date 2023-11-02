@@ -20,7 +20,7 @@ public class GetListMachineTypeQuery : IRequest<GetListResponse<GetListMachineTy
 
     public bool BypassCache { get; }
     public string CacheKey => $"GetListMachineTypes({PageRequest.PageIndex},{PageRequest.PageSize})";
-    public string CacheGroupKey => "GetMachineTypes";
+    public string[] CacheGroupKey =>new[] {"GetMachineTypes"};
     public TimeSpan? SlidingExpiration { get; }
 
     public class GetListMachineTypeQueryHandler : IRequestHandler<GetListMachineTypeQuery, GetListResponse<GetListMachineTypeListItemDto>>

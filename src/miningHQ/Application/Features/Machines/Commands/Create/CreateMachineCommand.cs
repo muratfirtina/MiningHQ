@@ -14,20 +14,18 @@ namespace Application.Features.Machines.Commands.Create;
 
 public class CreateMachineCommand : IRequest<CreatedMachineResponse>//, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
 {
-    public Guid ModelId { get; set; }
-    public Model? Model { get; set; }
-    public Guid QuarryId { get; set; }
-    public Quarry? Quarry { get; set; }
+    public string ModelId { get; set; }
+    public string QuarryId { get; set; }
     public string SerialNumber { get; set; }
-    public string? Name { get; set; }
-    public Guid MachineTypeId { get; set; }
-    public MachineType MachineType { get; set; }
+    public string Name { get; set; }
+    public string MachineTypeId { get; set; }
+    
 
     public string[] Roles => new[] { Admin, Write, MachinesOperationClaims.Create };
 
     public bool BypassCache { get; }
     public string? CacheKey { get; }
-    public string CacheGroupKey => "GetMachines";
+    public string[] CacheGroupKey => new[] {"GetMachines"};
 
     public class CreateMachineCommandHandler : IRequestHandler<CreateMachineCommand, CreatedMachineResponse>
     {

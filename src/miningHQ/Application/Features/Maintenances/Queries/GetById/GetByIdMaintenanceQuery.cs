@@ -9,7 +9,7 @@ using static Application.Features.Maintenances.Constants.MaintenancesOperationCl
 
 namespace Application.Features.Maintenances.Queries.GetById;
 
-public class GetByIdMaintenanceQuery : IRequest<GetByIdMaintenanceResponse>, ISecuredRequest
+public class GetByIdMaintenanceQuery : IRequest<GetByIdMaintenanceResponse>//, ISecuredRequest
 {
     public Guid Id { get; set; }
 

@@ -9,7 +9,7 @@ using static Application.Features.EmployeeLeaves.Constants.EmployeeLeavesOperati
 
 namespace Application.Features.EmployeeLeaves.Queries.GetById;
 
-public class GetByIdEmployeeLeaveQuery : IRequest<GetByIdEmployeeLeaveResponse>, ISecuredRequest
+public class GetByIdEmployeeLeaveQuery : IRequest<GetByIdEmployeeLeaveResponse>//, ISecuredRequest
 {
     public Guid Id { get; set; }
 
