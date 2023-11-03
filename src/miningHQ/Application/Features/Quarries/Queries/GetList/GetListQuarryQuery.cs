@@ -8,6 +8,7 @@ using Core.Application.Requests;
 using Core.Application.Responses;
 using Core.Persistence.Paging;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using static Application.Features.Quarries.Constants.QuarriesOperationClaims;
 
 namespace Application.Features.Quarries.Queries.GetList;
@@ -36,14 +37,36 @@ public class GetListQuarryQuery : IRequest<GetListResponse<GetListQuarryListItem
 
         public async Task<GetListResponse<GetListQuarryListItemDto>> Handle(GetListQuarryQuery request, CancellationToken cancellationToken)
         {
-            IPaginate<Quarry> quarries = await _quarryRepository.GetListAsync(
-                index: request.PageRequest.PageIndex,
-                size: request.PageRequest.PageSize, 
-                cancellationToken: cancellationToken
-            );
+            if(request.PageRequest.PageIndex == -1 && request.PageRequest.PageSize ==-1){
 
-            GetListResponse<GetListQuarryListItemDto> response = _mapper.Map<GetListResponse<GetListQuarryListItemDto>>(quarries);
-            return response;
+                var allQuarries = await _quarryRepository.GetAllAsync(
+
+                );
+                var quarryDto = _mapper.Map<List<GetListQuarryListItemDto>>(allQuarries);
+
+                return new GetListResponse<GetListQuarryListItemDto>
+                {
+                    Items = quarryDto,
+                    Index = -1,
+                    Size = -1,
+                    Count = allQuarries.Count,
+                    Pages = -1,
+                    HasPrevious = false,
+                    HasNext = false
+                };
+                
+            }
+            else
+            {
+                IPaginate<Quarry> quarries = await _quarryRepository.GetListAsync(
+                    index: request.PageRequest.PageIndex,
+                    size: request.PageRequest.PageSize,
+                    cancellationToken: cancellationToken
+                );
+
+                GetListResponse<GetListQuarryListItemDto> response = _mapper.Map<GetListResponse<GetListQuarryListItemDto>>(quarries);
+                return response;
+            }
         }
     }
 }

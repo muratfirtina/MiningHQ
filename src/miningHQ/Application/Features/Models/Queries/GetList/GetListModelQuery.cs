@@ -8,6 +8,7 @@ using Core.Application.Requests;
 using Core.Application.Responses;
 using Core.Persistence.Paging;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using static Application.Features.Models.Constants.ModelsOperationClaims;
 
 namespace Application.Features.Models.Queries.GetList;
@@ -36,14 +37,37 @@ public class GetListModelQuery : IRequest<GetListResponse<GetListModelListItemDt
 
         public async Task<GetListResponse<GetListModelListItemDto>> Handle(GetListModelQuery request, CancellationToken cancellationToken)
         {
-            IPaginate<Model> models = await _modelRepository.GetListAsync(
-                index: request.PageRequest.PageIndex,
-                size: request.PageRequest.PageSize, 
-                cancellationToken: cancellationToken
-            );
+            if(request.PageRequest.PageIndex == -1 && request.PageRequest.PageSize == -1)
+            {
+                var allModels = await _modelRepository.GetAllAsync(
+                    include:m => m.Include(m => m.Brand)
+                    );
+                var modelDto = _mapper.Map<List<GetListModelListItemDto>>(allModels);
 
-            GetListResponse<GetListModelListItemDto> response = _mapper.Map<GetListResponse<GetListModelListItemDto>>(models);
-            return response;
+                return new GetListResponse<GetListModelListItemDto>
+                {
+                    Items = modelDto,
+                    Index = -1,
+                    Size = -1,
+                    Count = allModels.Count,
+                    Pages = -1,
+                    HasPrevious = false,
+                    HasNext = false
+                };
+            }
+            else
+            {
+                IPaginate<Model> models = await _modelRepository.GetListAsync(
+                    index: request.PageRequest.PageIndex,
+                    size: request.PageRequest.PageSize,
+                    include:m => m.Include(m => m.Brand),
+                    cancellationToken: cancellationToken
+                );
+
+                GetListResponse<GetListModelListItemDto> response = _mapper.Map<GetListResponse<GetListModelListItemDto>>(models);
+                return response;
+                    
+            }
         }
     }
 }

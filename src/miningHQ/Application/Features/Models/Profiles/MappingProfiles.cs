@@ -21,7 +21,9 @@ public class MappingProfiles : Profile
         CreateMap<Model, DeleteModelCommand>().ReverseMap();
         CreateMap<Model, DeletedModelResponse>().ReverseMap();
         CreateMap<Model, GetByIdModelResponse>().ReverseMap();
-        CreateMap<Model, GetListModelListItemDto>().ReverseMap();
+        CreateMap<Model, GetListModelListItemDto>()
+        .ForMember(d => d.BrandName, opt => opt.MapFrom(s => s.Brand.Name))
+        .ReverseMap();
         CreateMap<IPaginate<Model>, GetListResponse<GetListModelListItemDto>>().ReverseMap();
     }
 }

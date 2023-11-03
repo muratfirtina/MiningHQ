@@ -8,6 +8,7 @@ using Core.Application.Requests;
 using Core.Application.Responses;
 using Core.Persistence.Paging;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using static Application.Features.Brands.Constants.BrandsOperationClaims;
 
 namespace Application.Features.Brands.Queries.GetList;
@@ -36,14 +37,32 @@ public class GetListBrandQuery : IRequest<GetListResponse<GetListBrandListItemDt
 
         public async Task<GetListResponse<GetListBrandListItemDto>> Handle(GetListBrandQuery request, CancellationToken cancellationToken)
         {
-            IPaginate<Brand> brands = await _brandRepository.GetListAsync(
-                index: request.PageRequest.PageIndex,
-                size: request.PageRequest.PageSize, 
-                cancellationToken: cancellationToken
-            );
+            if(request.PageRequest.PageIndex == -1 && request.PageRequest.PageSize == -1)
+            {
+                var allBrands = await _brandRepository.GetAllAsync();
+                var brandDto = _mapper.Map<List<GetListBrandListItemDto>>(allBrands);
 
-            GetListResponse<GetListBrandListItemDto> response = _mapper.Map<GetListResponse<GetListBrandListItemDto>>(brands);
-            return response;
+                return new GetListResponse<GetListBrandListItemDto>
+                {
+                    Items = brandDto,
+                    Index = -1,
+                    Size = -1,
+                    Count = allBrands.Count,
+                    Pages = -1,
+                    HasPrevious = false,
+                    HasNext = false
+                };
+            }
+            else
+            {
+                IPaginate<Brand> brands = await _brandRepository.GetListAsync(
+                    index: request.PageRequest.PageIndex,
+                    size: request.PageRequest.PageSize,
+                    cancellationToken: cancellationToken
+                );
+                GetListResponse<GetListBrandListItemDto> response = _mapper.Map<GetListResponse<GetListBrandListItemDto>>(brands);
+                return response;
+            }
         }
     }
 }

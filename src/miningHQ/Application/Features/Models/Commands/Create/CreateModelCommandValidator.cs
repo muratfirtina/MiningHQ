@@ -8,6 +8,5 @@ public class CreateModelCommandValidator : AbstractValidator<CreateModelCommand>
     {
         RuleFor(c => c.BrandId).NotEmpty();
         RuleFor(c => c.Name).NotEmpty();
-        RuleFor(c => c.Brand).NotEmpty();
     }
 }

@@ -8,6 +8,7 @@ using Core.Application.Requests;
 using Core.Application.Responses;
 using Core.Persistence.Paging;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using static Application.Features.MachineTypes.Constants.MachineTypesOperationClaims;
 
 namespace Application.Features.MachineTypes.Queries.GetList;
@@ -36,14 +37,33 @@ public class GetListMachineTypeQuery : IRequest<GetListResponse<GetListMachineTy
 
         public async Task<GetListResponse<GetListMachineTypeListItemDto>> Handle(GetListMachineTypeQuery request, CancellationToken cancellationToken)
         {
-            IPaginate<MachineType> machineTypes = await _machineTypeRepository.GetListAsync(
-                index: request.PageRequest.PageIndex,
-                size: request.PageRequest.PageSize, 
-                cancellationToken: cancellationToken
-            );
+            if(request.PageRequest.PageIndex == -1 && request.PageRequest.PageSize == -1)
+            {
+                var allMachineTypes = await _machineTypeRepository.GetAllAsync();
+                var machineTypeDto = _mapper.Map<List<GetListMachineTypeListItemDto>>(allMachineTypes);
 
-            GetListResponse<GetListMachineTypeListItemDto> response = _mapper.Map<GetListResponse<GetListMachineTypeListItemDto>>(machineTypes);
-            return response;
+                return new GetListResponse<GetListMachineTypeListItemDto>
+                {
+                    Items = machineTypeDto,
+                    Index = -1,
+                    Size = -1,
+                    Count = allMachineTypes.Count,
+                    Pages = -1,
+                    HasPrevious = false,
+                    HasNext = false
+                };
+            }
+            else
+            {
+                IPaginate<MachineType> machineTypes = await _machineTypeRepository.GetListAsync(
+                    index: request.PageRequest.PageIndex,
+                    size: request.PageRequest.PageSize,
+                    cancellationToken: cancellationToken
+                );
+
+                GetListResponse<GetListMachineTypeListItemDto> response = _mapper.Map<GetListResponse<GetListMachineTypeListItemDto>>(machineTypes);
+                return response;
+            }
         }
     }
 }
