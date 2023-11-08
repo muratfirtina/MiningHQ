@@ -1,3 +1,4 @@
+using System;
 using Application.Features.Employees.Constants;
 using Application.Features.Employees.Rules;
 using Application.Services.Repositories;
@@ -8,6 +9,7 @@ using Core.Application.Pipelines.Caching;
 using Core.Application.Pipelines.Logging;
 using Core.Application.Pipelines.Transaction;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using static Application.Features.Employees.Constants.EmployeesOperationClaims;
 
 namespace Application.Features.Employees.Commands.Update;
@@ -18,10 +20,8 @@ public class UpdateEmployeeCommand : IRequest<UpdatedEmployeeResponse>//, ISecur
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public DateTime? BirthDate { get; set; }
-    public Guid? JobId { get; set; }
-    public Job? Job { get; set; }
-    public Guid? QuarryId { get; set; }
-    public Quarry? Quarry { get; set; }
+    public string? JobId { get; set; }
+    public string? QuarryId { get; set; }
     public string? Phone { get; set; }
     public string? Address { get; set; }
     public DateTime? HireDate { get; set; }
