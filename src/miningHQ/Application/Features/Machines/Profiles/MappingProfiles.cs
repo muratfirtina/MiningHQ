@@ -3,6 +3,7 @@ using Application.Features.Machines.Commands.Delete;
 using Application.Features.Machines.Commands.Update;
 using Application.Features.Machines.Queries.GetById;
 using Application.Features.Machines.Queries.GetList;
+using Application.Features.Machines.Queries.GetListDynamic;
 using AutoMapper;
 using Core.Application.Responses;
 using Domain.Entities;
@@ -24,6 +25,7 @@ public class MappingProfiles : Profile
         CreateMap<Machine, GetListMachineListItemDto>()
         .ForMember(d => d.BrandName, opt => opt.MapFrom(s => s.Model.Brand.Name))
         .ReverseMap();
+        CreateMap<Machine, GetListResponse<GetListDynamicDto>>().ReverseMap();
         CreateMap<IPaginate<Machine>, GetListResponse<GetListMachineListItemDto>>().ReverseMap();
     }
 }

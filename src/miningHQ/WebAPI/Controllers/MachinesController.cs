@@ -51,4 +51,5 @@ public class MachinesController : BaseController
         GetListResponse<GetListMachineListItemDto> response = await Mediator.Send(getListMachineQuery);
         return Ok(response);
     }
+    
 }

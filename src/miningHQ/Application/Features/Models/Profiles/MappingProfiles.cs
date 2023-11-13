@@ -3,6 +3,7 @@ using Application.Features.Models.Commands.Delete;
 using Application.Features.Models.Commands.Update;
 using Application.Features.Models.Queries.GetById;
 using Application.Features.Models.Queries.GetList;
+using Application.Features.Models.Queries.GetListDynamicQuery;
 using AutoMapper;
 using Core.Application.Responses;
 using Domain.Entities;
@@ -24,6 +25,7 @@ public class MappingProfiles : Profile
         CreateMap<Model, GetListModelListItemDto>()
         .ForMember(d => d.BrandName, opt => opt.MapFrom(s => s.Brand.Name))
         .ReverseMap();
+        CreateMap<Model, GetListByBrandIdDynamicQueryDto>().ReverseMap();
         CreateMap<IPaginate<Model>, GetListResponse<GetListModelListItemDto>>().ReverseMap();
     }
 }

@@ -3,6 +3,7 @@ using Application.Features.MachineTypes.Commands.Delete;
 using Application.Features.MachineTypes.Commands.Update;
 using Application.Features.MachineTypes.Queries.GetById;
 using Application.Features.MachineTypes.Queries.GetList;
+using Application.Features.MachineTypes.Queries.GetListByBrand;
 using AutoMapper;
 using Core.Application.Responses;
 using Domain.Entities;
@@ -22,6 +23,9 @@ public class MappingProfiles : Profile
         CreateMap<MachineType, DeletedMachineTypeResponse>().ReverseMap();
         CreateMap<MachineType, GetByIdMachineTypeResponse>().ReverseMap();
         CreateMap<MachineType, GetListMachineTypeListItemDto>().ReverseMap();
+        CreateMap<MachineType, GetListByBrandIdDto>()
+            .ForMember(dest => dest.BrandName, opt => opt.MapFrom(src => src.Brands.FirstOrDefault().Name))
+            .ReverseMap();
         CreateMap<IPaginate<MachineType>, GetListResponse<GetListMachineTypeListItemDto>>().ReverseMap();
     }
 }

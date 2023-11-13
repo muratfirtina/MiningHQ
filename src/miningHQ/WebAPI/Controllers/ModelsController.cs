@@ -3,6 +3,7 @@ using Application.Features.Models.Commands.Delete;
 using Application.Features.Models.Commands.Update;
 using Application.Features.Models.Queries.GetById;
 using Application.Features.Models.Queries.GetList;
+using Application.Features.Models.Queries.GetListDynamicQuery;
 using Core.Application.Requests;
 using Core.Application.Responses;
 using Microsoft.AspNetCore.Mvc;
@@ -49,6 +50,14 @@ public class ModelsController : BaseController
     {
         GetListModelQuery getListModelQuery = new() { PageRequest = pageRequest };
         GetListResponse<GetListModelListItemDto> response = await Mediator.Send(getListModelQuery);
+        return Ok(response);
+    }
+    
+    [HttpGet("ByBrand/{brandId}")]
+    public async Task<IActionResult> GetListByBrandId([FromRoute] Guid brandId)
+    {
+        var query = new GetListByBrandIdDynamicQuery { BrandId = brandId };
+        var response = await Mediator.Send(query);
         return Ok(response);
     }
 }

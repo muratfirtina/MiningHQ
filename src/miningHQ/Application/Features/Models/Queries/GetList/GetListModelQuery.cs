@@ -16,6 +16,7 @@ namespace Application.Features.Models.Queries.GetList;
 public class GetListModelQuery : IRequest<GetListResponse<GetListModelListItemDto>>//, ISecuredRequest, ICachableRequest
 {
     public PageRequest PageRequest { get; set; }
+    public Guid? BrandId { get; set; }
 
     public string[] Roles => new[] { Admin, Read };
 
@@ -40,6 +41,7 @@ public class GetListModelQuery : IRequest<GetListResponse<GetListModelListItemDt
             if(request.PageRequest.PageIndex == -1 && request.PageRequest.PageSize == -1)
             {
                 var allModels = await _modelRepository.GetAllAsync(
+                    m => !request.BrandId.HasValue || m.BrandId == request.BrandId.Value,
                     include:m => m.Include(m => m.Brand)
                     );
                 var modelDto = _mapper.Map<List<GetListModelListItemDto>>(allModels);

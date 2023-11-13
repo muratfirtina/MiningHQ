@@ -8,7 +8,6 @@ public class CreateEmployeeCommandValidator : AbstractValidator<CreateEmployeeCo
     {
         RuleFor(c => c.FirstName).NotEmpty();
         RuleFor(c => c.LastName).NotEmpty();
-        RuleFor(c => c.JobId).NotEmpty();
     }
 
 }

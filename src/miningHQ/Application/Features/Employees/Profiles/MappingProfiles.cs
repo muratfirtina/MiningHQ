@@ -18,10 +18,7 @@ public class MappingProfiles : Profile
         CreateMap<Employee, CreateEmployeeCommand>().ReverseMap();
         CreateMap<Employee, CreatedEmployeeResponse>().ReverseMap();
         CreateMap<Employee, UpdateEmployeeCommand>().ReverseMap();
-        CreateMap<Employee, UpdatedEmployeeResponse>()
-            .ForMember(dest => dest.JobName, opt => opt.MapFrom(src => src.Job.Name))
-            .ForMember(dest => dest.QuarryName, opt => opt.MapFrom(src => src.Quarry.Name))
-            .ReverseMap();
+        CreateMap<Employee, UpdatedEmployeeResponse>().ReverseMap();
         CreateMap<Employee, DeleteEmployeeCommand>().ReverseMap();
         CreateMap<Employee, DeletedEmployeeResponse>().ReverseMap();
         CreateMap<Employee, GetByIdEmployeeResponse>().ReverseMap();

@@ -16,7 +16,7 @@ public class MachineTypeConfiguration : IEntityTypeConfiguration<MachineType>
         builder.Property(mt => mt.UpdatedDate).HasColumnName("UpdatedDate");
         builder.Property(mt => mt.DeletedDate).HasColumnName("DeletedDate");
         
-        
+        builder.HasMany(mt => mt.Brands).WithMany(b => b.MachineTypes);
 
         builder.HasQueryFilter(mt => !mt.DeletedDate.HasValue);
     }

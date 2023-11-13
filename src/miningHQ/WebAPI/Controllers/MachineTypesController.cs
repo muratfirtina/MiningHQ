@@ -3,6 +3,7 @@ using Application.Features.MachineTypes.Commands.Delete;
 using Application.Features.MachineTypes.Commands.Update;
 using Application.Features.MachineTypes.Queries.GetById;
 using Application.Features.MachineTypes.Queries.GetList;
+using Application.Features.MachineTypes.Queries.GetListByBrand;
 using Core.Application.Requests;
 using Core.Application.Responses;
 using Microsoft.AspNetCore.Mvc;
@@ -49,6 +50,14 @@ public class MachineTypesController : BaseController
     {
         GetListMachineTypeQuery getListMachineTypeQuery = new() { PageRequest = pageRequest };
         GetListResponse<GetListMachineTypeListItemDto> response = await Mediator.Send(getListMachineTypeQuery);
+        return Ok(response);
+    }
+    
+    [HttpGet("ByBrand/{brandId}")]
+    public async Task<IActionResult> GetListByBrandId([FromRoute] Guid brandId)
+    {
+        var query = new GetListByBrandIdQuery() { BrandId = brandId };
+        var response = await Mediator.Send(query);
         return Ok(response);
     }
 }
