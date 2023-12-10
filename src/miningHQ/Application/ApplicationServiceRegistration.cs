@@ -25,10 +25,11 @@ using Application.Services.MachineTypes;
 using Application.Services.Quarries;
 using Application.Services.DailyWorkDatas;
 using Application.Services.Models;
-using Application.Services.EmployeeLeaves;
+using Application.Services.EmployeeLeaveUsages;
 using Application.Services.Machines;
 using Application.Services.Files;
 using Application.Services.Employees;
+using Application.Services.EntitledLeaves;
 
 namespace Application;
 
@@ -69,10 +70,11 @@ public static class ApplicationServiceRegistration
         services.AddScoped<IQuarriesService, QuarriesManager>();
         services.AddScoped<IDailyWorkDatasService, DailyWorkDatasManager>();
         services.AddScoped<IModelsService, ModelsManager>();
-        services.AddScoped<IEmployeeLeavesService, EmployeeLeavesManager>();
+        services.AddScoped<IEmployeeLeaveUsagesService, EmployeeLeaveUsagesManager>();
         services.AddScoped<IMachinesService, MachinesManager>();
         services.AddScoped<IFilesService, FilesManager>();
         services.AddScoped<IEmployeesService, EmployeesManager>();
+        services.AddScoped<IEntitledLeavesService, EntitledLeavesManager>();
         return services;
     }
 

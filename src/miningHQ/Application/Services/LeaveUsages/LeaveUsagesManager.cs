@@ -1,4 +1,4 @@
-using Application.Features.LeaveUsages.Rules;
+using Application.Features.LeaveTypes.Rules;
 using Application.Services.Repositories;
 using Core.Persistence.Paging;
 using Domain.Entities;
@@ -9,31 +9,31 @@ namespace Application.Services.LeaveUsages;
 
 public class LeaveUsagesManager : ILeaveUsagesService
 {
-    private readonly ILeaveUsageRepository _leaveUsageRepository;
-    private readonly LeaveUsageBusinessRules _leaveUsageBusinessRules;
+    private readonly ILeaveTypeRepository _leaveTypeRepository;
+    private readonly LeaveUsageTypeBusinessRules _leaveUsageTypeBusinessRules;
 
-    public LeaveUsagesManager(ILeaveUsageRepository leaveUsageRepository, LeaveUsageBusinessRules leaveUsageBusinessRules)
+    public LeaveUsagesManager(ILeaveTypeRepository leaveTypeRepository, LeaveUsageTypeBusinessRules leaveUsageTypeBusinessRules)
     {
-        _leaveUsageRepository = leaveUsageRepository;
-        _leaveUsageBusinessRules = leaveUsageBusinessRules;
+        _leaveTypeRepository = leaveTypeRepository;
+        _leaveUsageTypeBusinessRules = leaveUsageTypeBusinessRules;
     }
 
-    public async Task<LeaveUsage?> GetAsync(
-        Expression<Func<LeaveUsage, bool>> predicate,
-        Func<IQueryable<LeaveUsage>, IIncludableQueryable<LeaveUsage, object>>? include = null,
+    public async Task<LeaveType?> GetAsync(
+        Expression<Func<LeaveType, bool>> predicate,
+        Func<IQueryable<LeaveType>, IIncludableQueryable<LeaveType, object>>? include = null,
         bool withDeleted = false,
         bool enableTracking = true,
         CancellationToken cancellationToken = default
     )
     {
-        LeaveUsage? leaveUsage = await _leaveUsageRepository.GetAsync(predicate, include, withDeleted, enableTracking, cancellationToken);
+        LeaveType? leaveUsage = await _leaveTypeRepository.GetAsync(predicate, include, withDeleted, enableTracking, cancellationToken);
         return leaveUsage;
     }
 
-    public async Task<IPaginate<LeaveUsage>?> GetListAsync(
-        Expression<Func<LeaveUsage, bool>>? predicate = null,
-        Func<IQueryable<LeaveUsage>, IOrderedQueryable<LeaveUsage>>? orderBy = null,
-        Func<IQueryable<LeaveUsage>, IIncludableQueryable<LeaveUsage, object>>? include = null,
+    public async Task<IPaginate<LeaveType>?> GetListAsync(
+        Expression<Func<LeaveType, bool>>? predicate = null,
+        Func<IQueryable<LeaveType>, IOrderedQueryable<LeaveType>>? orderBy = null,
+        Func<IQueryable<LeaveType>, IIncludableQueryable<LeaveType, object>>? include = null,
         int index = 0,
         int size = 10,
         bool withDeleted = false,
@@ -41,7 +41,7 @@ public class LeaveUsagesManager : ILeaveUsagesService
         CancellationToken cancellationToken = default
     )
     {
-        IPaginate<LeaveUsage> leaveUsageList = await _leaveUsageRepository.GetListAsync(
+        IPaginate<LeaveType> leaveUsageList = await _leaveTypeRepository.GetListAsync(
             predicate,
             orderBy,
             include,
@@ -54,24 +54,24 @@ public class LeaveUsagesManager : ILeaveUsagesService
         return leaveUsageList;
     }
 
-    public async Task<LeaveUsage> AddAsync(LeaveUsage leaveUsage)
+    public async Task<LeaveType> AddAsync(LeaveType leaveType)
     {
-        LeaveUsage addedLeaveUsage = await _leaveUsageRepository.AddAsync(leaveUsage);
+        LeaveType addedLeaveType = await _leaveTypeRepository.AddAsync(leaveType);
 
-        return addedLeaveUsage;
+        return addedLeaveType;
     }
 
-    public async Task<LeaveUsage> UpdateAsync(LeaveUsage leaveUsage)
+    public async Task<LeaveType> UpdateAsync(LeaveType leaveType)
     {
-        LeaveUsage updatedLeaveUsage = await _leaveUsageRepository.UpdateAsync(leaveUsage);
+        LeaveType updatedLeaveType = await _leaveTypeRepository.UpdateAsync(leaveType);
 
-        return updatedLeaveUsage;
+        return updatedLeaveType;
     }
 
-    public async Task<LeaveUsage> DeleteAsync(LeaveUsage leaveUsage, bool permanent = false)
+    public async Task<LeaveType> DeleteAsync(LeaveType leaveType, bool permanent = false)
     {
-        LeaveUsage deletedLeaveUsage = await _leaveUsageRepository.DeleteAsync(leaveUsage);
+        LeaveType deletedLeaveType = await _leaveTypeRepository.DeleteAsync(leaveType);
 
-        return deletedLeaveUsage;
+        return deletedLeaveType;
     }
 }

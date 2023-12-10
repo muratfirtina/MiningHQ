@@ -325,7 +325,7 @@ namespace Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EmployeeLeaves",
+                name: "EmployeeLeaveUsages",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -464,7 +464,7 @@ namespace Persistence.Migrations
                     table.ForeignKey(
                         name: "FK_LeaveUsages_EmployeeLeaves_EmployeeLeaveId",
                         column: x => x.EmployeeLeaveId,
-                        principalTable: "EmployeeLeaves",
+                        principalTable: "EmployeeLeaveUsages",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -567,12 +567,12 @@ namespace Persistence.Migrations
                     { 59, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Models.Add", null },
                     { 60, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Models.Update", null },
                     { 61, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Models.Delete", null },
-                    { 62, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "EmployeeLeaves.Admin", null },
-                    { 63, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "EmployeeLeaves.Read", null },
-                    { 64, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "EmployeeLeaves.Write", null },
-                    { 65, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "EmployeeLeaves.Add", null },
-                    { 66, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "EmployeeLeaves.Update", null },
-                    { 67, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "EmployeeLeaves.Delete", null },
+                    { 62, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "EmployeeLeaveUsages.Admin", null },
+                    { 63, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "EmployeeLeaveUsages.Read", null },
+                    { 64, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "EmployeeLeaveUsages.Write", null },
+                    { 65, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "EmployeeLeaveUsages.Add", null },
+                    { 66, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "EmployeeLeaveUsages.Update", null },
+                    { 67, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "EmployeeLeaveUsages.Delete", null },
                     { 68, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Machines.Admin", null },
                     { 69, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Machines.Read", null },
                     { 70, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "Machines.Write", null },
@@ -620,7 +620,7 @@ namespace Persistence.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_EmployeeLeaves_EmployeeId",
-                table: "EmployeeLeaves",
+                table: "EmployeeLeaveUsages",
                 column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
@@ -738,7 +738,7 @@ namespace Persistence.Migrations
                 name: "Maintenances");
 
             migrationBuilder.DropTable(
-                name: "EmployeeLeaves");
+                name: "EmployeeLeaveUsages");
 
             migrationBuilder.DropTable(
                 name: "OperationClaims");

@@ -1,4 +1,4 @@
-﻿using Core.Security.Entities;
+using Core.Security.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Reflection;
@@ -20,21 +20,24 @@ public class MiningHQDbContext : DbContext
     public DbSet<MaintenanceType> MaintenanceTypes { get; set; }
     public DbSet<Maintenance> Maintenances { get; set; }
     public DbSet<Job> Jobs { get; set; }
-    public DbSet<LeaveUsage> LeaveUsages { get; set; }
+    public DbSet<LeaveType> LeaveUsages { get; set; }
     public DbSet<MachineType> MachineTypes { get; set; }
     public DbSet<Quarry> Quarries { get; set; }
     public DbSet<DailyWorkData> DailyWorkDatas { get; set; }
     public DbSet<Model> Models { get; set; }
-    public DbSet<EmployeeLeave> EmployeeLeaves { get; set; }
+    public DbSet<EmployeeLeaveUsage> EmployeeLeaves { get; set; }
     public DbSet<Machine> Machines { get; set; }
     public DbSet<File> Files { get; set; }
     public DbSet<Employee> Employees { get; set; }
+    public DbSet<EntitledLeave> EntitledLeaves { get; set; }
 
     public MiningHQDbContext(DbContextOptions<MiningHQDbContext> dbContextOptions): base(dbContextOptions)
     {
-        
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true); 
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) =>
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+    
+    
 }

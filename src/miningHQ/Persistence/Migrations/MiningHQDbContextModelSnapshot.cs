@@ -476,37 +476,37 @@ namespace Persistence.Migrations
                         {
                             Id = 62,
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "EmployeeLeaves.Admin"
+                            Name = "EmployeeLeaveUsages.Admin"
                         },
                         new
                         {
                             Id = 63,
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "EmployeeLeaves.Read"
+                            Name = "EmployeeLeaveUsages.Read"
                         },
                         new
                         {
                             Id = 64,
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "EmployeeLeaves.Write"
+                            Name = "EmployeeLeaveUsages.Write"
                         },
                         new
                         {
                             Id = 65,
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "EmployeeLeaves.Add"
+                            Name = "EmployeeLeaveUsages.Add"
                         },
                         new
                         {
                             Id = 66,
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "EmployeeLeaves.Update"
+                            Name = "EmployeeLeaveUsages.Update"
                         },
                         new
                         {
                             Id = 67,
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "EmployeeLeaves.Delete"
+                            Name = "EmployeeLeaveUsages.Delete"
                         },
                         new
                         {
@@ -615,6 +615,42 @@ namespace Persistence.Migrations
                             Id = 85,
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Employees.Delete"
+                        },
+                        new
+                        {
+                            Id = 86,
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "EntitledLeaves.Admin"
+                        },
+                        new
+                        {
+                            Id = 87,
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "EntitledLeaves.Read"
+                        },
+                        new
+                        {
+                            Id = 88,
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "EntitledLeaves.Write"
+                        },
+                        new
+                        {
+                            Id = 89,
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "EntitledLeaves.Add"
+                        },
+                        new
+                        {
+                            Id = 90,
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "EntitledLeaves.Update"
+                        },
+                        new
+                        {
+                            Id = 91,
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "EntitledLeaves.Delete"
                         });
                 });
 
@@ -784,8 +820,8 @@ namespace Persistence.Migrations
                             Email = "admin@admin.com",
                             FirstName = "Admin",
                             LastName = "NArchitecture",
-                            PasswordHash = new byte[] { 176, 236, 84, 198, 126, 159, 141, 145, 48, 204, 201, 248, 96, 145, 146, 76, 131, 169, 229, 20, 215, 1, 173, 101, 48, 59, 204, 112, 52, 65, 255, 203, 42, 105, 241, 94, 195, 85, 10, 241, 47, 177, 138, 95, 222, 212, 224, 61, 217, 194, 160, 160, 138, 181, 176, 77, 25, 163, 84, 232, 97, 145, 159, 153 },
-                            PasswordSalt = new byte[] { 94, 239, 194, 22, 183, 222, 117, 70, 218, 34, 213, 103, 253, 207, 139, 201, 150, 125, 118, 89, 203, 252, 169, 123, 184, 162, 216, 30, 195, 5, 188, 31, 152, 238, 54, 17, 247, 127, 23, 9, 10, 249, 90, 119, 65, 62, 236, 116, 63, 205, 187, 218, 107, 167, 242, 204, 8, 3, 236, 144, 104, 37, 162, 215, 163, 42, 118, 157, 198, 47, 122, 212, 240, 73, 99, 102, 203, 64, 217, 23, 60, 240, 204, 124, 125, 232, 31, 143, 101, 184, 118, 168, 227, 151, 7, 95, 56, 27, 159, 51, 106, 65, 57, 73, 251, 20, 134, 230, 71, 52, 45, 238, 13, 166, 79, 85, 215, 160, 177, 66, 8, 148, 185, 40, 131, 198, 32, 18 },
+                            PasswordHash = new byte[] { 108, 73, 118, 164, 7, 107, 66, 206, 170, 124, 171, 161, 192, 17, 219, 227, 20, 139, 194, 147, 183, 28, 242, 93, 128, 66, 138, 118, 124, 125, 71, 139, 196, 160, 84, 127, 232, 72, 54, 255, 245, 135, 195, 176, 184, 0, 23, 131, 188, 54, 38, 229, 169, 79, 98, 171, 116, 234, 227, 168, 61, 141, 115, 99 },
+                            PasswordSalt = new byte[] { 158, 65, 166, 14, 185, 163, 159, 34, 110, 239, 1, 203, 40, 139, 122, 240, 238, 4, 182, 237, 143, 169, 186, 172, 210, 224, 102, 168, 159, 24, 220, 232, 58, 197, 171, 217, 186, 5, 24, 153, 221, 196, 160, 8, 7, 234, 227, 17, 164, 38, 12, 37, 124, 244, 221, 175, 105, 151, 254, 131, 238, 244, 157, 22, 98, 6, 89, 202, 46, 142, 150, 80, 10, 248, 3, 7, 175, 67, 228, 98, 137, 137, 138, 70, 100, 238, 206, 243, 246, 178, 49, 220, 248, 67, 101, 241, 255, 87, 193, 237, 14, 199, 70, 61, 44, 188, 204, 15, 43, 45, 221, 24, 65, 255, 19, 220, 18, 143, 9, 53, 187, 66, 50, 88, 116, 31, 160, 78 },
                             Status = true
                         });
                 });
@@ -1018,7 +1054,7 @@ namespace Persistence.Migrations
                     b.ToTable("Employees", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Entities.EmployeeLeave", b =>
+            modelBuilder.Entity("Domain.Entities.EmployeeLeaveUsage", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -1037,9 +1073,64 @@ namespace Persistence.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("EmployeeId");
 
-                    b.Property<int>("TotalLeaveDays")
+                    b.Property<Guid>("LeaveTypeId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("LeaveTypeId");
+
+                    b.Property<DateTime?>("ReturnDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("ReturnDate");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("UpdatedDate");
+
+                    b.Property<DateTime?>("UsageDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("UsageDate");
+
+                    b.Property<int?>("UsedDays")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("LeaveTypeId");
+
+                    b.ToTable("EmployeeLeavesUsage", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.EntitledLeave", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("Id");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("CreatedDate");
+
+                    b.Property<DateTime?>("DeletedDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("DeletedDate");
+
+                    b.Property<Guid>("EmployeeId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("EmployeeId");
+
+                    b.Property<DateTime?>("EntitledDate")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("EntitledDate");
+
+                    b.Property<int?>("EntitledDays")
                         .HasColumnType("integer")
-                        .HasColumnName("TotalLeaveDays");
+                        .HasColumnName("EntitledDays");
+
+                    b.Property<Guid>("LeaveTypeId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("LeaveTypeId");
 
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("timestamp with time zone")
@@ -1049,7 +1140,9 @@ namespace Persistence.Migrations
 
                     b.HasIndex("EmployeeId");
 
-                    b.ToTable("EmployeeLeaves", (string)null);
+                    b.HasIndex("LeaveTypeId");
+
+                    b.ToTable("EntitledLeaves", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.File", b =>
@@ -1128,7 +1221,7 @@ namespace Persistence.Migrations
                     b.ToTable("Jobs", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Entities.LeaveUsage", b =>
+            modelBuilder.Entity("Domain.Entities.LeaveType", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -1143,27 +1236,18 @@ namespace Persistence.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("DeletedDate");
 
-                    b.Property<Guid>("EmployeeLeaveId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("EmployeeLeaveId");
-
-                    b.Property<DateTime?>("ReturnDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("ReturnDate");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("Name");
 
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("UpdatedDate");
 
-                    b.Property<DateTime?>("UsageDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("UsageDate");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("EmployeeLeaveId");
-
-                    b.ToTable("LeaveUsages", (string)null);
+                    b.ToTable("LeaveTypes", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Machine", b =>
@@ -1536,26 +1620,42 @@ namespace Persistence.Migrations
                     b.Navigation("Quarry");
                 });
 
-            modelBuilder.Entity("Domain.Entities.EmployeeLeave", b =>
+            modelBuilder.Entity("Domain.Entities.EmployeeLeaveUsage", b =>
                 {
                     b.HasOne("Domain.Entities.Employee", "Employee")
-                        .WithMany("EmployeeLeaves")
+                        .WithMany("EmployeeLeaveUsages")
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Employee");
-                });
-
-            modelBuilder.Entity("Domain.Entities.LeaveUsage", b =>
-                {
-                    b.HasOne("Domain.Entities.EmployeeLeave", "EmployeeLeave")
-                        .WithMany("LeaveUsages")
-                        .HasForeignKey("EmployeeLeaveId")
+                    b.HasOne("Domain.Entities.LeaveType", "LeaveType")
+                        .WithMany("EmployeeLeaveUsages")
+                        .HasForeignKey("LeaveTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("EmployeeLeave");
+                    b.Navigation("Employee");
+
+                    b.Navigation("LeaveType");
+                });
+
+            modelBuilder.Entity("Domain.Entities.EntitledLeave", b =>
+                {
+                    b.HasOne("Domain.Entities.Employee", "Employee")
+                        .WithMany("EntitledLeaves")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.LeaveType", "LeaveType")
+                        .WithMany("EntitledLeaves")
+                        .HasForeignKey("LeaveTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("LeaveType");
                 });
 
             modelBuilder.Entity("Domain.Entities.Machine", b =>
@@ -1677,17 +1777,21 @@ namespace Persistence.Migrations
                 {
                     b.Navigation("EmployeeFiles");
 
-                    b.Navigation("EmployeeLeaves");
-                });
+                    b.Navigation("EmployeeLeaveUsages");
 
-            modelBuilder.Entity("Domain.Entities.EmployeeLeave", b =>
-                {
-                    b.Navigation("LeaveUsages");
+                    b.Navigation("EntitledLeaves");
                 });
 
             modelBuilder.Entity("Domain.Entities.Job", b =>
                 {
                     b.Navigation("Employees");
+                });
+
+            modelBuilder.Entity("Domain.Entities.LeaveType", b =>
+                {
+                    b.Navigation("EmployeeLeaveUsages");
+
+                    b.Navigation("EntitledLeaves");
                 });
 
             modelBuilder.Entity("Domain.Entities.Machine", b =>

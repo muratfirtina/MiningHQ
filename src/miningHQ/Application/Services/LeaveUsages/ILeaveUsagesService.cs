@@ -7,24 +7,24 @@ namespace Application.Services.LeaveUsages;
 
 public interface ILeaveUsagesService
 {
-    Task<LeaveUsage?> GetAsync(
-        Expression<Func<LeaveUsage, bool>> predicate,
-        Func<IQueryable<LeaveUsage>, IIncludableQueryable<LeaveUsage, object>>? include = null,
+    Task<LeaveType?> GetAsync(
+        Expression<Func<LeaveType, bool>> predicate,
+        Func<IQueryable<LeaveType>, IIncludableQueryable<LeaveType, object>>? include = null,
         bool withDeleted = false,
         bool enableTracking = true,
         CancellationToken cancellationToken = default
     );
-    Task<IPaginate<LeaveUsage>?> GetListAsync(
-        Expression<Func<LeaveUsage, bool>>? predicate = null,
-        Func<IQueryable<LeaveUsage>, IOrderedQueryable<LeaveUsage>>? orderBy = null,
-        Func<IQueryable<LeaveUsage>, IIncludableQueryable<LeaveUsage, object>>? include = null,
+    Task<IPaginate<LeaveType>?> GetListAsync(
+        Expression<Func<LeaveType, bool>>? predicate = null,
+        Func<IQueryable<LeaveType>, IOrderedQueryable<LeaveType>>? orderBy = null,
+        Func<IQueryable<LeaveType>, IIncludableQueryable<LeaveType, object>>? include = null,
         int index = 0,
         int size = 10,
         bool withDeleted = false,
         bool enableTracking = true,
         CancellationToken cancellationToken = default
     );
-    Task<LeaveUsage> AddAsync(LeaveUsage leaveUsage);
-    Task<LeaveUsage> UpdateAsync(LeaveUsage leaveUsage);
-    Task<LeaveUsage> DeleteAsync(LeaveUsage leaveUsage, bool permanent = false);
+    Task<LeaveType> AddAsync(LeaveType leaveType);
+    Task<LeaveType> UpdateAsync(LeaveType leaveType);
+    Task<LeaveType> DeleteAsync(LeaveType leaveType, bool permanent = false);
 }

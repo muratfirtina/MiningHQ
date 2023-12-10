@@ -1,4 +1,4 @@
-﻿using Application.Services.Repositories;
+using Application.Services.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,15 +26,16 @@ public static class PersistenceServiceRegistration
         services.AddScoped<IMaintenanceTypeRepository, MaintenanceTypeRepository>();
         services.AddScoped<IMaintenanceRepository, MaintenanceRepository>();
         services.AddScoped<IJobRepository, JobRepository>();
-        services.AddScoped<ILeaveUsageRepository, LeaveUsageRepository>();
+        services.AddScoped<ILeaveTypeRepository, LeaveTypeRepository>();
         services.AddScoped<IMachineTypeRepository, MachineTypeRepository>();
         services.AddScoped<IQuarryRepository, QuarryRepository>();
         services.AddScoped<IDailyWorkDataRepository, DailyWorkDataRepository>();
         services.AddScoped<IModelRepository, ModelRepository>();
-        services.AddScoped<IEmployeeLeaveRepository, EmployeeLeaveRepository>();
+        services.AddScoped<IEmployeeLeaveUsageRepository, EmployeeLeaveUsageRepository>();
         services.AddScoped<IMachineRepository, MachineRepository>();
         services.AddScoped<IFileRepository, FileRepository>();
         services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+        services.AddScoped<IEntitledLeaveRepository, EntitledLeaveRepository>();
         return services;
     }
 }

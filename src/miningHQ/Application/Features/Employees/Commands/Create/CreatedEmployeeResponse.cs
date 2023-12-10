@@ -18,4 +18,5 @@ public class CreatedEmployeeResponse : IResponse
     public string? LicenseType { get; set; }
     public string? TypeOfBlood { get; set; }
     public string? EmergencyContact { get; set; }
+    public int? TotalLeaveDays { get; set; }
 }

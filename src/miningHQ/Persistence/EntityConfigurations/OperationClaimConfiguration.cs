@@ -174,16 +174,16 @@ public class OperationClaimConfiguration : IEntityTypeConfiguration<OperationCla
         #endregion
         
         
-        #region EmployeeLeaves
+        #region EmployeeLeaveUsages
         
-        seeds.Add(new OperationClaim { Id = ++id, Name = "EmployeeLeaves.Admin" });
+        seeds.Add(new OperationClaim { Id = ++id, Name = "EmployeeLeaveUsages.Admin" });
         
-        seeds.Add(new OperationClaim { Id = ++id, Name = "EmployeeLeaves.Read" });
-        seeds.Add(new OperationClaim { Id = ++id, Name = "EmployeeLeaves.Write" });
+        seeds.Add(new OperationClaim { Id = ++id, Name = "EmployeeLeaveUsages.Read" });
+        seeds.Add(new OperationClaim { Id = ++id, Name = "EmployeeLeaveUsages.Write" });
         
-        seeds.Add(new OperationClaim { Id = ++id, Name = "EmployeeLeaves.Add" });
-        seeds.Add(new OperationClaim { Id = ++id, Name = "EmployeeLeaves.Update" });
-        seeds.Add(new OperationClaim { Id = ++id, Name = "EmployeeLeaves.Delete" });
+        seeds.Add(new OperationClaim { Id = ++id, Name = "EmployeeLeaveUsages.Add" });
+        seeds.Add(new OperationClaim { Id = ++id, Name = "EmployeeLeaveUsages.Update" });
+        seeds.Add(new OperationClaim { Id = ++id, Name = "EmployeeLeaveUsages.Delete" });
         
         #endregion
         
@@ -226,6 +226,20 @@ public class OperationClaimConfiguration : IEntityTypeConfiguration<OperationCla
         seeds.Add(new OperationClaim { Id = ++id, Name = "Employees.Add" });
         seeds.Add(new OperationClaim { Id = ++id, Name = "Employees.Update" });
         seeds.Add(new OperationClaim { Id = ++id, Name = "Employees.Delete" });
+        
+        #endregion
+        
+        
+        #region EntitledLeaves
+        
+        seeds.Add(new OperationClaim { Id = ++id, Name = "EntitledLeaves.Admin" });
+        
+        seeds.Add(new OperationClaim { Id = ++id, Name = "EntitledLeaves.Read" });
+        seeds.Add(new OperationClaim { Id = ++id, Name = "EntitledLeaves.Write" });
+        
+        seeds.Add(new OperationClaim { Id = ++id, Name = "EntitledLeaves.Add" });
+        seeds.Add(new OperationClaim { Id = ++id, Name = "EntitledLeaves.Update" });
+        seeds.Add(new OperationClaim { Id = ++id, Name = "EntitledLeaves.Delete" });
         
         #endregion
         

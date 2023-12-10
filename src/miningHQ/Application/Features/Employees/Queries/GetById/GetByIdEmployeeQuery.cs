@@ -34,10 +34,27 @@ public class GetByIdEmployeeQuery : IRequest<GetByIdEmployeeResponse>//, ISecure
             Employee? employee = await _employeeRepository.GetAsync
                 (predicate: e => e.Id == request.Id,
                     include: e=>e.Include(e=>e.Job)
-                        .Include(e=>e.Quarry) ,cancellationToken: cancellationToken);
+                        .Include(e=>e.Quarry)
+                        .Include(e=>e.EntitledLeaves).ThenInclude(el=>el.LeaveType)
+                        .Include(e=>e.EmployeeLeaveUsages).ThenInclude(el=>el.LeaveType) ,cancellationToken: cancellationToken);
+            
+            
+            //hakedilen izinleri topla
+            var totalEntitledDays = employee.EntitledLeaves.Sum(el => el.EntitledDays);
+            //kullanılan izinleri topla
+            var totalUsedDays = employee.EmployeeLeaveUsages.Sum(el => el.UsedDays);
+            
+            //hakedilen izinlerden kullanılan izinleri çıkar
+            var currentLeaveDays =  totalEntitledDays - totalUsedDays;
+            
+            
             await _employeeBusinessRules.EmployeeShouldExistWhenSelected(employee);
 
             GetByIdEmployeeResponse response = _mapper.Map<GetByIdEmployeeResponse>(employee);
+            response.TotalUsedLeaveDays = totalUsedDays;
+            response.TotalEntitledLeaveDays = totalEntitledDays;
+            response.CurrentLeaveDays = currentLeaveDays;
+            
             return response;
         }
     }

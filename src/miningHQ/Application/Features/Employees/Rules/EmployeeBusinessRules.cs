@@ -31,4 +31,23 @@ public class EmployeeBusinessRules : BaseBusinessRules
         );
         await EmployeeShouldExistWhenSelected(employee);
     }
+    public async Task<int> CalculateLeaveDays(Guid id)
+    {
+        Employee? employee = await _employeeRepository.GetAsync(
+            predicate: e => e.Id == id
+        );
+        DateTime? hireDate = employee?.HireDate;
+        if (hireDate != null)
+        {
+            DateTime anniversaryDate = hireDate.Value.AddYears(DateTime.Now.Year - hireDate.Value.Year);
+
+            int leaveDays = DateTime.Now >= anniversaryDate.AddYears(5) ? 20 : 14;
+
+            return leaveDays;
+        }
+        else
+        {
+            return 0;
+        }
+    }
 }

@@ -18,7 +18,9 @@ public class GetByIdEmployeeResponse : IResponse
     public string? LicenseType { get; set; }
     public string? TypeOfBlood { get; set; }
     public string? EmergencyContact { get; set; }
+    public int? TotalUsedLeaveDays { get; set; }
+    public int? TotalEntitledLeaveDays { get; set; }
     
-
+    public int? CurrentLeaveDays { get; set; }
 
 }

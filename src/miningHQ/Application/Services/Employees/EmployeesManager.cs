@@ -74,4 +74,10 @@ public class EmployeesManager : IEmployeesService
 
         return deletedEmployee;
     }
+    
+    public async Task<int> CalculateLeaveDays(Guid employeeId)
+    {
+        int leaveDays = await _employeeBusinessRules.CalculateLeaveDays(employeeId);
+        return leaveDays;
+    }
 }

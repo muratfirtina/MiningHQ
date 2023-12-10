@@ -20,8 +20,8 @@ public class Employee:Entity<Guid>
     public string? EmergencyContact { get; set; }
     public ICollection<Machine>? Machines { get; set; } = new List<Machine>();
     public ICollection<EmployeeFile>? EmployeeFiles { get; set; } = new List<EmployeeFile>();
-    public ICollection<EmployeeLeave>? EmployeeLeaves { get; set; } = new List<EmployeeLeave>();
-
+    public ICollection<EmployeeLeaveUsage>? EmployeeLeaveUsages { get; set; }
+    public ICollection<EntitledLeave>? EntitledLeaves { get; set; }
     
 
     public Employee()

@@ -29,6 +29,10 @@ public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
         
         builder.HasOne(e => e.Job).WithMany(j => j.Employees).HasForeignKey(e => e.JobId);
         builder.HasOne(e => e.Quarry).WithMany(q => q.Employees).HasForeignKey(e => e.QuarryId);
+        builder.HasMany(e => e.Machines).WithMany(m => m.Employees);
+        builder.HasMany(e => e.EmployeeFiles).WithOne(e => e.Employee).HasForeignKey(e => e.EmployeeId);
+        builder.HasMany(e => e.EmployeeLeaveUsages).WithOne(e => e.Employee).HasForeignKey(e => e.EmployeeId);
+        builder.HasMany(e => e.EntitledLeaves).WithOne(e => e.Employee).HasForeignKey(e => e.EmployeeId);
         
 
         builder.HasQueryFilter(e => !e.DeletedDate.HasValue);
