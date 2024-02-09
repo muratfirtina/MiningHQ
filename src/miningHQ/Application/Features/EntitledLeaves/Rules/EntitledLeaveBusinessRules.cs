@@ -9,10 +9,12 @@ namespace Application.Features.EntitledLeaves.Rules;
 public class EntitledLeaveBusinessRules : BaseBusinessRules
 {
     private readonly IEntitledLeaveRepository _entitledLeaveRepository;
+    private readonly IEmployeeLeaveUsageRepository _employeeLeaveUsageRepository;
 
-    public EntitledLeaveBusinessRules(IEntitledLeaveRepository entitledLeaveRepository)
+    public EntitledLeaveBusinessRules(IEntitledLeaveRepository entitledLeaveRepository, IEmployeeLeaveUsageRepository employeeLeaveUsageRepository)
     {
         _entitledLeaveRepository = entitledLeaveRepository;
+        _employeeLeaveUsageRepository = employeeLeaveUsageRepository;
     }
 
     public Task EntitledLeaveShouldExistWhenSelected(EntitledLeave? entitledLeave)
@@ -31,5 +33,29 @@ public class EntitledLeaveBusinessRules : BaseBusinessRules
         );
         await EntitledLeaveShouldExistWhenSelected(entitledLeave);
     }
+    
+    
+    public async Task<int?> CalculateRemainingAnnualLeaves(string? employeeId, CancellationToken cancellationToken)
+    {
+        var entitledLeaves = await _entitledLeaveRepository.GetAllAsync(
+            predicate: el => el.EmployeeId.ToString() == employeeId,
+            enableTracking: false,
+            cancellationToken: cancellationToken
+        );
+        
+        var usedDays = await _employeeLeaveUsageRepository.GetAllAsync(
+            predicate: elu => elu.EmployeeId.ToString() == employeeId,
+            enableTracking: false,
+            cancellationToken: cancellationToken
+        );
+        
+        var tolalEntitledLeaves = entitledLeaves.Sum(el => el.EntitledDays);
+        var tolalUsedDays = usedDays.Sum(elu => elu.UsedDays);
+        
+        var remainingAnnualLeaves = tolalEntitledLeaves - tolalUsedDays;
+        return remainingAnnualLeaves;
+        
+    }
+    
     
 }

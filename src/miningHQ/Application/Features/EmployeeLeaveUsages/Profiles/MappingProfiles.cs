@@ -21,7 +21,14 @@ public class MappingProfiles : Profile
         CreateMap<EmployeeLeaveUsage, DeleteEmployeeLeaveUsageCommand>().ReverseMap();
         CreateMap<EmployeeLeaveUsage, DeletedEmployeeLeaveUsageResponse>().ReverseMap();
         CreateMap<EmployeeLeaveUsage, GetByIdEmployeeLeaveUsageResponse>().ReverseMap();
-        CreateMap<EmployeeLeaveUsage, GetListEmployeeLeaveUsageListItemDto>().ReverseMap();
+        CreateMap<EmployeeLeaveUsage, GetListEmployeeLeaveUsageListItemDto>()
+            .ForMember(d => d.FirstName, o => o.MapFrom(s => s.Employee.FirstName))
+            .ForMember(d => d.LastName, o => o.MapFrom(s => s.Employee.LastName))
+            .ReverseMap();
         CreateMap<IPaginate<EmployeeLeaveUsage>, GetListResponse<GetListEmployeeLeaveUsageListItemDto>>().ReverseMap();
+        CreateMap<List<EmployeeLeaveUsage>, GetListResponse<GetListEmployeeLeaveUsageListItemDto>>()
+                .ReverseMap();
+  
+        
     }
 }

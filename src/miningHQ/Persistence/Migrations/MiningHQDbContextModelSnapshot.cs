@@ -49,11 +49,11 @@ namespace Persistence.Migrations
                         .HasColumnName("ActivationKey");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreatedDate");
 
                     b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("DeletedDate");
 
                     b.Property<bool>("IsVerified")
@@ -61,7 +61,7 @@ namespace Persistence.Migrations
                         .HasColumnName("IsVerified");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("UpdatedDate");
 
                     b.Property<Guid>("UserId")
@@ -85,11 +85,11 @@ namespace Persistence.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreatedDate");
 
                     b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("DeletedDate");
 
                     b.Property<string>("Name")
@@ -98,7 +98,7 @@ namespace Persistence.Migrations
                         .HasColumnName("Name");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("UpdatedDate");
 
                     b.HasKey("Id");
@@ -651,6 +651,42 @@ namespace Persistence.Migrations
                             Id = 91,
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "EntitledLeaves.Delete"
+                        },
+                        new
+                        {
+                            Id = 92,
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Timekeepings.Admin"
+                        },
+                        new
+                        {
+                            Id = 93,
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Timekeepings.Read"
+                        },
+                        new
+                        {
+                            Id = 94,
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Timekeepings.Write"
+                        },
+                        new
+                        {
+                            Id = 95,
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Timekeepings.Add"
+                        },
+                        new
+                        {
+                            Id = 96,
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Timekeepings.Update"
+                        },
+                        new
+                        {
+                            Id = 97,
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Timekeepings.Delete"
                         });
                 });
 
@@ -662,11 +698,11 @@ namespace Persistence.Migrations
                         .HasColumnName("Id");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreatedDate");
 
                     b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("DeletedDate");
 
                     b.Property<bool>("IsVerified")
@@ -679,7 +715,7 @@ namespace Persistence.Migrations
                         .HasColumnName("SecretKey");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("UpdatedDate");
 
                     b.Property<Guid>("UserId")
@@ -706,15 +742,15 @@ namespace Persistence.Migrations
                         .HasColumnName("CreatedByIp");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreatedDate");
 
                     b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("DeletedDate");
 
                     b.Property<DateTime>("Expires")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("Expires");
 
                     b.Property<string>("ReasonRevoked")
@@ -726,7 +762,7 @@ namespace Persistence.Migrations
                         .HasColumnName("ReplacedByToken");
 
                     b.Property<DateTime?>("Revoked")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("Revoked");
 
                     b.Property<string>("RevokedByIp")
@@ -739,7 +775,7 @@ namespace Persistence.Migrations
                         .HasColumnName("Token");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("UpdatedDate");
 
                     b.Property<Guid>("UserId")
@@ -765,11 +801,11 @@ namespace Persistence.Migrations
                         .HasColumnName("AuthenticatorType");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreatedDate");
 
                     b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("DeletedDate");
 
                     b.Property<string>("Email")
@@ -804,7 +840,7 @@ namespace Persistence.Migrations
                         .HasColumnName("Status");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("UpdatedDate");
 
                     b.HasKey("Id");
@@ -820,8 +856,8 @@ namespace Persistence.Migrations
                             Email = "admin@admin.com",
                             FirstName = "Admin",
                             LastName = "NArchitecture",
-                            PasswordHash = new byte[] { 108, 73, 118, 164, 7, 107, 66, 206, 170, 124, 171, 161, 192, 17, 219, 227, 20, 139, 194, 147, 183, 28, 242, 93, 128, 66, 138, 118, 124, 125, 71, 139, 196, 160, 84, 127, 232, 72, 54, 255, 245, 135, 195, 176, 184, 0, 23, 131, 188, 54, 38, 229, 169, 79, 98, 171, 116, 234, 227, 168, 61, 141, 115, 99 },
-                            PasswordSalt = new byte[] { 158, 65, 166, 14, 185, 163, 159, 34, 110, 239, 1, 203, 40, 139, 122, 240, 238, 4, 182, 237, 143, 169, 186, 172, 210, 224, 102, 168, 159, 24, 220, 232, 58, 197, 171, 217, 186, 5, 24, 153, 221, 196, 160, 8, 7, 234, 227, 17, 164, 38, 12, 37, 124, 244, 221, 175, 105, 151, 254, 131, 238, 244, 157, 22, 98, 6, 89, 202, 46, 142, 150, 80, 10, 248, 3, 7, 175, 67, 228, 98, 137, 137, 138, 70, 100, 238, 206, 243, 246, 178, 49, 220, 248, 67, 101, 241, 255, 87, 193, 237, 14, 199, 70, 61, 44, 188, 204, 15, 43, 45, 221, 24, 65, 255, 19, 220, 18, 143, 9, 53, 187, 66, 50, 88, 116, 31, 160, 78 },
+                            PasswordHash = new byte[] { 75, 169, 52, 176, 84, 49, 188, 7, 0, 60, 87, 30, 69, 228, 196, 125, 15, 31, 224, 133, 216, 89, 162, 204, 85, 6, 191, 60, 42, 105, 241, 192, 38, 127, 105, 185, 75, 137, 5, 61, 2, 245, 62, 142, 43, 26, 10, 250, 223, 107, 140, 118, 84, 150, 159, 1, 37, 22, 17, 145, 183, 159, 239, 243 },
+                            PasswordSalt = new byte[] { 211, 12, 227, 199, 32, 243, 143, 172, 54, 227, 85, 142, 107, 62, 0, 25, 4, 246, 246, 38, 14, 194, 85, 74, 205, 167, 49, 188, 38, 83, 84, 159, 199, 148, 173, 236, 161, 103, 233, 176, 195, 70, 72, 25, 198, 61, 126, 192, 199, 46, 57, 7, 242, 193, 37, 13, 105, 117, 188, 89, 10, 210, 23, 169, 14, 91, 226, 243, 127, 215, 250, 18, 205, 1, 207, 222, 229, 43, 195, 145, 153, 81, 182, 74, 133, 142, 227, 110, 50, 37, 8, 206, 249, 169, 130, 120, 105, 93, 86, 231, 6, 64, 24, 49, 69, 220, 195, 104, 219, 202, 242, 127, 153, 126, 175, 53, 121, 41, 69, 78, 63, 67, 16, 213, 51, 31, 64, 206 },
                             Status = true
                         });
                 });
@@ -834,11 +870,11 @@ namespace Persistence.Migrations
                         .HasColumnName("Id");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreatedDate");
 
                     b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("DeletedDate");
 
                     b.Property<int>("OperationClaimId")
@@ -846,7 +882,7 @@ namespace Persistence.Migrations
                         .HasColumnName("OperationClaimId");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("UpdatedDate");
 
                     b.Property<Guid>("UserId")
@@ -879,11 +915,11 @@ namespace Persistence.Migrations
                         .HasColumnName("Id");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreatedDate");
 
                     b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("DeletedDate");
 
                     b.Property<string>("Name")
@@ -892,7 +928,7 @@ namespace Persistence.Migrations
                         .HasColumnName("Name");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("UpdatedDate");
 
                     b.HasKey("Id");
@@ -908,15 +944,15 @@ namespace Persistence.Migrations
                         .HasColumnName("Id");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreatedDate");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("Date");
 
                     b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("DeletedDate");
 
                     b.Property<double>("FuelConsumption")
@@ -928,7 +964,7 @@ namespace Persistence.Migrations
                         .HasColumnName("MachineId");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("UpdatedDate");
 
                     b.HasKey("Id");
@@ -946,15 +982,15 @@ namespace Persistence.Migrations
                         .HasColumnName("Id");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreatedDate");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("Date");
 
                     b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("DeletedDate");
 
                     b.Property<Guid>("MachineId")
@@ -962,7 +998,7 @@ namespace Persistence.Migrations
                         .HasColumnName("MachineId");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("UpdatedDate");
 
                     b.Property<int>("WorkingHoursOrKm")
@@ -988,19 +1024,19 @@ namespace Persistence.Migrations
                         .HasColumnName("Address");
 
                     b.Property<DateTime?>("BirthDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("BirthDate");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreatedDate");
 
                     b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("DeletedDate");
 
                     b.Property<DateTime?>("DepartureDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("DepartureDate");
 
                     b.Property<string>("EmergencyContact")
@@ -1013,7 +1049,7 @@ namespace Persistence.Migrations
                         .HasColumnName("FirstName");
 
                     b.Property<DateTime?>("HireDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("HireDate");
 
                     b.Property<Guid?>("JobId")
@@ -1042,7 +1078,7 @@ namespace Persistence.Migrations
                         .HasColumnName("TypeOfBlood");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("UpdatedDate");
 
                     b.HasKey("Id");
@@ -1062,11 +1098,11 @@ namespace Persistence.Migrations
                         .HasColumnName("Id");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreatedDate");
 
                     b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("DeletedDate");
 
                     b.Property<Guid>("EmployeeId")
@@ -1078,15 +1114,15 @@ namespace Persistence.Migrations
                         .HasColumnName("LeaveTypeId");
 
                     b.Property<DateTime?>("ReturnDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("ReturnDate");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("UpdatedDate");
 
                     b.Property<DateTime?>("UsageDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("UsageDate");
 
                     b.Property<int?>("UsedDays")
@@ -1109,11 +1145,11 @@ namespace Persistence.Migrations
                         .HasColumnName("Id");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreatedDate");
 
                     b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("DeletedDate");
 
                     b.Property<Guid>("EmployeeId")
@@ -1121,7 +1157,7 @@ namespace Persistence.Migrations
                         .HasColumnName("EmployeeId");
 
                     b.Property<DateTime?>("EntitledDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("EntitledDate");
 
                     b.Property<int?>("EntitledDays")
@@ -1133,7 +1169,7 @@ namespace Persistence.Migrations
                         .HasColumnName("LeaveTypeId");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("UpdatedDate");
 
                     b.HasKey("Id");
@@ -1153,11 +1189,11 @@ namespace Persistence.Migrations
                         .HasColumnName("Id");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreatedDate");
 
                     b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("DeletedDate");
 
                     b.Property<string>("Discriminator")
@@ -1180,7 +1216,7 @@ namespace Persistence.Migrations
                         .HasColumnName("Storage");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("UpdatedDate");
 
                     b.HasKey("Id");
@@ -1200,11 +1236,11 @@ namespace Persistence.Migrations
                         .HasColumnName("Id");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreatedDate");
 
                     b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("DeletedDate");
 
                     b.Property<string>("Name")
@@ -1213,7 +1249,7 @@ namespace Persistence.Migrations
                         .HasColumnName("Name");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("UpdatedDate");
 
                     b.HasKey("Id");
@@ -1229,11 +1265,11 @@ namespace Persistence.Migrations
                         .HasColumnName("Id");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreatedDate");
 
                     b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("DeletedDate");
 
                     b.Property<string>("Name")
@@ -1242,7 +1278,7 @@ namespace Persistence.Migrations
                         .HasColumnName("Name");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("UpdatedDate");
 
                     b.HasKey("Id");
@@ -1258,11 +1294,11 @@ namespace Persistence.Migrations
                         .HasColumnName("Id");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreatedDate");
 
                     b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("DeletedDate");
 
                     b.Property<Guid>("MachineTypeId")
@@ -1287,7 +1323,7 @@ namespace Persistence.Migrations
                         .HasColumnName("SerialNumber");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("UpdatedDate");
 
                     b.HasKey("Id");
@@ -1309,11 +1345,11 @@ namespace Persistence.Migrations
                         .HasColumnName("Id");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreatedDate");
 
                     b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("DeletedDate");
 
                     b.Property<string>("Name")
@@ -1322,7 +1358,7 @@ namespace Persistence.Migrations
                         .HasColumnName("Name");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("UpdatedDate");
 
                     b.HasKey("Id");
@@ -1338,11 +1374,11 @@ namespace Persistence.Migrations
                         .HasColumnName("Id");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreatedDate");
 
                     b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("DeletedDate");
 
                     b.Property<string>("Description")
@@ -1359,7 +1395,7 @@ namespace Persistence.Migrations
                         .HasColumnName("MachineWorkingTimeOrKilometer");
 
                     b.Property<DateTime>("MaintenanceDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("MaintenanceDate");
 
                     b.Property<string>("MaintenanceFirm")
@@ -1372,7 +1408,7 @@ namespace Persistence.Migrations
                         .HasColumnName("MaintenanceTypeId");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("UpdatedDate");
 
                     b.HasKey("Id");
@@ -1392,11 +1428,11 @@ namespace Persistence.Migrations
                         .HasColumnName("Id");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreatedDate");
 
                     b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("DeletedDate");
 
                     b.Property<string>("Name")
@@ -1405,7 +1441,7 @@ namespace Persistence.Migrations
                         .HasColumnName("Name");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("UpdatedDate");
 
                     b.HasKey("Id");
@@ -1425,11 +1461,11 @@ namespace Persistence.Migrations
                         .HasColumnName("BrandId");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreatedDate");
 
                     b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("DeletedDate");
 
                     b.Property<string>("Name")
@@ -1438,7 +1474,7 @@ namespace Persistence.Migrations
                         .HasColumnName("Name");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("UpdatedDate");
 
                     b.HasKey("Id");
@@ -1456,11 +1492,11 @@ namespace Persistence.Migrations
                         .HasColumnName("Id");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreatedDate");
 
                     b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("DeletedDate");
 
                     b.Property<string>("Name")
@@ -1469,12 +1505,50 @@ namespace Persistence.Migrations
                         .HasColumnName("Name");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("timestamp without time zone")
                         .HasColumnName("UpdatedDate");
 
                     b.HasKey("Id");
 
                     b.ToTable("Quarries", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Timekeeping", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("Id");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("CreatedDate");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("Date");
+
+                    b.Property<DateTime?>("DeletedDate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("DeletedDate");
+
+                    b.Property<Guid?>("EmployeeId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("EmployeeId");
+
+                    b.Property<bool?>("Status")
+                        .HasColumnType("boolean")
+                        .HasColumnName("Status");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("UpdatedDate");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("Timekeepings", (string)null);
                 });
 
             modelBuilder.Entity("EmployeeMachine", b =>
@@ -1715,6 +1789,15 @@ namespace Persistence.Migrations
                     b.Navigation("Brand");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Timekeeping", b =>
+                {
+                    b.HasOne("Domain.Entities.Employee", "Employee")
+                        .WithMany("Timekeepings")
+                        .HasForeignKey("EmployeeId");
+
+                    b.Navigation("Employee");
+                });
+
             modelBuilder.Entity("EmployeeMachine", b =>
                 {
                     b.HasOne("Domain.Entities.Employee", null)
@@ -1780,6 +1863,8 @@ namespace Persistence.Migrations
                     b.Navigation("EmployeeLeaveUsages");
 
                     b.Navigation("EntitledLeaves");
+
+                    b.Navigation("Timekeepings");
                 });
 
             modelBuilder.Entity("Domain.Entities.Job", b =>

@@ -27,4 +27,7 @@ public interface IEntitledLeavesService
     Task<EntitledLeave> AddAsync(EntitledLeave entitledLeave);
     Task<EntitledLeave> UpdateAsync(EntitledLeave entitledLeave);
     Task<EntitledLeave> DeleteAsync(EntitledLeave entitledLeave, bool permanent = false);
+    
+    Task<int?> GetRemainingEntitledLeavesAsync(string employeeId, CancellationToken cancellationToken = default);
+    
 }

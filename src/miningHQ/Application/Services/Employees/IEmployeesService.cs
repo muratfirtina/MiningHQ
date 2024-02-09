@@ -1,3 +1,4 @@
+using Application.Features.Employees.Dtos;
 using Core.Persistence.Paging;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore.Query;
@@ -27,4 +28,6 @@ public interface IEmployeesService
     Task<Employee> AddAsync(Employee employee);
     Task<Employee> UpdateAsync(Employee employee);
     Task<Employee> DeleteAsync(Employee employee, bool permanent = false);
+    
+    Task<List<EmployeeWithTimekeepingsDto>> GetEmployeesWithTimekeepings(int year, int month, int pageIndex, int pageSize);
 }

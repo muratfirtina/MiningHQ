@@ -27,6 +27,13 @@ public class MappingProfiles : Profile
             .ReverseMap();
         CreateMap<Employee, GetListEmployeeListItemDto>().ReverseMap();
         
+        CreateMap<Employee, GetListEmployeeListItemDto>()
+            .ForMember(dest => dest.Timekeepings, opt => opt.MapFrom(src => src.Timekeepings))
+            .ReverseMap();
+        
+        CreateMap<Timekeeping, TimekeepingDto>().ReverseMap();
+
+        
         CreateMap<IPaginate<Employee>, GetListResponse<GetListEmployeeListItemDto>>().ReverseMap();
     }
 }

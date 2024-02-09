@@ -74,4 +74,9 @@ public class EntitledLeavesManager : IEntitledLeavesService
 
         return deletedEntitledLeave;
     }
+
+    public async Task<int?> GetRemainingEntitledLeavesAsync(string employeeId, CancellationToken cancellationToken = default)
+    {
+        return await _entitledLeaveBusinessRules.CalculateRemainingAnnualLeaves(employeeId, cancellationToken);
+    }
 }

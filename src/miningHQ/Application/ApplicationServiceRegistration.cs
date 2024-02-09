@@ -30,6 +30,7 @@ using Application.Services.Machines;
 using Application.Services.Files;
 using Application.Services.Employees;
 using Application.Services.EntitledLeaves;
+using Application.Services.Timekeepings;
 
 namespace Application;
 
@@ -75,6 +76,7 @@ public static class ApplicationServiceRegistration
         services.AddScoped<IFilesService, FilesManager>();
         services.AddScoped<IEmployeesService, EmployeesManager>();
         services.AddScoped<IEntitledLeavesService, EntitledLeavesManager>();
+        services.AddScoped<ITimekeepingsService, TimekeepingsManager>();
         return services;
     }
 

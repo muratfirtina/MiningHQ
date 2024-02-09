@@ -7,6 +7,8 @@ public class GetListEmployeeLeaveUsageListItemDto : IDto
 {
     public Guid Id { get; set; }
     public Guid EmployeeId { get; set; }
-    public Employee Employee { get; set; }
-    public int TotalLeaveDays { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public string LeaveTypeName { get; set; }
+    public int UsedDays { get; set; }
 }

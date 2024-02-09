@@ -1,3 +1,4 @@
+using Application.Services.EntitledLeaves;
 using Application.Services.Repositories;
 using AutoMapper;
 using Core.Application.Requests;
@@ -5,6 +6,7 @@ using Core.Application.Responses;
 using Core.Persistence.Paging;
 using Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using static Application.Features.EmployeeLeaveUsages.Constants.EmployeeLeaveUsagesOperationClaims;
 
 namespace Application.Features.EmployeeLeaveUsages.Queries.GetList;
@@ -33,14 +35,41 @@ public class GetListEmployeeLeaveUsageQuery : IRequest<GetListResponse<GetListEm
 
         public async Task<GetListResponse<GetListEmployeeLeaveUsageListItemDto>> Handle(GetListEmployeeLeaveUsageQuery request, CancellationToken cancellationToken)
         {
-            IPaginate<EmployeeLeaveUsage> employeeLeaves = await _employeeLeaveUsageRepository.GetListAsync(
-                index: request.PageRequest.PageIndex,
-                size: request.PageRequest.PageSize, 
-                cancellationToken: cancellationToken
-            );
+            if (request.PageRequest.PageIndex == -1 && request.PageRequest.PageSize == -1)
+            {
+                var allEmployeeLeaves = await _employeeLeaveUsageRepository.GetAllAsync(
+                    //employee adına göre sıralayoruz
+                    orderBy: e => e.OrderBy(e => e.Employee.FirstName),
+                    include: e => e.Include(e => e.Employee)
+                        .Include(e => e.LeaveType)
+                );
+                var employeeLeaveDtos = _mapper.Map<List<GetListEmployeeLeaveUsageListItemDto>>(allEmployeeLeaves);
 
-            GetListResponse<GetListEmployeeLeaveUsageListItemDto> response = _mapper.Map<GetListResponse<GetListEmployeeLeaveUsageListItemDto>>(employeeLeaves);
-            return response;
+                return new GetListResponse<GetListEmployeeLeaveUsageListItemDto>
+                {
+                    Items = employeeLeaveDtos,
+                    Index = -1,
+                    Size = -1,
+                    Count = employeeLeaveDtos.Count,
+                    Pages = -1,
+                    HasPrevious = false,
+                    HasNext = false
+                };
+                
+            }
+            else
+            {
+                IPaginate<EmployeeLeaveUsage> employeeLeaves = await _employeeLeaveUsageRepository.GetListAsync(
+                    include: m => m.Include(c => c.Employee).Include(c => c.LeaveType),
+                    index: request.PageRequest.PageIndex,
+                    size: request.PageRequest.PageSize,
+                    cancellationToken: cancellationToken
+                );
+                
+                GetListResponse<GetListEmployeeLeaveUsageListItemDto> response = _mapper.Map<GetListResponse<GetListEmployeeLeaveUsageListItemDto>>(employeeLeaves);
+                return response;
+            }
+            
         }
     }
 }

@@ -22,6 +22,7 @@ public class Employee:Entity<Guid>
     public ICollection<EmployeeFile>? EmployeeFiles { get; set; } = new List<EmployeeFile>();
     public ICollection<EmployeeLeaveUsage>? EmployeeLeaveUsages { get; set; }
     public ICollection<EntitledLeave>? EntitledLeaves { get; set; }
+    public ICollection<Timekeeping>? Timekeepings { get; set; }
     
 
     public Employee()

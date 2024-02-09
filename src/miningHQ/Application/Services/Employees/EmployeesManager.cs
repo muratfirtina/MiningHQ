@@ -1,3 +1,4 @@
+using Application.Features.Employees.Dtos;
 using Application.Features.Employees.Rules;
 using Application.Services.Repositories;
 using Core.Persistence.Paging;
@@ -74,7 +75,12 @@ public class EmployeesManager : IEmployeesService
 
         return deletedEmployee;
     }
-    
+
+    public Task<List<EmployeeWithTimekeepingsDto>> GetEmployeesWithTimekeepings(int year, int month, int pageIndex, int pageSize)
+    {
+        return _employeeRepository.GetEmployeesWithTimekeepings(year, month, pageIndex, pageSize);
+    }
+
     public async Task<int> CalculateLeaveDays(Guid employeeId)
     {
         int leaveDays = await _employeeBusinessRules.CalculateLeaveDays(employeeId);

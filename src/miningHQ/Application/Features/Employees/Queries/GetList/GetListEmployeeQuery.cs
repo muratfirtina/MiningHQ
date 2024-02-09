@@ -48,7 +48,10 @@ public class GetListEmployeeQuery : IRequest<GetListResponse<GetListEmployeeList
                 var allEmployees = await _employeeRepository.GetAllAsync(
                     //employee adına göre sıralayoruz
                     orderBy: e => e.OrderBy(e => e.FirstName),
-                    include:e => e.Include(e => e.Job).Include(e => e.Quarry).Include(e => e.EmployeeFiles)
+                    include:e => e.Include(e => e.Job)
+                        .Include(e => e.Quarry)
+                        .Include(e => e.EmployeeFiles)
+                        .Include(e => e.Timekeepings)
                     );
                 var employeeDtos = _mapper.Map<List<GetListEmployeeListItemDto>>(allEmployees);
 
