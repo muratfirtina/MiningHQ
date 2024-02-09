@@ -33,6 +33,7 @@ public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
         builder.HasMany(e => e.EmployeeFiles).WithOne(e => e.Employee).HasForeignKey(e => e.EmployeeId);
         builder.HasMany(e => e.EmployeeLeaveUsages).WithOne(e => e.Employee).HasForeignKey(e => e.EmployeeId);
         builder.HasMany(e => e.EntitledLeaves).WithOne(e => e.Employee).HasForeignKey(e => e.EmployeeId);
+        builder.HasMany(e => e.Timekeepings).WithOne(e => e.Employee).HasForeignKey(e => e.EmployeeId);
         
 
         builder.HasQueryFilter(e => !e.DeletedDate.HasValue);

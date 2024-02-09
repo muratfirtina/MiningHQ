@@ -30,6 +30,7 @@ public class MiningHQDbContext : DbContext
     public DbSet<File> Files { get; set; }
     public DbSet<Employee> Employees { get; set; }
     public DbSet<EntitledLeave> EntitledLeaves { get; set; }
+    public DbSet<Timekeeping> Timekeepings { get; set; }
 
     public MiningHQDbContext(DbContextOptions<MiningHQDbContext> dbContextOptions): base(dbContextOptions)
     {

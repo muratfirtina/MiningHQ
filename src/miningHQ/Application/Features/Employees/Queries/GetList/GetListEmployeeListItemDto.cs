@@ -1,3 +1,4 @@
+using Application.Features.Employees.Dtos;
 using Core.Application.Dtos;
 using Domain.Entities;
 
@@ -19,4 +20,5 @@ public class GetListEmployeeListItemDto : IDto
     public DateTime? HireDate { get; set; }
     public DateTime? DepartureDate { get; set; }
     public ICollection<EmployeeFile>? EmployeeImageFiles { get; set; }
+    public ICollection<TimekeepingDto>? Timekeepings { get; set; }
 }

@@ -55,9 +55,10 @@ public class EntitledLeavesController : BaseController
     
     
     [HttpGet("[action]/{employeeId}")]
-    public async Task<IActionResult> GetListByEmployeeId([FromRoute] Guid employeeId, [FromQuery] Guid? leaveTypeId, [FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate)
+    public async Task<IActionResult> GetListByEmployeeId([FromRoute] Guid employeeId,[FromQuery] PageRequest pageRequest , [FromQuery] Guid? leaveTypeId, [FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate)
     {
-        GetEntitledLeavesByEmployeeIdResponse response = await Mediator.Send(new GetEntitledLeavesByEmployeeIdQuery { EmployeeId = employeeId, LeaveTypeId = leaveTypeId, StartDate = startDate, EndDate = endDate });
+        GetEntitledLeavesByEmployeeIdQuery getListEntitledLeaveQuery = new() { PageRequest = pageRequest, EmployeeId = employeeId, LeaveTypeId = leaveTypeId, StartDate = startDate, EndDate = endDate };
+        GetListResponse<GetEmployeeEntitledLeaveDto> response = await Mediator.Send(getListEntitledLeaveQuery);
         return Ok(response);
     }
 }

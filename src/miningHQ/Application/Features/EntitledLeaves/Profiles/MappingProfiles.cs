@@ -24,9 +24,10 @@ public class MappingProfiles : Profile
         CreateMap<EntitledLeave, DeletedEntitledLeaveResponse>().ReverseMap();
         CreateMap<EntitledLeave, GetByIdEntitledLeaveResponse>().ReverseMap();
         CreateMap<EntitledLeave, GetListEntitledLeaveListItemDto>().ReverseMap();
-        CreateMap<List<EntitledLeave>, GetEntitledLeavesByEmployeeIdResponse>().ReverseMap();
-        CreateMap<EmployeeEntitledLeaveDto, GetEntitledLeavesByEmployeeIdResponse>().ReverseMap();
-        CreateMap<EntitledLeave, EmployeeEntitledLeaveDto>().ReverseMap();
+        CreateMap<List<EntitledLeave>, GetEmployeeEntitledLeaveDto>().ReverseMap();
+        CreateMap<EntitledLeave, GetEmployeeEntitledLeaveDto>().ReverseMap();
+        CreateMap<IPaginate<EntitledLeave>, GetListResponse<GetEmployeeEntitledLeaveDto>>().ReverseMap();
         CreateMap<IPaginate<EntitledLeave>, GetListResponse<GetListEntitledLeaveListItemDto>>().ReverseMap();
+        
     }
 }

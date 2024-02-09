@@ -243,6 +243,20 @@ public class OperationClaimConfiguration : IEntityTypeConfiguration<OperationCla
         
         #endregion
         
+        
+        #region Timekeepings
+        
+        seeds.Add(new OperationClaim { Id = ++id, Name = "Timekeepings.Admin" });
+        
+        seeds.Add(new OperationClaim { Id = ++id, Name = "Timekeepings.Read" });
+        seeds.Add(new OperationClaim { Id = ++id, Name = "Timekeepings.Write" });
+        
+        seeds.Add(new OperationClaim { Id = ++id, Name = "Timekeepings.Add" });
+        seeds.Add(new OperationClaim { Id = ++id, Name = "Timekeepings.Update" });
+        seeds.Add(new OperationClaim { Id = ++id, Name = "Timekeepings.Delete" });
+        
+        #endregion
+        
         return seeds;
     }
 }
