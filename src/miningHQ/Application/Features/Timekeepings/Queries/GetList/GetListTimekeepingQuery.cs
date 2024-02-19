@@ -1,6 +1,9 @@
 using Application.Features.Timekeepings.Constants;
+<<<<<<< HEAD
 using Application.Services.Employees;
 using Application.Services.EntitledLeaves;
+=======
+>>>>>>> origin/main
 using Application.Services.Repositories;
 using AutoMapper;
 using Domain.Entities;
@@ -33,6 +36,7 @@ public class GetListTimekeepingQuery : IRequest<GetListResponse<GetListTimekeepi
     {
         private readonly ITimekeepingRepository _timekeepingRepository;
         private readonly IMapper _mapper;
+<<<<<<< HEAD
         private readonly IEmployeesService _employeesService;
         private readonly IEntitledLeavesService _entitledLeavesService;
 
@@ -42,11 +46,21 @@ public class GetListTimekeepingQuery : IRequest<GetListResponse<GetListTimekeepi
             _mapper = mapper;
             _employeesService = employeesService;
             _entitledLeavesService = entitledLeavesService;
+=======
+        private readonly IEmployeeRepository _employeeRepository;
+
+        public GetListTimekeepingQueryHandler(ITimekeepingRepository timekeepingRepository, IMapper mapper, IEmployeeRepository employeeRepository)
+        {
+            _timekeepingRepository = timekeepingRepository;
+            _mapper = mapper;
+            _employeeRepository = employeeRepository;
+>>>>>>> origin/main
         }
 
         public async Task<GetListResponse<GetListTimekeepingListItemDto>> Handle(GetListTimekeepingQuery request, CancellationToken cancellationToken)
         {
             
+<<<<<<< HEAD
                 
             
                 var employeesWithTimekeepings = await _employeesService.GetEmployeesWithTimekeepings(request.Year, request.Month,request.PageRequest.PageIndex, request.PageRequest.PageSize);
@@ -57,6 +71,11 @@ public class GetListTimekeepingQuery : IRequest<GetListResponse<GetListTimekeepi
                     employee.TotalRemainingDays = await _entitledLeavesService.GetRemainingEntitledLeavesAsync(employee.EmployeeId.ToString());
                 }
                 
+=======
+            
+                var employeesWithTimekeepings = await _employeeRepository.GetEmployeesWithTimekeepings(request.Year, request.Month,request.PageRequest.PageIndex, request.PageRequest.PageSize);
+    
+>>>>>>> origin/main
                 // Çekilen veriyi GetListTimekeepingListItemDto'ya dönüştür
                 var mappedResult = _mapper.Map<List<GetListTimekeepingListItemDto>>(employeesWithTimekeepings);
     
