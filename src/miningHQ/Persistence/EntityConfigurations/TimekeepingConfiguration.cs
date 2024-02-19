@@ -21,5 +21,7 @@ public class TimekeepingConfiguration : IEntityTypeConfiguration<Timekeeping>
         builder.HasOne(t => t.Employee).WithMany(e => e.Timekeepings).HasForeignKey(t => t.EmployeeId);
 
         builder.HasQueryFilter(t => !t.DeletedDate.HasValue);
+        
+        
     }
 }

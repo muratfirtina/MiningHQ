@@ -7,6 +7,7 @@ using Core.Application.Pipelines.Authorization;
 using Core.Application.Pipelines.Caching;
 using Core.Application.Pipelines.Logging;
 using Core.Application.Pipelines.Transaction;
+using Domain.Enums;
 using MediatR;
 using static Application.Features.Timekeepings.Constants.TimekeepingsOperationClaims;
 
@@ -16,7 +17,7 @@ public class CreateTimekeepingCommand : IRequest<CreatedTimekeepingResponse>
 {
     public DateTime Date { get; set; }
     public Guid? EmployeeId { get; set; }
-    public bool? Status { get; set; }
+    public TimekeepingStatus Status { get; set; }
 
     public string[] Roles => new[] { Admin, Write, TimekeepingsOperationClaims.Create };
 
