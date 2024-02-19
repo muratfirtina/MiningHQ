@@ -10,14 +10,10 @@ public class GetListTimekeepingListItemDto : IDto
     public Guid? EmployeeId { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
-<<<<<<< HEAD
     public DateTime? HireDate { get; set; } 
     public int? TotalRemainingDays { get; set; }
     
     public ICollection<TimekeepingDto>? Timekeepings { get; set; }
-=======
-    
-    public ICollection<TimekeepingDto> Timekeepings { get; set; }
->>>>>>> origin/main
+
     
 }
