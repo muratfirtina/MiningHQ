@@ -8,6 +8,7 @@ using Core.Application.Requests;
 using Core.Application.Responses;
 using Core.Persistence.Paging;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using static Application.Features.EntitledLeaves.Constants.EntitledLeavesOperationClaims;
 
 namespace Application.Features.EntitledLeaves.Queries.GetList;
@@ -36,6 +37,26 @@ public class GetListEntitledLeaveQuery : IRequest<GetListResponse<GetListEntitle
 
         public async Task<GetListResponse<GetListEntitledLeaveListItemDto>> Handle(GetListEntitledLeaveQuery request, CancellationToken cancellationToken)
         {
+            if (request.PageRequest.PageIndex == -1 && request.PageRequest.PageSize == -1)
+            {
+                var entitledLeavesList = await _entitledLeaveRepository.GetAllAsync(
+                    include: el => el.Include(e => e.Employee).Include(lt => lt.LeaveType),
+                    cancellationToken: cancellationToken
+                );
+
+                var employeeEntitledLeaves = _mapper.Map<List<GetListEntitledLeaveListItemDto>>(entitledLeavesList);
+                return new GetListResponse<GetListEntitledLeaveListItemDto>
+                {
+                    Items = employeeEntitledLeaves,
+                    Index = -1,
+                    Size = -1,
+                    Count = entitledLeavesList.Count,
+                    Pages = -1,
+                    HasPrevious = false,
+                    HasNext = false
+                };
+                
+            }
             IPaginate<EntitledLeave> entitledLeaves = await _entitledLeaveRepository.GetListAsync(
                 index: request.PageRequest.PageIndex,
                 size: request.PageRequest.PageSize, 
