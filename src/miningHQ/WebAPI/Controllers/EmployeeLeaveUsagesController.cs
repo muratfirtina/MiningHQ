@@ -3,8 +3,10 @@ using Application.Features.EmployeeLeaveUsages.Commands.Create;
 using Application.Features.EmployeeLeaveUsages.Commands.Delete;
 using Application.Features.EmployeeLeaveUsages.Queries.GetById;
 using Application.Features.EmployeeLeaveUsages.Queries.GetList;
+using Application.Features.EmployeeLeaveUsages.Queries.GetListByDynamic;
 using Core.Application.Requests;
 using Core.Application.Responses;
+using Core.Persistence.Dynamic;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;
@@ -51,4 +53,19 @@ public class EmployeeLeaveUsagesController : BaseController
         GetListResponse<GetListEmployeeLeaveUsageListItemDto> response = await Mediator.Send(getListEmployeeLeaveUsageQuery);
         return Ok(response);
     }
+    
+    [HttpPost("GetList/ByDynamic")]
+    public async Task<IActionResult> GetListByDynamic([FromQuery] PageRequest pageRequest, [FromBody] DynamicQuery? dynamicQuery = null) 
+    {
+        
+        GetListByDynamicEmployeeLeaveUsageListItemQuery getListByDynamicEmployeeLeaveUsageListItemQuery = new()
+        {
+            DynamicQuery = dynamicQuery,
+            PageRequest = pageRequest
+        };
+        GetListResponse<GetListByDynamicEmployeeLeaveUsageListItemDto> response = await Mediator.Send(getListByDynamicEmployeeLeaveUsageListItemQuery);
+        return Ok(response);
+    }
+    
+   
 }

@@ -3,6 +3,7 @@ using Application.Features.Employees.Commands.Delete;
 using Application.Features.Employees.Commands.Update;
 using Application.Features.Employees.Queries.GetById;
 using Application.Features.Employees.Queries.GetList;
+using Application.Features.Employees.Queries.GetList.ShortDetail;
 using Application.Features.Employees.Queries.GetListByDynamic;
 using Core.Application.Requests;
 using Core.Application.Responses;
@@ -51,6 +52,14 @@ public class EmployeesController : BaseController
     {
         GetListEmployeeQuery getListEmployeeQuery = new() { PageRequest = pageRequest };
         GetListResponse<GetListEmployeeListItemDto> response = await Mediator.Send(getListEmployeeQuery);
+        return Ok(response);
+    }
+    
+    [HttpGet("GetList/ShortDetail")]
+    public async Task<IActionResult> GetListShortDetail([FromQuery] PageRequest pageRequest)
+    {
+        GetListByEmplooyeeShortDetailQuery getListByEmplooyeeShortDetailQuery = new() { PageRequest = pageRequest };
+        GetListResponse<GetListByEmplooyeeShortDetailItemDto> response = await Mediator.Send(getListByEmplooyeeShortDetailQuery);
         return Ok(response);
     }
     

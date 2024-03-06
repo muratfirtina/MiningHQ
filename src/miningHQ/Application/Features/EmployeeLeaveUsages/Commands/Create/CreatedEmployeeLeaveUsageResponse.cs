@@ -7,7 +7,10 @@ public class CreatedEmployeeLeaveUsageResponse : IResponse
 {
     public Guid Id { get; set; }
     public Guid EmployeeId { get; set; }
-    public Employee Employee { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
     public string LeaveTypeName { get; set; }
+    public DateTime UsageDate { get; set; }
+    public DateTime ReturnDate { get; set; }
     public int UsedDays { get; set; }
 }

@@ -4,8 +4,11 @@ using Application.Features.EntitledLeaves.Commands.Update;
 using Application.Features.EntitledLeaves.Queries.GetByEmployeeId;
 using Application.Features.EntitledLeaves.Queries.GetById;
 using Application.Features.EntitledLeaves.Queries.GetList;
+using Application.Features.EntitledLeaves.Queries.GetListByDynamic;
+using Application.Features.EntitledLeaves.Queries.GetTotalRemainingDays;
 using Core.Application.Requests;
 using Core.Application.Responses;
+using Core.Persistence.Dynamic;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;
@@ -61,4 +64,20 @@ public class EntitledLeavesController : BaseController
         GetListResponse<GetEmployeeEntitledLeaveDto> response = await Mediator.Send(getListEntitledLeaveQuery);
         return Ok(response);
     }
+    
+    [HttpPost("GetList/ByDynamic")]
+    public async Task<IActionResult> GetListByDynamic([FromQuery] PageRequest pageRequest, [FromBody] DynamicQuery? dynamicQuery = null)
+    {
+        GetListByDynamicEntitledLeavesQuery getListByDynamicEntitledLeavesQuery = new() { PageRequest = pageRequest, DynamicQuery = dynamicQuery };
+        GetListResponse<GetListByDynamicEntitledLeavesListItemDto> response = await Mediator.Send(getListByDynamicEntitledLeavesQuery);
+        return Ok(response);
+    }
+    
+    [HttpPost("GetRemainingDays")]
+    public async Task<IActionResult> GetRemainingDays([FromBody] GetTotalRemainingDaysByEmployeeIdQuery request)
+    {
+        GetTotalRemainingDaysByEmployeeIdDto response = await Mediator.Send(request);
+        return Ok(response);
+    }
+    
 }

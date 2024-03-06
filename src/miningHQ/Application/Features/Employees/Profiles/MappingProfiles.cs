@@ -4,6 +4,7 @@ using Application.Features.Employees.Commands.Update;
 using Application.Features.Employees.Dtos;
 using Application.Features.Employees.Queries.GetById;
 using Application.Features.Employees.Queries.GetList;
+using Application.Features.Employees.Queries.GetList.ShortDetail;
 using Application.Features.Employees.Queries.GetListByDynamic;
 using AutoMapper;
 using Core.Application.Responses;
@@ -49,5 +50,13 @@ public class MappingProfiles : Profile
             .ForMember(dest => dest.EmergencyContact, opt => opt.MapFrom(src => src.EmergencyContact))
             .ReverseMap();
             ;
+
+        CreateMap<IPaginate<Employee>, GetListResponse<GetListByEmplooyeeShortDetailItemDto>>()
+            .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Items))
+            .ReverseMap();
+
+        CreateMap<Employee, GetListByEmplooyeeShortDetailItemDto>()
+            .ReverseMap();
+
     }
 }

@@ -41,7 +41,6 @@ public class CreateEmployeeLeaveUsageCommand : IRequest<CreatedEmployeeLeaveUsag
         {
             EmployeeLeaveUsage employeeLeaveUsage = _mapper.Map<EmployeeLeaveUsage>(request);
             
-
             await _employeeLeaveUsageRepository.AddAsync(employeeLeaveUsage);
 
             CreatedEmployeeLeaveUsageResponse response = _mapper.Map<CreatedEmployeeLeaveUsageResponse>(employeeLeaveUsage);

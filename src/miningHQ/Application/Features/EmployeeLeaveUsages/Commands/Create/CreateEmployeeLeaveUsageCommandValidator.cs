@@ -7,7 +7,6 @@ public class CreateEmployeeLeaveUsageCommandValidator : AbstractValidator<Create
 {
     public CreateEmployeeLeaveUsageCommandValidator()
     {
-        RuleFor(c => c.Id).NotEmpty();
         RuleFor(c => c.EmployeeId).NotEmpty();
     }
 }
