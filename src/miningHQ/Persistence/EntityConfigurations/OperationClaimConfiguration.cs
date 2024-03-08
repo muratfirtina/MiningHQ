@@ -257,6 +257,20 @@ public class OperationClaimConfiguration : IEntityTypeConfiguration<OperationCla
         
         #endregion
         
+        
+        #region Overtimes
+        
+        seeds.Add(new OperationClaim { Id = ++id, Name = "Overtimes.Admin" });
+        
+        seeds.Add(new OperationClaim { Id = ++id, Name = "Overtimes.Read" });
+        seeds.Add(new OperationClaim { Id = ++id, Name = "Overtimes.Write" });
+        
+        seeds.Add(new OperationClaim { Id = ++id, Name = "Overtimes.Add" });
+        seeds.Add(new OperationClaim { Id = ++id, Name = "Overtimes.Update" });
+        seeds.Add(new OperationClaim { Id = ++id, Name = "Overtimes.Delete" });
+        
+        #endregion
+        
         return seeds;
     }
 }

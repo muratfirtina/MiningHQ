@@ -25,6 +25,8 @@ public class Employee:Entity<Guid>
     public ICollection<EntitledLeave>? EntitledLeaves { get; set; }
     public ICollection<Timekeeping>? Timekeepings { get; set; }
     
+    public ICollection<Overtime>? Overtimes { get; set; }
+    
 
     public Employee()
     {
