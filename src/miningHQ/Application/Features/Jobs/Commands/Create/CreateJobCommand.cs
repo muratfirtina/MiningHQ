@@ -15,6 +15,7 @@ namespace Application.Features.Jobs.Commands.Create;
 public class CreateJobCommand : IRequest<CreatedJobResponse>//, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
 {
     public string Name { get; set; }
+    public string? DepartmentId { get; set; }
 
     public string[] Roles => new[] { Admin, Write, JobsOperationClaims.Create };
 

@@ -42,6 +42,8 @@ public class GetListJobQuery : IRequest<GetListResponse<GetListJobListItemDto>>/
                 // Sayfalama yapmadan tüm listeyi çek
                 var allJobs = await _jobRepository.GetAllAsync(
                     include:e => e.Include(e => e.Employees)
+                        .Include(e => e.Department),
+                    cancellationToken: cancellationToken
                     );
                 var jobDtos = _mapper.Map<List<GetListJobListItemDto>>(allJobs);
                 
@@ -62,7 +64,7 @@ public class GetListJobQuery : IRequest<GetListResponse<GetListJobListItemDto>>/
                 IPaginate<Job> jobs = await _jobRepository.GetListAsync(
                     index: request.PageRequest.PageIndex,
                     size: request.PageRequest.PageSize,
-                    include:e => e.Include(e => e.Employees),
+                    include:e => e.Include(e => e.Employees).Include(e => e.Department),
                     
                     cancellationToken: cancellationToken
                 );

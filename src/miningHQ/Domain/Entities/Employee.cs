@@ -12,6 +12,8 @@ public class Employee:Entity<Guid>
     public Job? Job { get; set; }
     public Guid? QuarryId { get; set; }
     public Quarry? Quarry { get; set; }
+    public Guid? DepartmentId { get; set; }
+    public Department? Department { get; set; }
     public string? Phone { get; set; }
     public string? Address { get; set; }
     public DateTime? HireDate { get; set; }

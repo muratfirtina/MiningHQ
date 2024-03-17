@@ -8,6 +8,7 @@ using Core.Application.Pipelines.Caching;
 using Core.Application.Pipelines.Logging;
 using Core.Application.Pipelines.Transaction;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using static Application.Features.Jobs.Constants.JobsOperationClaims;
 
 namespace Application.Features.Jobs.Commands.Update;
@@ -16,6 +17,7 @@ public class UpdateJobCommand : IRequest<UpdatedJobResponse>//, ISecuredRequest,
 {
     public Guid Id { get; set; }
     public string Name { get; set; }
+    public Guid DepartmentId { get; set; }
     public string[] Roles => new[] { Admin, Write, JobsOperationClaims.Update };
 
     public bool BypassCache { get; }
@@ -38,7 +40,8 @@ public class UpdateJobCommand : IRequest<UpdatedJobResponse>//, ISecuredRequest,
 
         public async Task<UpdatedJobResponse> Handle(UpdateJobCommand request, CancellationToken cancellationToken)
         {
-            Job? job = await _jobRepository.GetAsync(predicate: j => j.Id == request.Id, cancellationToken: cancellationToken);
+            Job? job = await _jobRepository.GetAsync(predicate: j => j.Id == request.Id,
+                include: j => j.Include(j => j.Department), cancellationToken: cancellationToken);
             await _jobBusinessRules.JobShouldExistWhenSelected(job);
             job = _mapper.Map(request, job);
 

@@ -32,6 +32,7 @@ using Application.Services.Employees;
 using Application.Services.EntitledLeaves;
 using Application.Services.Timekeepings;
 using Application.Services.Overtimes;
+using Application.Services.Departments;
 
 namespace Application;
 
@@ -79,6 +80,7 @@ public static class ApplicationServiceRegistration
         services.AddScoped<IEntitledLeavesService, EntitledLeavesManager>();
         services.AddScoped<ITimekeepingsService, TimekeepingsManager>();
         services.AddScoped<IOvertimesService, OvertimesManager>();
+        services.AddScoped<IDepartmentsService, DepartmentsManager>();
         return services;
     }
 

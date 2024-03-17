@@ -32,6 +32,7 @@ public class MiningHQDbContext : DbContext
     public DbSet<EntitledLeave> EntitledLeaves { get; set; }
     public DbSet<Timekeeping> Timekeepings { get; set; }
     public DbSet<Overtime> Overtimes { get; set; }
+    public DbSet<Department> Departments { get; set; }
 
     public MiningHQDbContext(DbContextOptions<MiningHQDbContext> dbContextOptions): base(dbContextOptions)
     {

@@ -38,6 +38,7 @@ public static class PersistenceServiceRegistration
         services.AddScoped<IEntitledLeaveRepository, EntitledLeaveRepository>();
         services.AddScoped<ITimekeepingRepository, TimekeepingRepository>();
         services.AddScoped<IOvertimeRepository, OvertimeRepository>();
+        services.AddScoped<IDepartmentRepository, DepartmentRepository>();
         return services;
     }
 }

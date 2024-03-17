@@ -17,5 +17,7 @@ public class JobConfiguration : IEntityTypeConfiguration<Job>
         builder.Property(j => j.DeletedDate).HasColumnName("DeletedDate");
         
         builder.HasQueryFilter(j => !j.DeletedDate.HasValue);
+        
+        builder.HasOne(j => j.Department).WithMany(d => d.Jobs).HasForeignKey(j => j.DepartmentId);
     }
 }
