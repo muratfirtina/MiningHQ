@@ -5,4 +5,5 @@ namespace Application.Services.Repositories;
 
 public interface IJobRepository : IAsyncRepository<Job, Guid>, IRepository<Job, Guid>
 {
+    Task<Job?> GetJobByIdWithDepartmentIdAsync(string jobId);
 }

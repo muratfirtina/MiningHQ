@@ -9,6 +9,7 @@ public class GetByIdEmployeeResponse : IResponse
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public DateTime? BirthDate { get; set; }
+    public string? DepartmentName { get; set; }
     public string? JobName { get; set; }
     public string? QuarryName { get; set; }
     public string? Phone { get; set; }

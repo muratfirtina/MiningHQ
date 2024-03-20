@@ -35,6 +35,7 @@ public class GetByIdEmployeeQuery : IRequest<GetByIdEmployeeResponse>//, ISecure
                 (predicate: e => e.Id == request.Id,
                     include: e=>e.Include(e=>e.Job)
                         .Include(e=>e.Quarry)
+                        .Include(e=>e.Department)
                         .Include(e=>e.EntitledLeaves).ThenInclude(el=>el.LeaveType)
                         .Include(e=>e.EmployeeLeaveUsages).ThenInclude(el=>el.LeaveType) ,cancellationToken: cancellationToken);
             

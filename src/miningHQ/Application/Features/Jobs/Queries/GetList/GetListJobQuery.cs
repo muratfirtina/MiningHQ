@@ -64,6 +64,7 @@ public class GetListJobQuery : IRequest<GetListResponse<GetListJobListItemDto>>/
                 IPaginate<Job> jobs = await _jobRepository.GetListAsync(
                     index: request.PageRequest.PageIndex,
                     size: request.PageRequest.PageSize,
+                    orderBy: p => p.OrderBy(p => p.Department.Name),
                     include:e => e.Include(e => e.Employees).Include(e => e.Department),
                     
                     cancellationToken: cancellationToken

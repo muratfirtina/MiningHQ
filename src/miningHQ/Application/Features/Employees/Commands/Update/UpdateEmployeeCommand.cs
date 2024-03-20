@@ -20,6 +20,7 @@ public class UpdateEmployeeCommand : IRequest<UpdatedEmployeeResponse>//, ISecur
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public DateTime? BirthDate { get; set; }
+    public string? DepartmentId { get; set; }
     public string? JobId { get; set; }
     public string? QuarryId { get; set; }
     public string? Phone { get; set; }
@@ -41,18 +42,29 @@ public class UpdateEmployeeCommand : IRequest<UpdatedEmployeeResponse>//, ISecur
         private readonly IMapper _mapper;
         private readonly IEmployeeRepository _employeeRepository;
         private readonly EmployeeBusinessRules _employeeBusinessRules;
+        private readonly IJobRepository _jobRepository;
 
         public UpdateEmployeeCommandHandler(IMapper mapper, IEmployeeRepository employeeRepository,
-                                         EmployeeBusinessRules employeeBusinessRules)
+                                         EmployeeBusinessRules employeeBusinessRules, IJobRepository jobRepository)
         {
             _mapper = mapper;
             _employeeRepository = employeeRepository;
             _employeeBusinessRules = employeeBusinessRules;
+            _jobRepository = jobRepository;
         }
 
         public async Task<UpdatedEmployeeResponse> Handle(UpdateEmployeeCommand request, CancellationToken cancellationToken)
         {
             Employee? employee = await _employeeRepository.GetAsync(predicate: e => e.Id == request.Id, cancellationToken: cancellationToken);
+            //Eğer job id değiştirildiyse yeni department id alınır.
+            if (request.JobId != null)
+            {
+                Job? job = await _jobRepository.GetJobByIdWithDepartmentIdAsync(request.JobId);
+                if (job != null)
+                {
+                    request.DepartmentId = job.DepartmentId.ToString();
+                }
+            }
             await _employeeBusinessRules.EmployeeShouldExistWhenSelected(employee);
             employee = _mapper.Map(request, employee);
 

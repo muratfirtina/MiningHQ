@@ -9,6 +9,7 @@ public class GetListEmployeeListItemDto : IDto
     public string Id { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
+    public string DepartmentName { get; set; }
     public string JobName { get; set; }
     public string QuarryName { get; set; }
     public string? Address { get; set; }

@@ -19,7 +19,7 @@ public class MiningHQDbContext : DbContext
     public DbSet<DailyFuelConsumptionData> DailyFuelConsumptionDatas { get; set; }
     public DbSet<MaintenanceType> MaintenanceTypes { get; set; }
     public DbSet<Maintenance> Maintenances { get; set; }
-    public DbSet<Job> Jobs { get; set; }
+    public DbSet<Job?> Jobs { get; set; }
     public DbSet<LeaveType> LeaveUsages { get; set; }
     public DbSet<MachineType> MachineTypes { get; set; }
     public DbSet<Quarry> Quarries { get; set; }

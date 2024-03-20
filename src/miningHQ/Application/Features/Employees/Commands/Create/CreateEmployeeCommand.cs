@@ -19,6 +19,7 @@ public class CreateEmployeeCommand : IRequest<CreatedEmployeeResponse>//, ISecur
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public DateTime? BirthDate { get; set; }
+    public string? DepartmentId { get; set; }
     public string? JobId { get; set; }
     public string? QuarryId { get; set; }
     public string? Phone { get; set; }
@@ -40,16 +41,26 @@ public class CreateEmployeeCommand : IRequest<CreatedEmployeeResponse>//, ISecur
     {
         private readonly IMapper _mapper;
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IJobRepository _jobRepository;
 
-        public CreateEmployeeCommandHandler(IMapper mapper, IEmployeeRepository employeeRepository)
+        public CreateEmployeeCommandHandler(IMapper mapper, IEmployeeRepository employeeRepository, IJobRepository jobRepository)
         {
             _mapper = mapper;
             _employeeRepository = employeeRepository;
-            
+            _jobRepository = jobRepository;
         }
 
         public async Task<CreatedEmployeeResponse> Handle(CreateEmployeeCommand request, CancellationToken cancellationToken)
         {
+
+            if (request.JobId != null)
+            {
+                var job =await _jobRepository.GetAsync(job => job.Id.ToString() == request.JobId);
+                if (job != null)
+                {
+                    request.DepartmentId = job.DepartmentId.ToString();
+                }
+            }
             
             Employee employee = _mapper.Map<Employee>(request);
 
