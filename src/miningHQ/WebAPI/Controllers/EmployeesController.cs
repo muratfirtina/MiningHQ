@@ -5,6 +5,7 @@ using Application.Features.Employees.Queries.GetById;
 using Application.Features.Employees.Queries.GetList;
 using Application.Features.Employees.Queries.GetList.ShortDetail;
 using Application.Features.Employees.Queries.GetListByDynamic;
+using Application.Storage.Local;
 using Core.Application.Requests;
 using Core.Application.Responses;
 using Core.Persistence.Dynamic;
@@ -16,6 +17,15 @@ namespace WebAPI.Controllers;
 [ApiController]
 public class EmployeesController : BaseController
 {
+    private readonly IWebHostEnvironment _webHostEnvironment;
+    private readonly ILocalStorage _localStorage;
+
+    public EmployeesController(IWebHostEnvironment webHostEnvironment, ILocalStorage localStorage)
+    {
+        _webHostEnvironment = webHostEnvironment;
+        _localStorage = localStorage;
+    }
+
     [HttpPost]
     public async Task<IActionResult> Add([FromBody] CreateEmployeeCommand createEmployeeCommand)
     {
@@ -70,4 +80,39 @@ public class EmployeesController : BaseController
         GetListResponse<GetListByDynamicEmployeeListItemDto> response = await Mediator.Send(getListByDynamicEmployeeQuery);
         return Ok(response);
     }
+    
+    [HttpPost("[action]")]
+    public async Task<IActionResult> Upload([FromForm] string path, [FromForm] IFormFileCollection files)
+    {
+        List<(string fileName, string path)> datas = await _localStorage.UploadAsync(path, files);
+        return Ok(datas);
+    }
+    
+    /*[HttpPost("[action]")]
+    public async Task<IActionResult> Upload([FromForm] string path, [FromForm] IFormFileCollection files)
+    {
+        string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "images", path);
+        if (!Directory.Exists(uploadPath))
+        {
+            Directory.CreateDirectory(uploadPath);
+        }
+
+        List<(string fileName, string path)> datas = new();
+        foreach (IFormFile file in files)
+        {
+            // await anahtar kelimesi ile asenkron işlemi bekleyin
+            var filePath = Path.Combine(uploadPath, file.FileName);
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream); // Dosya kopyalama işlemini asenkron olarak bekleyin
+            }
+            datas.Add((file.FileName, Path.Combine("images", path, file.FileName))); // Dosya yolu bilgisini güncelleyin
+        }
+        return Ok(datas);
+    }*/
+
+
+
+    
+     
 }
