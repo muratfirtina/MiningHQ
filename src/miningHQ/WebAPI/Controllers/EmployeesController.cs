@@ -5,6 +5,8 @@ using Application.Features.Employees.Queries.GetById;
 using Application.Features.Employees.Queries.GetList;
 using Application.Features.Employees.Queries.GetList.ShortDetail;
 using Application.Features.Employees.Queries.GetListByDynamic;
+using Application.Services.ImageService;
+using Application.Storage.Cloudinary;
 using Application.Storage.Local;
 using Core.Application.Requests;
 using Core.Application.Responses;
@@ -19,11 +21,13 @@ public class EmployeesController : BaseController
 {
     private readonly IWebHostEnvironment _webHostEnvironment;
     private readonly ILocalStorage _localStorage;
+    private readonly ICloudinaryStorage _cloudinaryStorage;
 
-    public EmployeesController(IWebHostEnvironment webHostEnvironment, ILocalStorage localStorage)
+    public EmployeesController(IWebHostEnvironment webHostEnvironment, ILocalStorage localStorage, ICloudinaryStorage cloudinaryStorage)
     {
         _webHostEnvironment = webHostEnvironment;
         _localStorage = localStorage;
+        _cloudinaryStorage = cloudinaryStorage;
     }
 
     [HttpPost]
@@ -81,12 +85,17 @@ public class EmployeesController : BaseController
         return Ok(response);
     }
     
-    [HttpPost("[action]")]
-    public async Task<IActionResult> Upload([FromForm] string path, [FromForm] IFormFileCollection files)
+    /*[HttpPost("[action]")]
+    public async Task<IActionResult> Upload([FromForm] IFormFileCollection files)
     {
-        List<(string fileName, string path)> datas = await _localStorage.UploadAsync(path, files);
+        List<(string fileName, string path)> datas = new();
+        foreach (IFormFile file in files)
+        {
+            string imageUrl = await _imageService.UploadAsync(file);
+            datas.Add((file.FileName, imageUrl));
+        }
         return Ok(datas);
-    }
+    }*/
     
     /*[HttpPost("[action]")]
     public async Task<IActionResult> Upload([FromForm] string path, [FromForm] IFormFileCollection files)
@@ -110,6 +119,19 @@ public class EmployeesController : BaseController
         }
         return Ok(datas);
     }*/
+    
+    [HttpPost("[action]")]
+    public async Task<IActionResult> Upload([FromForm] string path,[FromForm] IFormFileCollection files)
+    {
+        List<(string fileName, string path)> datas = new();
+        foreach (IFormFile file in files)
+        {
+            var imageUploadResult = await _cloudinaryStorage.UploadAsync(path, files);
+            datas.Add((file.FileName, imageUploadResult.FirstOrDefault().path));
+            
+        }
+        return Ok(datas);
+    }
 
 
 

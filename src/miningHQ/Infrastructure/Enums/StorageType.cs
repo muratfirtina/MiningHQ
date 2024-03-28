@@ -4,5 +4,5 @@ public enum StorageType
 {
     Local,
     Azure,
-    AWS
+    Cloudinary
 }

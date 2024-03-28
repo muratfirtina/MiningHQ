@@ -31,7 +31,6 @@ public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
         builder.HasOne(e => e.Quarry).WithMany(q => q.Employees).HasForeignKey(e => e.QuarryId);
         builder.HasOne(e => e.Department).WithMany(d => d.Employees).HasForeignKey(e => e.DepartmentId);
         builder.HasMany(e => e.Machines).WithMany(m => m.Employees);
-        builder.HasMany(e => e.EmployeeFiles).WithOne(e => e.Employee).HasForeignKey(e => e.EmployeeId);
         builder.HasMany(e => e.EmployeeLeaveUsages).WithOne(e => e.Employee).HasForeignKey(e => e.EmployeeId);
         builder.HasMany(e => e.EntitledLeaves).WithOne(e => e.Employee).HasForeignKey(e => e.EmployeeId);
         builder.HasMany(e => e.Timekeepings).WithOne(e => e.Employee).HasForeignKey(e => e.EmployeeId);

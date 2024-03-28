@@ -16,7 +16,6 @@ public class FileConfiguration : IEntityTypeConfiguration<File>
         builder.Property(f => f.Path).HasColumnName("Path");
         builder.Property(f => f.Storage).HasColumnName("Storage");
         builder.Property(f => f.CreatedDate).HasColumnName("CreatedDate").IsRequired();
-        builder.Property(f => f.UpdatedDate).HasColumnName("UpdatedDate");
         builder.Property(f => f.DeletedDate).HasColumnName("DeletedDate");
         
         

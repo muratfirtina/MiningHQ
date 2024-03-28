@@ -18,7 +18,6 @@
   <ItemGroup>
     <Folder Include="Services\Repositories" />
     <Folder Include="Storage\Azure\" />
-    <Folder Include="Storage\Cloudinary\" />
   </ItemGroup>
 
   <ItemGroup>

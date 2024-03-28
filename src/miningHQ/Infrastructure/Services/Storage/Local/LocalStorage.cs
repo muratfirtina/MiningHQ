@@ -14,7 +14,7 @@ public class LocalStorage : FileService, ILocalStorage
             Directory.CreateDirectory(_baseFolderPath);
         }
     }
-    public async Task<List<(string fileName, string pathOrContainerName)>> UploadAsync(string path, IFormFileCollection files)
+    public async Task<List<(string fileName, string path)>> UploadAsync(string path, IFormFileCollection files)
     {
         var employeeFolderPath = Path.Combine(_baseFolderPath, path);
         if (!Directory.Exists(employeeFolderPath))

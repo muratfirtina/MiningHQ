@@ -1,9 +1,12 @@
 ﻿using Application.Services;
 using Application.Services.ImageService;
 using Application.Storage;
+using Application.Storage.Cloudinary;
+using Application.Storage.Local;
 using Infrastructure.Adapters.ImageService;
 using Infrastructure.Enums;
 using Infrastructure.Services;
+using Infrastructure.Services.Storage.Cloudinary;
 using Infrastructure.Services.Storage.Local;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,9 +16,10 @@ public static class InfrastructureServiceRegistration
 {
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
     {
-        services.AddScoped<ImageServiceBase, CloudinaryImageServiceAdapter>();
-        services.AddScoped<Application.Storage.Local.ILocalStorage, LocalStorage>();
-        services.AddScoped<ILocalStorage, LocalImageService>();
+        //services.AddScoped<ImageServiceBase, CloudinaryImageServiceAdapter>();
+        services.AddScoped<ILocalStorage, LocalStorage>();
+        services.AddScoped<ICloudinaryStorage, CloudinaryStorage>();
+        
         return services;
     }
     
@@ -32,10 +36,10 @@ public static class InfrastructureServiceRegistration
                 break;
             /*case StorageType.Azure:
                 serviceCollection.AddScoped<IStorage, AzureStorage>();
-                break;
-            case StorageType.AWS:
-                serviceCollection.AddScoped<IStorage, AWSStorage>();
                 break;*/
+            case StorageType.Cloudinary:
+                serviceCollection.AddScoped<IStorage, CloudinaryStorage>();
+                break;
             default:
                 serviceCollection.AddScoped<IStorage, LocalStorage>();
                 break;
