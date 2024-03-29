@@ -6,11 +6,14 @@ using Application.Features.Employees.Queries.GetList;
 using Application.Features.Employees.Queries.GetList.ShortDetail;
 using Application.Features.Employees.Queries.GetListByDynamic;
 using Application.Services.ImageService;
+using Application.Services.Repositories;
 using Application.Storage.Cloudinary;
 using Application.Storage.Local;
 using Core.Application.Requests;
 using Core.Application.Responses;
 using Core.Persistence.Dynamic;
+using Domain.Entities;
+using Infrastructure.Enums;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers;
@@ -22,12 +25,14 @@ public class EmployeesController : BaseController
     private readonly IWebHostEnvironment _webHostEnvironment;
     private readonly ILocalStorage _localStorage;
     private readonly ICloudinaryStorage _cloudinaryStorage;
+    private readonly IFileRepository _fileRepository;
 
-    public EmployeesController(IWebHostEnvironment webHostEnvironment, ILocalStorage localStorage, ICloudinaryStorage cloudinaryStorage)
+    public EmployeesController(IWebHostEnvironment webHostEnvironment, ILocalStorage localStorage, ICloudinaryStorage cloudinaryStorage, IFileRepository fileRepository)
     {
         _webHostEnvironment = webHostEnvironment;
         _localStorage = localStorage;
         _cloudinaryStorage = cloudinaryStorage;
+        _fileRepository = fileRepository;
     }
 
     [HttpPost]
@@ -127,7 +132,15 @@ public class EmployeesController : BaseController
         foreach (IFormFile file in files)
         {
             var imageUploadResult = await _cloudinaryStorage.UploadAsync(path, files);
-            datas.Add((file.FileName, imageUploadResult.FirstOrDefault().path));
+            //string fileNewName = await FileRenameAsync(path, file.FileName, HasFile);
+            _fileRepository.AddAsync(new EmployeeFile()
+            {
+                Name = file.FileName,
+                Path = imageUploadResult.FirstOrDefault().path,
+                Storage = StorageType.Cloudinary.ToString()
+            });
+            
+            
             
         }
         return Ok(datas);
