@@ -21,8 +21,8 @@ public class Employee:Entity<Guid>
     public string? LicenseType { get; set; }
     public TypeOfBlood TypeOfBlood { get; set; }
     public string? EmergencyContact { get; set; }
-    public ICollection<Machine>? Machines { get; set; } = new List<Machine>();
-    public ICollection<EmployeeFile>? EmployeeFiles { get; set; } = new List<EmployeeFile>();
+    public ICollection<Machine>? Machines { get; set; }
+    public ICollection<EmployeeFile>? EmployeeFiles { get; set; }
     public ICollection<EmployeeLeaveUsage>? EmployeeLeaveUsages { get; set; }
     public ICollection<EntitledLeave>? EntitledLeaves { get; set; }
     public ICollection<Timekeeping>? Timekeepings { get; set; }
