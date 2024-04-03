@@ -56,7 +56,7 @@ public class UpdateEmployeeCommand : IRequest<UpdatedEmployeeResponse>//, ISecur
         public async Task<UpdatedEmployeeResponse> Handle(UpdateEmployeeCommand request, CancellationToken cancellationToken)
         {
             Employee? employee = await _employeeRepository.GetAsync(predicate: e => e.Id == request.Id, cancellationToken: cancellationToken);
-            //Eğer job id değiştirildiyse yeni department id alınır.
+            
             if (request.JobId != null)
             {
                 Job? job = await _jobRepository.GetJobByIdWithDepartmentIdAsync(request.JobId);

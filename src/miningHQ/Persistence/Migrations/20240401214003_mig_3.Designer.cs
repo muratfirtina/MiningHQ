@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Persistence.Contexts;
@@ -11,9 +12,11 @@ using Persistence.Contexts;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(MiningHQDbContext))]
-    partial class MiningHQDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240401214003_mig_3")]
+    partial class mig_3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -928,8 +931,8 @@ namespace Persistence.Migrations
                             Email = "admin@admin.com",
                             FirstName = "Admin",
                             LastName = "NArchitecture",
-                            PasswordHash = new byte[] { 38, 57, 49, 238, 124, 140, 155, 13, 198, 108, 160, 12, 28, 102, 130, 28, 196, 101, 249, 7, 88, 66, 108, 207, 149, 238, 237, 152, 197, 200, 156, 55, 140, 75, 112, 18, 111, 159, 50, 153, 124, 75, 221, 145, 104, 183, 197, 73, 237, 207, 118, 146, 53, 32, 222, 233, 144, 185, 123, 241, 12, 191, 70, 32 },
-                            PasswordSalt = new byte[] { 211, 222, 15, 247, 232, 184, 115, 146, 141, 205, 237, 255, 191, 0, 117, 139, 240, 93, 109, 97, 146, 133, 42, 94, 243, 17, 48, 246, 246, 150, 177, 84, 76, 133, 50, 230, 153, 65, 123, 86, 200, 226, 44, 204, 48, 200, 239, 31, 92, 5, 123, 12, 96, 103, 160, 81, 28, 99, 74, 194, 62, 29, 35, 118, 135, 223, 180, 140, 114, 177, 57, 181, 236, 118, 172, 131, 110, 99, 96, 145, 216, 28, 245, 109, 203, 179, 181, 44, 116, 179, 186, 49, 149, 179, 33, 72, 239, 75, 112, 59, 136, 68, 230, 79, 223, 223, 171, 166, 227, 154, 190, 104, 58, 149, 253, 76, 77, 20, 148, 193, 153, 62, 80, 164, 70, 198, 187, 100 },
+                            PasswordHash = new byte[] { 255, 210, 15, 0, 156, 27, 70, 175, 187, 198, 220, 70, 254, 197, 82, 246, 200, 9, 47, 154, 164, 50, 224, 15, 158, 78, 183, 134, 207, 69, 53, 126, 250, 131, 225, 1, 0, 126, 138, 213, 198, 71, 1, 108, 74, 165, 142, 157, 40, 80, 68, 216, 39, 148, 167, 27, 250, 109, 30, 4, 105, 154, 120, 205 },
+                            PasswordSalt = new byte[] { 82, 91, 127, 149, 22, 245, 175, 238, 127, 53, 200, 121, 57, 121, 156, 147, 202, 117, 19, 115, 8, 89, 96, 179, 223, 196, 224, 173, 246, 163, 176, 243, 187, 70, 34, 143, 144, 95, 168, 88, 104, 158, 63, 139, 37, 220, 194, 123, 121, 127, 207, 195, 135, 126, 168, 225, 29, 28, 252, 86, 116, 228, 177, 55, 246, 59, 191, 212, 42, 137, 36, 88, 232, 168, 141, 83, 16, 214, 116, 119, 16, 254, 164, 163, 41, 214, 33, 156, 158, 12, 178, 122, 172, 77, 117, 112, 58, 77, 88, 172, 26, 59, 107, 131, 110, 132, 5, 193, 182, 242, 50, 199, 66, 177, 178, 21, 134, 20, 173, 165, 107, 187, 178, 93, 34, 153, 188, 253 },
                             Status = true
                         });
                 });
@@ -1146,9 +1149,6 @@ namespace Persistence.Migrations
                     b.Property<string>("EmergencyContact")
                         .HasColumnType("text")
                         .HasColumnName("EmergencyContact");
-
-                    b.Property<Guid?>("EmployeePhotoId")
-                        .HasColumnType("uuid");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -1714,6 +1714,21 @@ namespace Persistence.Migrations
                     b.ToTable("EmployeeEmployeeFile");
                 });
 
+            modelBuilder.Entity("EmployeeEmployeePhoto", b =>
+                {
+                    b.Property<Guid>("EmployeePhotosId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("EmployeesId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("EmployeePhotosId", "EmployeesId");
+
+                    b.HasIndex("EmployeesId");
+
+                    b.ToTable("EmployeeEmployeePhoto");
+                });
+
             modelBuilder.Entity("EmployeeMachine", b =>
                 {
                     b.Property<Guid>("EmployeesId")
@@ -1757,12 +1772,6 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.EmployeePhoto", b =>
                 {
                     b.HasBaseType("Domain.Entities.File");
-
-                    b.Property<Guid>("EmployeeId")
-                        .HasColumnType("uuid");
-
-                    b.HasIndex("EmployeeId")
-                        .IsUnique();
 
                     b.HasDiscriminator().HasValue("EmployeePhoto");
                 });
@@ -2026,6 +2035,21 @@ namespace Persistence.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("EmployeeEmployeePhoto", b =>
+                {
+                    b.HasOne("Domain.Entities.EmployeePhoto", null)
+                        .WithMany()
+                        .HasForeignKey("EmployeePhotosId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Employee", null)
+                        .WithMany()
+                        .HasForeignKey("EmployeesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("EmployeeMachine", b =>
                 {
                     b.HasOne("Domain.Entities.Employee", null)
@@ -2054,17 +2078,6 @@ namespace Persistence.Migrations
                         .HasForeignKey("MaintenancesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Domain.Entities.EmployeePhoto", b =>
-                {
-                    b.HasOne("Domain.Entities.Employee", "Employee")
-                        .WithOne("EmployeePhoto")
-                        .HasForeignKey("Domain.Entities.EmployeePhoto", "EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("Core.Security.Entities.OperationClaim", b =>
@@ -2098,8 +2111,6 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.Employee", b =>
                 {
                     b.Navigation("EmployeeLeaveUsages");
-
-                    b.Navigation("EmployeePhoto");
 
                     b.Navigation("EntitledLeaves");
 

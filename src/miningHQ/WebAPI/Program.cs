@@ -5,6 +5,8 @@ using Core.Security.Encryption;
 using Core.Security.JWT;
 using Core.WebAPI.Extensions.Swagger;
 using Infrastructure;
+using Infrastructure.Services.Storage;
+using Infrastructure.Services.Storage.Azure;
 using Infrastructure.Services.Storage.Cloudinary;
 using Infrastructure.Services.Storage.Local;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -27,6 +29,7 @@ builder.Services.AddHttpContextAccessor();
 
 //builder.Services.AddStorage<LocalStorage>();
 builder.Services.AddStorage<CloudinaryStorage>();
+//builder.Services.AddStorage<AzureStorage>();
 
 const string tokenOptionsConfigurationSection = "TokenOptions";
 TokenOptions tokenOptions =

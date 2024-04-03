@@ -1,6 +1,7 @@
 using Application.Storage.Cloudinary;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
+using Core.CrossCuttingConcerns.Exceptions.Types;
 using Infrastructure.Adapters.ImageService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -24,9 +25,9 @@ public class CloudinaryStorage : FileService, ICloudinaryStorage
         _cloudinary = new CloudinaryDotNet.Cloudinary(account);
     }
 
-    public async Task<List<(string fileName, string path)>> UploadAsync(string path, IFormFileCollection files)
+    public async Task<List<(string fileName, string path)>> UploadAsync(string category,string path, IFormFileCollection files)
     {
-        var datas = new List<(string fileName, string pathOrContainerName)>();
+        var datas = new List<(string fileName, string path)>();
         foreach (IFormFile file in files)
         {
             ImageUploadParams imageUploadParams = new()
@@ -38,8 +39,9 @@ public class CloudinaryStorage : FileService, ICloudinaryStorage
             };
             string fileNewName = await FileRenameAsync(path, file.FileName, HasFile);
             
+            await FileMustBeInFileFormat(file);
             
-            imageUploadParams.Folder = path;
+            imageUploadParams.Folder = category + "/" + path;
             imageUploadParams.File.FileName = fileNewName;
 
             ImageUploadResult imageUploadResult = await _cloudinary.UploadAsync(imageUploadParams);
@@ -49,12 +51,14 @@ public class CloudinaryStorage : FileService, ICloudinaryStorage
         return datas;
         
     }
+    
+    
 
-    public Task DeleteAsync(string path, string fileName)
+    public async Task DeleteAsync(string path)
     {
-        DeletionParams deletionParams = new(path + "/" + fileName);
-        return _cloudinary.DestroyAsync(deletionParams);
-        
+        var publicId = GetPublicId(path);
+        var deletionParams = new DeletionParams(publicId);
+        await _cloudinary.DestroyAsync(deletionParams);
     }
 
     public List<string> GetFiles(string path)
@@ -65,12 +69,50 @@ public class CloudinaryStorage : FileService, ICloudinaryStorage
 
     public bool HasFile(string path, string fileName) 
         => File.Exists(Path.Combine(path, fileName));
+
     
+
     private string GetPublicId(string imageUrl)
     {
-        int startIndex = imageUrl.LastIndexOf('/') + 1;
-        int endIndex = imageUrl.LastIndexOf('.');
-        int length = endIndex - startIndex;
-        return imageUrl.Substring(startIndex, length);
+        // Cloudinary URL'sinden '/image/upload/' dizgisinden sonraki kısmı çıkarmak için
+        var uploadSegment = "/image/upload/";
+        var startIndex = imageUrl.IndexOf(uploadSegment) + uploadSegment.Length;
+        if(startIndex > uploadSegment.Length - 1)
+        {
+            // '/image/upload/' segmentinden sonraki kısmı alır
+            var pathWithVersion = imageUrl.Substring(startIndex);
+        
+            // 'version' kısmını geçmek için ikinci '/' karakterinden sonrasını alır
+            var pathStartIndex = pathWithVersion.IndexOf('/', 1);
+            if(pathStartIndex > -1)
+            {
+                var publicId = pathWithVersion.Substring(pathStartIndex + 1);
+
+                // Eğer varsa dosya uzantısını kaldırır
+                var endIndex = publicId.LastIndexOf('.');
+                if(endIndex > -1)
+                {
+                    publicId = publicId.Substring(0, endIndex);
+                }
+
+                return publicId;
+            }
+        }
+
+        // Eğer URL beklenen formatta değilse, boş bir string dön
+        return string.Empty;
     }
+    
+    public async Task FileMustBeInFileFormat(IFormFile formFile)
+    {
+        List<string> extensions = new() { ".jpg", ".png", ".jpeg", ".webp", ".pdf", ".doc", ".docx", ".xls", ".xlsx", ".heic"};
+
+        string extension = Path.GetExtension(formFile.FileName).ToLower();
+        if (!extensions.Contains(extension))
+            throw new BusinessException("Unsupported format");
+        await Task.CompletedTask;
+    }
+
+
+    
 }

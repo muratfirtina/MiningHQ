@@ -1,12 +1,14 @@
 using Application.Features.Employees.Commands.Create;
 using Application.Features.Employees.Commands.Delete;
 using Application.Features.Employees.Commands.Update;
+using Application.Features.Employees.Commands.UpdateShowcase;
 using Application.Features.Employees.Queries.GetById;
 using Application.Features.Employees.Queries.GetList;
 using Application.Features.Employees.Queries.GetList.ShortDetail;
 using Application.Features.Employees.Queries.GetListByDynamic;
 using Application.Services.ImageService;
 using Application.Services.Repositories;
+using Application.Storage;
 using Application.Storage.Cloudinary;
 using Application.Storage.Local;
 using Core.Application.Requests;
@@ -26,13 +28,17 @@ public class EmployeesController : BaseController
     private readonly ILocalStorage _localStorage;
     private readonly ICloudinaryStorage _cloudinaryStorage;
     private readonly IFileRepository _fileRepository;
+    private readonly IEmployeeRepository _employeeRepository;
+    private readonly IStorageService _storageService;
 
-    public EmployeesController(IWebHostEnvironment webHostEnvironment, ILocalStorage localStorage, ICloudinaryStorage cloudinaryStorage, IFileRepository fileRepository)
+    public EmployeesController(IWebHostEnvironment webHostEnvironment, ILocalStorage localStorage, ICloudinaryStorage cloudinaryStorage, IFileRepository fileRepository, IEmployeeRepository employeeRepository, IStorageService storageService)
     {
         _webHostEnvironment = webHostEnvironment;
         _localStorage = localStorage;
         _cloudinaryStorage = cloudinaryStorage;
         _fileRepository = fileRepository;
+        _employeeRepository = employeeRepository;
+        _storageService = storageService;
     }
 
     [HttpPost]
@@ -90,64 +96,100 @@ public class EmployeesController : BaseController
         return Ok(response);
     }
     
-    /*[HttpPost("[action]")]
-    public async Task<IActionResult> Upload([FromForm] IFormFileCollection files)
-    {
-        List<(string fileName, string path)> datas = new();
-        foreach (IFormFile file in files)
-        {
-            string imageUrl = await _imageService.UploadAsync(file);
-            datas.Add((file.FileName, imageUrl));
-        }
-        return Ok(datas);
-    }*/
-    
-    /*[HttpPost("[action]")]
-    public async Task<IActionResult> Upload([FromForm] string path, [FromForm] IFormFileCollection files)
-    {
-        string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, "images", path);
-        if (!Directory.Exists(uploadPath))
-        {
-            Directory.CreateDirectory(uploadPath);
-        }
-
-        List<(string fileName, string path)> datas = new();
-        foreach (IFormFile file in files)
-        {
-            // await anahtar kelimesi ile asenkron işlemi bekleyin
-            var filePath = Path.Combine(uploadPath, file.FileName);
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                await file.CopyToAsync(stream); // Dosya kopyalama işlemini asenkron olarak bekleyin
-            }
-            datas.Add((file.FileName, Path.Combine("images", path, file.FileName))); // Dosya yolu bilgisini güncelleyin
-        }
-        return Ok(datas);
-    }*/
     
     [HttpPost("[action]")]
-    public async Task<IActionResult> Upload([FromForm] string path,[FromForm] IFormFileCollection files)
+    public async Task<IActionResult> Upload([FromForm] string category,[FromForm] string path, [FromForm] IFormFileCollection files, [FromForm] string employeeId)
     {
-        List<(string fileName, string path)> datas = new();
-        foreach (IFormFile file in files)
+        if(files == null || files.Count == 0)
+            return BadRequest("Dosya bulunamadı.");
+
+        // Cloudinary'ye dosya yükleme işlemini burada gerçekleştirin
+        var uploadResults = await _storageService.UploadAsync(category,path, files);
+
+        var employee = await _employeeRepository.GetAsync(x => x.Id == Guid.Parse(employeeId));
+        if (employee == null)
+            return BadRequest("Çalışan bulunamadı.");
+
+        foreach (var uploadResult in uploadResults)
         {
-            var imageUploadResult = await _cloudinaryStorage.UploadAsync(path, files);
-            //string fileNewName = await FileRenameAsync(path, file.FileName, HasFile);
-            _fileRepository.AddAsync(new EmployeeFile()
+            // Yüklenen her bir dosya için veritabanında bir kayıt oluşturun
+            await _fileRepository.AddAsync(new EmployeeFile()
             {
-                Name = file.FileName,
-                Path = imageUploadResult.FirstOrDefault().path,
-                Storage = StorageType.Cloudinary.ToString()
+                Name = uploadResult.fileName,
+                Path = uploadResult.path,
+                Storage = _storageService.StorageName,
+                Employees = new List<Employee>() { employee }
             });
-            
-            
-            
         }
-        return Ok(datas);
+
+        return Ok();
+    }
+    
+    [HttpPost("[action]")]
+    public async Task<IActionResult> UploadEmployeePhoto([FromForm] string category, [FromForm] string path, [FromForm] IFormFileCollection files, [FromForm] string employeeId)
+    {
+        if(files == null || files.Count == 0)
+            return BadRequest("Dosya bulunamadı.");
+        
+        // Yükleme işleminden önce, çalışanın mevcut fotoğraflarını silin
+        var file = await _employeeRepository.GetEmployeePhoto(employeeId);
+        if (file != null)
+        {
+            
+            await _cloudinaryStorage.DeleteAsync(file.Path);
+            await _localStorage.DeleteAsync(_webHostEnvironment.WebRootPath + "/images/" + category +"/" + file.Name);   
+            await _fileRepository.DeleteAsync(file);
+        }
+        
+
+        // Cloudinary'ye dosya yükleme işlemini burada gerçekleştirin
+        var uploadResults = await _cloudinaryStorage.UploadAsync(category,path, files);
+        
+        await _localStorage.UploadAsync(category,path, files);
+
+        var employee = await _employeeRepository.GetAsync(x => x.Id == Guid.Parse(employeeId));
+        if (employee == null)
+            return BadRequest("Çalışan bulunamadı.");
+
+        foreach (var uploadResult in uploadResults)
+        {
+            // Yüklenen her bir dosya için veritabanında bir kayıt oluşturun
+            await _fileRepository.AddAsync(new EmployeePhoto()
+            {
+                Name = uploadResult.fileName,
+                Path = uploadResult.path,
+                Storage = StorageType.Cloudinary.ToString(),
+                Employee = employee
+            });
+        }
+
+        return Ok();
     }
 
-
-
+    
+    [HttpGet("[action]/{employeeId}")]
+    public async Task<IActionResult> GetEmployeePhoto([FromRoute] string employeeId)
+    {
+        var photo = await _employeeRepository.GetEmployeePhoto(employeeId);
+        return Ok(photo);
+    }
+    
+    
+    // EmployeeId'ye ait resimleri getir
+    [HttpGet("[action]/{employeeId}")]
+    public async Task<IActionResult> GetImagesByEmployeeId([FromRoute] string employeeId)
+    {
+        var images = await _employeeRepository.GetFilesByEmployeeId(employeeId);
+        return Ok(images);
+    }
+    
+    
+    [HttpGet("[action]")]
+    public async Task<IActionResult> ChangeShowcase([FromQuery] UpdateShowcaseCommand updateShowcaseCommand)
+    {
+        UpdateShowcaseResponse response = await Mediator.Send(updateShowcaseCommand);
+        return Ok(response);
+    }
     
      
 }

@@ -12,11 +12,11 @@ public class StorageService : IStorageService
         _storage = storage;
     }
 
-    public Task<List<(string fileName, string path)>> UploadAsync(string pathOrContainerName, IFormFileCollection files)
-        => _storage.UploadAsync(pathOrContainerName, files);
+    public Task<List<(string fileName, string path)>> UploadAsync(string category, string pathOrContainerName, IFormFileCollection files)
+        => _storage.UploadAsync(category,pathOrContainerName, files);
 
-    public async Task DeleteAsync(string pathOrContainerName, string fileName)
-        => await _storage.DeleteAsync(pathOrContainerName, fileName);
+    public async Task DeleteAsync(string path) 
+        => await _storage.DeleteAsync(path);
 
     public List<string> GetFiles(string pathOrContainerName)
         => _storage.GetFiles(pathOrContainerName);

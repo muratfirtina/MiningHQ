@@ -23,5 +23,6 @@ public class GetByIdEmployeeResponse : IResponse
     public int? TotalEntitledLeaveDays { get; set; }
     
     public int? CurrentLeaveDays { get; set; }
+    public ICollection<EmployeeFile>? EmployeeFiles { get; set; }
 
 }

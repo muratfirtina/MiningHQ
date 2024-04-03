@@ -23,6 +23,8 @@ public class Employee:Entity<Guid>
     public string? EmergencyContact { get; set; }
     public ICollection<Machine>? Machines { get; set; }
     public ICollection<EmployeeFile>? EmployeeFiles { get; set; }
+    public Guid? EmployeePhotoId { get; set; }
+    public EmployeePhoto? EmployeePhoto { get; set; }
     public ICollection<EmployeeLeaveUsage>? EmployeeLeaveUsages { get; set; }
     public ICollection<EntitledLeave>? EntitledLeaves { get; set; }
     public ICollection<Timekeeping>? Timekeepings { get; set; }

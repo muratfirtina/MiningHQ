@@ -30,7 +30,17 @@
   <ItemGroup>
     <Folder Include="Controllers\Dtos" />
     <Folder Include="logs\" />
+    <Folder Include="wwwroot\" />
     <Folder Include="wwwroot\images\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\images\employee-images\files\MURATFIRTINA\919ce222-d1ab-41dc-b3c3-536bcd403cd3-20240403125001.jpeg" />
+    <_ContentIncludedByDefault Remove="wwwroot\images\employee-images\files\MURATFIRTINA\95a620ee-d544-409d-a43a-81bc2fc7f944-20240403125001.jpeg" />
+    <_ContentIncludedByDefault Remove="wwwroot\images\employee-images\files\MURATFIRTINA\a64d8339-c5bf-469c-9d0e-681abed1e15b-20240403125001.jpeg" />
+    <_ContentIncludedByDefault Remove="wwwroot\images\employee-images\files\MURATFIRTINA\adsiz-doküman-20240403102315.pdf" />
+    <_ContentIncludedByDefault Remove="wwwroot\images\employee-images\photo\MURATFIRTINA\clipart548003-20240403094855.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\images\employee-images\photo\MURATFIRTINA\img2059-2-20240403094459.heic" />
   </ItemGroup>
 
 </Project>
