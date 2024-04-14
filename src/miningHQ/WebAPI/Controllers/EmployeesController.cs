@@ -2,14 +2,18 @@ using Application.Features.Employees.Commands.Create;
 using Application.Features.Employees.Commands.Delete;
 using Application.Features.Employees.Commands.Update;
 using Application.Features.Employees.Commands.UpdateShowcase;
+using Application.Features.Employees.Commands.UploadEmployeeFile;
 using Application.Features.Employees.Queries.GetById;
+using Application.Features.Employees.Queries.GetFilesByEmployeeId;
 using Application.Features.Employees.Queries.GetList;
 using Application.Features.Employees.Queries.GetList.ShortDetail;
 using Application.Features.Employees.Queries.GetListByDynamic;
 using Application.Services.ImageService;
 using Application.Services.Repositories;
 using Application.Storage;
+using Application.Storage.Azure;
 using Application.Storage.Cloudinary;
+using Application.Storage.Google;
 using Application.Storage.Local;
 using Core.Application.Requests;
 using Core.Application.Responses;
@@ -30,8 +34,11 @@ public class EmployeesController : BaseController
     private readonly IFileRepository _fileRepository;
     private readonly IEmployeeRepository _employeeRepository;
     private readonly IStorageService _storageService;
+    private readonly IAzureStorage _azureStorage;
+    private readonly IGoogleStorage _googleStorage;
+    
 
-    public EmployeesController(IWebHostEnvironment webHostEnvironment, ILocalStorage localStorage, ICloudinaryStorage cloudinaryStorage, IFileRepository fileRepository, IEmployeeRepository employeeRepository, IStorageService storageService)
+    public EmployeesController(IWebHostEnvironment webHostEnvironment, ILocalStorage localStorage, ICloudinaryStorage cloudinaryStorage, IFileRepository fileRepository, IEmployeeRepository employeeRepository, IStorageService storageService, IAzureStorage azureStorage, IGoogleStorage googleStorage)
     {
         _webHostEnvironment = webHostEnvironment;
         _localStorage = localStorage;
@@ -39,6 +46,8 @@ public class EmployeesController : BaseController
         _fileRepository = fileRepository;
         _employeeRepository = employeeRepository;
         _storageService = storageService;
+        _azureStorage = azureStorage;
+        _googleStorage = googleStorage;
     }
 
     [HttpPost]
@@ -98,31 +107,10 @@ public class EmployeesController : BaseController
     
     
     [HttpPost("[action]")]
-    public async Task<IActionResult> Upload([FromForm] string category,[FromForm] string path, [FromForm] IFormFileCollection files, [FromForm] string employeeId)
+    public async Task<IActionResult> Upload([FromForm] UploadEmployeeFileCommand uploadEmployeeFileCommand)
     {
-        if(files == null || files.Count == 0)
-            return BadRequest("Dosya bulunamadı.");
-
-        // Cloudinary'ye dosya yükleme işlemini burada gerçekleştirin
-        var uploadResults = await _storageService.UploadAsync(category,path, files);
-
-        var employee = await _employeeRepository.GetAsync(x => x.Id == Guid.Parse(employeeId));
-        if (employee == null)
-            return BadRequest("Çalışan bulunamadı.");
-
-        foreach (var uploadResult in uploadResults)
-        {
-            // Yüklenen her bir dosya için veritabanında bir kayıt oluşturun
-            await _fileRepository.AddAsync(new EmployeeFile()
-            {
-                Name = uploadResult.fileName,
-                Path = uploadResult.path,
-                Storage = _storageService.StorageName,
-                Employees = new List<Employee>() { employee }
-            });
-        }
-
-        return Ok();
+        UploadEmployeeFileDto response = await Mediator.Send(uploadEmployeeFileCommand);
+        return Ok(response);
     }
     
     [HttpPost("[action]")]
@@ -137,19 +125,25 @@ public class EmployeesController : BaseController
         {
             
             await _cloudinaryStorage.DeleteAsync(file.Path);
+            await _azureStorage.DeleteAsync(file.Path);
             await _localStorage.DeleteAsync(_webHostEnvironment.WebRootPath + "/images/" + category +"/" + file.Name);   
             await _fileRepository.DeleteAsync(file);
         }
         
 
         // Cloudinary'ye dosya yükleme işlemini burada gerçekleştirin
-        var uploadResults = await _cloudinaryStorage.UploadAsync(category,path, files);
         
-        await _localStorage.UploadAsync(category,path, files);
-
         var employee = await _employeeRepository.GetAsync(x => x.Id == Guid.Parse(employeeId));
         if (employee == null)
             return BadRequest("Çalışan bulunamadı.");
+        
+        //gelen category ve dosya adını düzenle.
+        
+        var uploadResults = await _googleStorage.UploadAsync(category,path, files);
+        
+        await _localStorage.UploadAsync(category,path, files);
+
+        
 
         foreach (var uploadResult in uploadResults)
         {
@@ -158,7 +152,8 @@ public class EmployeesController : BaseController
             {
                 Name = uploadResult.fileName,
                 Path = uploadResult.path,
-                Storage = StorageType.Cloudinary.ToString(),
+                Category = uploadResult.containerName,
+                Storage = StorageType.Google.ToString(),
                 Employee = employee
             });
         }
@@ -179,8 +174,8 @@ public class EmployeesController : BaseController
     [HttpGet("[action]/{employeeId}")]
     public async Task<IActionResult> GetImagesByEmployeeId([FromRoute] string employeeId)
     {
-        var images = await _employeeRepository.GetFilesByEmployeeId(employeeId);
-        return Ok(images);
+        var response = await Mediator.Send(new GetFilesByEmployeeIdQuery { EmployeeId = employeeId });
+        return Ok(response);
     }
     
     

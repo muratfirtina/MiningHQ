@@ -1,3 +1,4 @@
+using Amazon.S3;
 using Application;
 using Core.CrossCuttingConcerns.Exceptions.Extensions;
 using Core.Security;
@@ -6,8 +7,10 @@ using Core.Security.JWT;
 using Core.WebAPI.Extensions.Swagger;
 using Infrastructure;
 using Infrastructure.Services.Storage;
+using Infrastructure.Services.Storage.AWS;
 using Infrastructure.Services.Storage.Azure;
 using Infrastructure.Services.Storage.Cloudinary;
+using Infrastructure.Services.Storage.Google;
 using Infrastructure.Services.Storage.Local;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -27,9 +30,19 @@ builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddInfrastructureServices();
 builder.Services.AddHttpContextAccessor();
 
-//builder.Services.AddStorage<LocalStorage>();
+builder.Services.AddStorage<LocalStorage>();
 builder.Services.AddStorage<CloudinaryStorage>();
-//builder.Services.AddStorage<AzureStorage>();
+builder.Services.AddStorage<AzureStorage>();
+builder.Services.AddStorage<GoogleStorage>();
+//builder.Services.AddStorage<AwsStorage>();
+//builder.Services.AddAWSService<IAmazonS3>(builder.Configuration.GetAWSOptions("Storage:AWS"));
+/*builder.Services.AddSingleton<IAmazonS3>(sp =>
+{
+    var configuration = sp.GetRequiredService<IConfiguration>();
+    var awsOptions = configuration.GetAWSOptions();
+    return new AmazonS3Client(awsOptions.Credentials, awsOptions.Region);
+});*/
+
 
 const string tokenOptionsConfigurationSection = "TokenOptions";
 TokenOptions tokenOptions =

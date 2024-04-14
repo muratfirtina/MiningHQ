@@ -1,6 +1,7 @@
 using Application.Storage.Azure;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using Core.CrossCuttingConcerns.Exceptions.Types;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
@@ -17,24 +18,27 @@ public class AzureStorage : FileService, IAzureStorage
         _blobServiceClient = new BlobServiceClient(configuration["Storage:Azure"]);
     }
 
-    public async Task<List<(string fileName, string path)>> UploadAsync(string category, string path,
+    public async Task<List<(string fileName, string path, string containerName)>> UploadAsync(string category, string path,
         IFormFileCollection files)
     {
-        _blobContainerClient = _blobServiceClient.GetBlobContainerClient(path);
+        string newPath = await PathRenameAsync(path);
+        _blobContainerClient = _blobServiceClient.GetBlobContainerClient(newPath);
         _blobContainerClient.CreateIfNotExists();
         _blobContainerClient.SetAccessPolicy(PublicAccessType.BlobContainer);
         List<(string fileName, string path)> datas = new();
 
         foreach (IFormFile file in files)
         {
-            string fileNewName = await FileRenameAsync(path, file.FileName, HasFile);
+            string fileNewName = await FileRenameAsync(newPath, file.FileName, HasFile);
+            await FileMustBeInFileFormat(file);
             BlobClient blobClient = _blobContainerClient.GetBlobClient(fileNewName);
+            
             blobClient.Upload(file.OpenReadStream());
-            datas.Add((fileNewName, System.IO.Path.Combine(path, fileNewName)));
+            //datas.Add((file.FileName, System.IO.Path.Combine(newPath, fileNewName)));
 
         }
         
-        return datas;
+        return datas.Select(d => (d.fileName, d.path, category)).ToList();
 
     }
 
@@ -56,5 +60,15 @@ public class AzureStorage : FileService, IAzureStorage
     {
         _blobContainerClient = _blobServiceClient.GetBlobContainerClient(path);
         return _blobContainerClient.GetBlobs().Select(b => b.Name).ToList();
+    }
+    
+    public async Task FileMustBeInFileFormat(IFormFile formFile)
+    {
+        List<string> extensions = new() { ".jpg", ".png", ".jpeg", ".webp", ".pdf", ".doc", ".docx", ".xls", ".xlsx", ".heic" };
+
+        string extension = Path.GetExtension(formFile.FileName).ToLower();
+        if (!extensions.Contains(extension))
+            throw new BusinessException("Unsupported format");
+        await Task.CompletedTask;
     }
 }

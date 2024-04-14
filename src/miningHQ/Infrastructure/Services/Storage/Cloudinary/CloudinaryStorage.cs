@@ -25,9 +25,9 @@ public class CloudinaryStorage : FileService, ICloudinaryStorage
         _cloudinary = new CloudinaryDotNet.Cloudinary(account);
     }
 
-    public async Task<List<(string fileName, string path)>> UploadAsync(string category,string path, IFormFileCollection files)
+    public async Task<List<(string fileName, string path, string containerName)>> UploadAsync(string category,string path, IFormFileCollection files)
     {
-        var datas = new List<(string fileName, string path)>();
+        var datas = new List<(string fileName, string path, string containerName)>();
         foreach (IFormFile file in files)
         {
             ImageUploadParams imageUploadParams = new()
@@ -41,11 +41,11 @@ public class CloudinaryStorage : FileService, ICloudinaryStorage
             
             await FileMustBeInFileFormat(file);
             
-            imageUploadParams.Folder = category + "/" + path;
+            imageUploadParams.Folder = category;
             imageUploadParams.File.FileName = fileNewName;
 
             ImageUploadResult imageUploadResult = await _cloudinary.UploadAsync(imageUploadParams);
-            datas.Add((file.FileName, imageUploadResult.Url.ToString()));
+            datas.Add((file.FileName, imageUploadResult.Url.ToString(), path));
             
         }
         return datas;
@@ -103,16 +103,6 @@ public class CloudinaryStorage : FileService, ICloudinaryStorage
         return string.Empty;
     }
     
-    public async Task FileMustBeInFileFormat(IFormFile formFile)
-    {
-        List<string> extensions = new() { ".jpg", ".png", ".jpeg", ".webp", ".pdf", ".doc", ".docx", ".xls", ".xlsx", ".heic"};
-
-        string extension = Path.GetExtension(formFile.FileName).ToLower();
-        if (!extensions.Contains(extension))
-            throw new BusinessException("Unsupported format");
-        await Task.CompletedTask;
-    }
-
 
     
 }

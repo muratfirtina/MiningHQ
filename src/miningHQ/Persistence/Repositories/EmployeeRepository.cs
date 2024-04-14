@@ -39,20 +39,28 @@ public class EmployeeRepository : EfRepositoryBase<Employee, Guid, MiningHQDbCon
         return await query;
     }
 
-    public async Task<List<GetFilesByEmployeeIdResponse>> GetFilesByEmployeeId(string employeeId)
+    public async Task<List<GetEmployeeFilesDto>> GetFilesByEmployeeId(string employeeId)
     {
         var storageProvider = _configuration["StorageProvider"];
-        var baseStorageUrl = _configuration["BaseStorageUrl"];
-
+        var azureStorageUrl = _configuration["AzureStorageUrl"];
+        var googleStorageUrl = _configuration["GoogleStorageUrl"];
+        //var awsStorageUrl = _configuration["AwsStorageUrl"];
+        var localStorageUrl = _configuration["LocalStorageUrl"];;
+        
         var query = Context.Employees
             .Where(e => e.Id == Guid.Parse(employeeId))
             .SelectMany(e => e.EmployeeFiles)
-            .Select(e => new GetFilesByEmployeeIdResponse
+            .OrderByDescending(e => e.CreatedDate)
+            .Select(e => new GetEmployeeFilesDto
             {
                 FileName = e.Name,
-                // Storage sağlayıcısına göre Path'i ayarla
-                Path = storageProvider == "AzureStorage" ? $"{baseStorageUrl}/{e.Path}" : e.Path,
+                Path = storageProvider == "AzureStorage" ? $"{azureStorageUrl}{e.Path}" :
+                    storageProvider == "GoogleStorage" ? $"{googleStorageUrl}{e.Category}/{e.Path}" :
+                    //storageProvider == "AwsStorage" ? $"{awsStorageUrl}{e.Category}/{e.Path}" :
+                    storageProvider == "LocalStorage" ? $"{localStorageUrl}{e.Category}/{e.Path}" : e.Path,
                 Showcase = e.Showcase,
+                Storage = storageProvider,
+                Category = e.Category,
                 Id = e.Id.ToString()
             }).ToListAsync();
 
@@ -91,4 +99,6 @@ public class EmployeeRepository : EfRepositoryBase<Employee, Guid, MiningHQDbCon
         return await query;
         
     }
+    
+    
 }

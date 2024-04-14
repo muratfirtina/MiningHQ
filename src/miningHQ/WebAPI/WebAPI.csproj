@@ -31,7 +31,6 @@
     <Folder Include="Controllers\Dtos" />
     <Folder Include="logs\" />
     <Folder Include="wwwroot\" />
-    <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,6 +40,22 @@
     <_ContentIncludedByDefault Remove="wwwroot\images\employee-images\files\MURATFIRTINA\adsiz-doküman-20240403102315.pdf" />
     <_ContentIncludedByDefault Remove="wwwroot\images\employee-images\photo\MURATFIRTINA\clipart548003-20240403094855.png" />
     <_ContentIncludedByDefault Remove="wwwroot\images\employee-images\photo\MURATFIRTINA\img2059-2-20240403094459.heic" />
+    <_ContentIncludedByDefault Remove="wwwroot\images\employee-images\files\murat-firtina\4c5cefbd-e01b-4cbe-b442-3ea9428858bc-20240403200252.jpeg" />
+    <_ContentIncludedByDefault Remove="wwwroot\files\employee-images\files\murat-firtina\4c5cefbd-e01b-4cbe-b442-3ea9428858bc-20240404092646.jpeg" />
+    <_ContentIncludedByDefault Remove="wwwroot\files\employee-images\files\murat-firtina\4c5cefbd-e01b-4cbe-b442-3ea9428858bc-20240404093113.jpeg" />
+    <_ContentIncludedByDefault Remove="wwwroot\files\employee-images\files\murat-firtina\4c5cefbd-e01b-4cbe-b442-3ea9428858bc-20240404093134.jpeg" />
+    <_ContentIncludedByDefault Remove="wwwroot\files\employee-images\files\murat-firtina\9d80a593-a1d8-4b9d-ba7b-80f33d41f192-20240404093205.jpeg" />
+    <_ContentIncludedByDefault Remove="wwwroot\files\employee-images\files\murat-firtina\9d80a593-a1d8-4b9d-ba7b-80f33d41f192-20240404093232.jpeg" />
+    <_ContentIncludedByDefault Remove="wwwroot\files\employee-images\files\murat-firtina\9d80a593-a1d8-4b9d-ba7b-80f33d41f192-20240404093338.jpeg" />
+    <_ContentIncludedByDefault Remove="wwwroot\employee-images\files\erdi̇nç-eşki̇\employee-imagesfilesmurat-firtina95a620ee-d544-409d-a43a-81bc2fc7f944-.jpeg" />
+    <_ContentIncludedByDefault Remove="wwwroot\employee-images\files\erdi̇nç-eşki̇\nisan-2024-calendar-.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\employee-images\files\erdi̇nç-eşki̇\nisan-2024-calendar-1-.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\employee-images\files\erdi̇nç-eşki̇\nisan-2024-takvim-.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\employee-images\files\lütfi̇-bursali\dalle-2024-02-28-00-13-29---design-a-minimalistic-industrial-themed-logo-for-a-web-application-named-mininghq-which-is-a-quarry-personnel-and-machinery-tracking-program--use-co-.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\employee-images\files\lütfi̇-bursali\dalle-2024-02-28-00-23-58---design-a-logo-for-a-web-application-named-mininghq-which-is-a-quarry-personnel-and-machine-tracking-program--the-logo-should-have-a-minimalistic-ind-.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\employee-images\files\murat-firtina\b98aa272-c814-4cf8-8002-1c3d58d95e5b-.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\employee-images\files\murat-firtina\clipart548003-.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\employee-images\files\murat-firtina\employee-imagesfilesmurat-firtina95a620ee-d544-409d-a43a-81bc2fc7f944-.jpeg" />
   </ItemGroup>
 
 </Project>

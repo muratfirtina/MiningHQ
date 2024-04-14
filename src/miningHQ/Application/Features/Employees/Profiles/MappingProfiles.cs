@@ -2,6 +2,7 @@ using Application.Features.Employees.Commands.Create;
 using Application.Features.Employees.Commands.Delete;
 using Application.Features.Employees.Commands.Update;
 using Application.Features.Employees.Commands.UpdateShowcase;
+using Application.Features.Employees.Commands.UploadEmployeeFile;
 using Application.Features.Employees.Dtos;
 using Application.Features.Employees.Queries.GetById;
 using Application.Features.Employees.Queries.GetList;
@@ -50,7 +51,9 @@ public class MappingProfiles : Profile
             .ForMember(dest => dest.TypeOfBlood, opt => opt.MapFrom(src => src.TypeOfBlood))
             .ForMember(dest => dest.EmergencyContact, opt => opt.MapFrom(src => src.EmergencyContact))
             .ReverseMap();
-            ;
+
+        CreateMap<EmployeeFile, UploadEmployeeFileDto>()
+            .ReverseMap();
 
         CreateMap<IPaginate<Employee>, GetListResponse<GetListByEmplooyeeShortDetailItemDto>>()
             .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Items))

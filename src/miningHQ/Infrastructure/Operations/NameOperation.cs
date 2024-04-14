@@ -134,6 +134,8 @@ public class NameOperation
             .Replace("[", "")
             .Replace("]", "")
             .Replace("£", "")
-            .Replace("$", "");
+            .Replace("$", "")
+            .Replace("i\u0307", "i")
+            .Replace("I\u0307", "i");
 
 }

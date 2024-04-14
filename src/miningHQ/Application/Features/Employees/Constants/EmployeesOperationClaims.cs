@@ -10,4 +10,5 @@ public static class EmployeesOperationClaims
     public const string Create = "Employees.Create";
     public const string Update = "Employees.Update";
     public const string Delete = "Employees.Delete";
+    public const string UploadEmployeeFile = "Employees.UploadEmployeeFile";
 }

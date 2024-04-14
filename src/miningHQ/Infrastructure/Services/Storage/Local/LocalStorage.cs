@@ -6,7 +6,7 @@ namespace Infrastructure.Services.Storage.Local;
 
 public class LocalStorage : FileService, ILocalStorage
 {
-    private readonly string _baseFolderPath = Path.Combine("wwwroot", "images");
+    private readonly string _baseFolderPath = Path.Combine("wwwroot");
     
     public LocalStorage()
     {
@@ -15,23 +15,24 @@ public class LocalStorage : FileService, ILocalStorage
             Directory.CreateDirectory(_baseFolderPath);
         }
     }
-    public async Task<List<(string fileName, string path)>> UploadAsync(string category,string path, IFormFileCollection files)
+    public async Task<List<(string fileName, string path, string containerName)>> UploadAsync(string category,string path, IFormFileCollection files)
     {
-        var employeeFolderPath = Path.Combine(_baseFolderPath, category, path);
+        string newPath = await PathRenameAsync(path);
+        var employeeFolderPath = Path.Combine(_baseFolderPath, category, newPath);
         if (!Directory.Exists(employeeFolderPath))
         {
             Directory.CreateDirectory(employeeFolderPath);
         }
         
-        List<(string fileName, string path)> datas = new ();
+        List<(string fileName, string path, string containerName)> datas = new ();
         foreach (IFormFile file in files)
         {
-            string fileNewName = await FileRenameAsync(path, file.FileName, HasFile);
+            string fileNewName = await FileRenameAsync(newPath, file.FileName, HasFile);
             
             await FileMustBeInFileFormat(file);
             
             await CopyFileAsync(Path.Combine(employeeFolderPath, fileNewName), file);
-            datas.Add((file.FileName, Path.Combine(path, fileNewName)));
+            datas.Add((file.FileName, Path.Combine(newPath, fileNewName), category));
         }
         return datas;
         
@@ -39,8 +40,8 @@ public class LocalStorage : FileService, ILocalStorage
 
     public async Task DeleteAsync(string path)
     {
-        var localPath = ExtractLocalPath(path); // Dosya yolu çıkar
-        var filePath = Path.Combine(_baseFolderPath, localPath); // Dosya yolu ve adını birleştir
+        //var localPath = ExtractLocalPath(path); // Dosya yolu çıkar
+        var filePath = Path.Combine(_baseFolderPath, path); // Dosya yolu ve adını birleştir
         if (File.Exists(filePath))
         {
             File.Delete(filePath);

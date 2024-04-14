@@ -8,14 +8,14 @@ using static Application.Features.Employees.Constants.EmployeesOperationClaims;
 
 namespace Application.Features.Employees.Queries.GetFilesByEmployeeId;
 
-public class GetFilesByEmployeeIdQuery: IRequest<List<GetFilesByEmployeeIdResponse>>//,ISecuredRequest
+public class GetFilesByEmployeeIdQuery: IRequest<List<GetEmployeeFilesDto>>//,ISecuredRequest
 {
     public string? EmployeeId { get; set; }
     
     public string[] Roles => new[] { Admin, Read };
     
     
-    public class GetImagesByEmployeeIdQueryHandler : IRequestHandler<GetFilesByEmployeeIdQuery, List<GetFilesByEmployeeIdResponse>>
+    public class GetImagesByEmployeeIdQueryHandler : IRequestHandler<GetFilesByEmployeeIdQuery, List<GetEmployeeFilesDto>>
     {
         private readonly IStorage _storage;
         private readonly IMapper _mapper;
@@ -28,20 +28,10 @@ public class GetFilesByEmployeeIdQuery: IRequest<List<GetFilesByEmployeeIdRespon
             _employeeRepository = employeeRepository;
         }
 
-        public async Task<List<GetFilesByEmployeeIdResponse>> Handle(GetFilesByEmployeeIdQuery request, CancellationToken cancellationToken)
+        public async Task<List<GetEmployeeFilesDto>> Handle(GetFilesByEmployeeIdQuery request, CancellationToken cancellationToken)
         {
-            //employeeId'ye ait resimleri getir
-            if (request.EmployeeId != null)
-            {
-                await _employeeRepository.GetFilesByEmployeeId(request.EmployeeId);
-                
-            }
-            else
-            {
-                throw new Exception("EmployeeId is null");
-            }
-
-            return new List<GetFilesByEmployeeIdResponse>();
+            var employeeFiles = await _employeeRepository.GetFilesByEmployeeId(request.EmployeeId);
+            return _mapper.Map<List<GetEmployeeFilesDto>>(employeeFiles);
             
         }
     }
