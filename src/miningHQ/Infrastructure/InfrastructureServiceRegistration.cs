@@ -1,5 +1,6 @@
 ﻿using Amazon.S3;
 using Application.Services;
+using Application.Services.Files;
 using Application.Services.ImageService;
 using Application.Storage;
 using Application.Storage.AWS;
@@ -24,46 +25,40 @@ public static class InfrastructureServiceRegistration
 {
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
     {
-        //services.AddScoped<ImageServiceBase, CloudinaryImageServiceAdapter>();
         services.AddScoped<ILocalStorage, LocalStorage>();
         services.AddScoped<ICloudinaryStorage, CloudinaryStorage>();
         services.AddScoped<IAzureStorage, AzureStorage>();
         services.AddScoped<IGoogleStorage, GoogleStorage>();
-        //services.AddScoped<IAwsStorage, AwsStorage>();
         services.AddScoped<IStorageService, StorageService>();
-       
-        
-        
+        services.AddScoped<IFileNameService, FileNameService>();
         
         return services;
     }
     
-    public static void AddStorage<T>(this IServiceCollection serviceCollection) where T : FileService, IStorage
+    public static void AddStorage<T>(this IServiceCollection serviceCollection) where T : class,IBlobService
     {
-        serviceCollection.AddScoped<IStorage, T>();
-
+        serviceCollection.AddScoped<IBlobService, T>();
+        serviceCollection.AddScoped<IStorage,StorageService>();
     }
     public static void AddStorage(this IServiceCollection serviceCollection, StorageType storageType)
     {
         switch (storageType)
         {
             case StorageType.Local:
-                serviceCollection.AddScoped<IStorage, LocalStorage>();
+                serviceCollection.AddScoped<IBlobService, LocalStorage>();
                 break;
-            case StorageType.Azure:
-                serviceCollection.AddScoped<IStorage, AzureStorage>();
-                break;
+            
             case StorageType.Cloudinary:
-                serviceCollection.AddScoped<IStorage, CloudinaryStorage>();
+                serviceCollection.AddScoped<IBlobService, CloudinaryStorage>();
                 break;
             case StorageType.Google:
-                serviceCollection.AddScoped<IStorage, GoogleStorage>();
+                serviceCollection.AddScoped<IBlobService, GoogleStorage>();
                 break;
             /*case StorageType.Aws:
-                serviceCollection.AddScoped<IStorage, AwsStorage>();
+                serviceCollection.AddScoped<IBlobService, AwsStorage>();
                 break;*/
             default:
-                serviceCollection.AddScoped<IStorage, LocalStorage>();
+                serviceCollection.AddScoped<IBlobService, LocalStorage>();
                 break;
         }
     }

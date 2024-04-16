@@ -8,7 +8,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Infrastructure.Services.Storage.Cloudinary;
 
-public class CloudinaryStorage : FileService, ICloudinaryStorage
+public class CloudinaryStorage : ICloudinaryStorage
 {
     private readonly CloudinaryDotNet.Cloudinary _cloudinary;
     
@@ -25,7 +25,8 @@ public class CloudinaryStorage : FileService, ICloudinaryStorage
         _cloudinary = new CloudinaryDotNet.Cloudinary(account);
     }
 
-    public async Task<List<(string fileName, string path, string containerName)>> UploadAsync(string category,string path, IFormFileCollection files)
+    /*public async Task<List<(string fileName, string path, string containerName)>> UploadAsync(string category,
+        string path, List<IFormFile> files)
     {
         var datas = new List<(string fileName, string path, string containerName)>();
         foreach (IFormFile file in files)
@@ -37,12 +38,11 @@ public class CloudinaryStorage : FileService, ICloudinaryStorage
                 UniqueFilename = false,
                 Overwrite = false
             };
-            string fileNewName = await FileRenameAsync(path, file.FileName, HasFile);
             
-            await FileMustBeInFileFormat(file);
+            
             
             imageUploadParams.Folder = category;
-            imageUploadParams.File.FileName = fileNewName;
+            imageUploadParams.File.FileName = file.FileName;
 
             ImageUploadResult imageUploadResult = await _cloudinary.UploadAsync(imageUploadParams);
             datas.Add((file.FileName, imageUploadResult.Url.ToString(), path));
@@ -50,9 +50,30 @@ public class CloudinaryStorage : FileService, ICloudinaryStorage
         }
         return datas;
         
+    }*/
+
+
+    public async Task<List<(string fileName, string path, string containerName)>> UploadFileToStorage(string category,
+        string path, string fileName, MemoryStream fileStream)
+    {
+        var datas = new List<(string fileName, string path, string containerName)>();
+        ImageUploadParams imageUploadParams = new()
+        {
+            File = new FileDescription(fileName, stream: fileStream),
+            UseFilename = true,
+            UniqueFilename = false,
+            Overwrite = false
+        };
+        
+        imageUploadParams.Folder = category + "/" + path;
+        imageUploadParams.File.FileName = fileName;
+        
+        await _cloudinary.UploadAsync(imageUploadParams);
+        
+        
+        return null;
+        
     }
-    
-    
 
     public async Task DeleteAsync(string path)
     {

@@ -54,12 +54,12 @@ public class EmployeeRepository : EfRepositoryBase<Employee, Guid, MiningHQDbCon
             .Select(e => new GetEmployeeFilesDto
             {
                 FileName = e.Name,
-                Path = storageProvider == "AzureStorage" ? $"{azureStorageUrl}{e.Path}" :
-                    storageProvider == "GoogleStorage" ? $"{googleStorageUrl}{e.Category}/{e.Path}" :
+                Path = storageProvider == "AzureStorage" ? $"{azureStorageUrl}{e.Path}/{e.Name}" :
+                    storageProvider == "GoogleStorage" ? $"{googleStorageUrl}{e.Category}/{e.Path}/{e.Name}" :
                     //storageProvider == "AwsStorage" ? $"{awsStorageUrl}{e.Category}/{e.Path}" :
-                    storageProvider == "LocalStorage" ? $"{localStorageUrl}{e.Category}/{e.Path}" : e.Path,
+                    storageProvider == "LocalStorage" ? $"{localStorageUrl}{e.Category}/{e.Path}/{e.Name}" : $"{e.Path}/{e.Name}",
                 Showcase = e.Showcase,
-                Storage = storageProvider,
+                Storage = e.Storage,
                 Category = e.Category,
                 Id = e.Id.ToString()
             }).ToListAsync();

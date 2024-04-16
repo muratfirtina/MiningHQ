@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Infrastructure.Services.Storage.Local;
 
-public class LocalStorage : FileService, ILocalStorage
+public class LocalStorage : ILocalStorage
 {
     private readonly string _baseFolderPath = Path.Combine("wwwroot");
     
@@ -15,10 +15,11 @@ public class LocalStorage : FileService, ILocalStorage
             Directory.CreateDirectory(_baseFolderPath);
         }
     }
-    public async Task<List<(string fileName, string path, string containerName)>> UploadAsync(string category,string path, IFormFileCollection files)
+    /*public async Task<List<(string fileName, string path, string containerName)>> UploadAsync(string category,
+        string path, List<IFormFile> files)
     {
-        string newPath = await PathRenameAsync(path);
-        var employeeFolderPath = Path.Combine(_baseFolderPath, category, newPath);
+        
+        var employeeFolderPath = Path.Combine(_baseFolderPath, category, path);
         if (!Directory.Exists(employeeFolderPath))
         {
             Directory.CreateDirectory(employeeFolderPath);
@@ -27,15 +28,36 @@ public class LocalStorage : FileService, ILocalStorage
         List<(string fileName, string path, string containerName)> datas = new ();
         foreach (IFormFile file in files)
         {
-            string fileNewName = await FileRenameAsync(newPath, file.FileName, HasFile);
             
-            await FileMustBeInFileFormat(file);
-            
-            await CopyFileAsync(Path.Combine(employeeFolderPath, fileNewName), file);
-            datas.Add((file.FileName, Path.Combine(newPath, fileNewName), category));
+            await CopyFileAsync(Path.Combine(employeeFolderPath, file.FileName), file);
+            datas.Add((file.FileName, Path.Combine(path, file.FileName), category));
         }
         return datas;
         
+    }*/
+
+
+    public async Task<List<(string fileName, string path, string containerName)>> UploadFileToStorage(string category,
+        string path, string fileName, MemoryStream fileStream)
+    {
+        var employeeFolderPath = Path.Combine(_baseFolderPath, category, path);
+        
+        if (!Directory.Exists(employeeFolderPath))
+        {
+            Directory.CreateDirectory(employeeFolderPath);
+        }
+        
+        List<(string fileName, string path, string containerName)> datas = new();
+        
+        //dosyayı locale kaydet
+        var filePath = Path.Combine(employeeFolderPath, fileName);
+        await using FileStream fileStream1 = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None, 1024 * 1024, useAsync:false);
+        await fileStream.CopyToAsync(fileStream1);
+        await fileStream1.FlushAsync();
+        
+        datas.Add((fileName, path, category));
+
+        return null;
     }
 
     public async Task DeleteAsync(string path)

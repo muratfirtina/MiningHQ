@@ -1,4 +1,5 @@
 using Application.Features.Employees.Constants;
+using Application.Services.Files;
 using Application.Services.Repositories;
 using Application.Storage;
 using AutoMapper;
@@ -19,7 +20,7 @@ public class UploadEmployeeFileCommand : IRequest<UploadEmployeeFileDto>//, ISec
 {
     public string Category { get; set; }
     public string Path { get; set; }
-    public IFormFileCollection Files { get; set; }
+    public List<IFormFile> Files { get; set; }
     public string EmployeeId { get; set; } 
     
     public string[] Roles => new[] { Admin, Write, EmployeesOperationClaims.UploadEmployeeFile };
@@ -34,35 +35,52 @@ public class UploadEmployeeFileCommand : IRequest<UploadEmployeeFileDto>//, ISec
         private readonly IStorage _storage;
         private readonly IFileRepository _fileRepository;
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IFileNameService _fileNameService;
         private readonly IMapper _mapper;
     
 
-        public UploadEmployeeFileCommandHandler(IStorageService storageService, IEmployeeRepository employeeRepository, IMapper mapper, IFileRepository fileRepository, IStorage storage)
+        public UploadEmployeeFileCommandHandler(IStorageService storageService, IEmployeeRepository employeeRepository, IMapper mapper, IFileRepository fileRepository, IStorage storage, IFileNameService fileNameService)
         {
         _storageService = storageService;
         _employeeRepository = employeeRepository;
         _mapper = mapper;
         _fileRepository = fileRepository;
         _storage = storage;
+        _fileNameService = fileNameService;
         }
 
         public async Task<UploadEmployeeFileDto> Handle(UploadEmployeeFileCommand request, CancellationToken cancellationToken)
         {
-            List<(string fileName, string path, string containerName)> result = await _storageService.UploadAsync(request.Category, request.Path, request.Files);
+            
             Employee? employee = await _employeeRepository.GetAsync(e=>e.Id == Guid.Parse(request.EmployeeId));
             if (employee == null)
             {
                 throw new NotFoundException("Employee not found");
             }
+
+            foreach (IFormFile file in request.Files)
+            {
+                await _fileNameService.FileMustBeInFileFormat(file);
+                
+                if (file.Length > 5 * 1024 * 1024)
+                {
+                    throw new ("File size must be less than 5MB");
+                }
+            }
+            
+            List<(string fileName, string path, string category,string storageType)> result = await _storageService.UploadAsync(request.Category, request.Path, request.Files);
             await _fileRepository.AddAsync(result.Select(r => new EmployeeFile()
             {
                 Name = r.fileName,
-                Category = r.containerName,
                 Path = r.path,
-                Storage = _storageService.StorageName,
+                Category = r.category,
+                Storage = r.storageType,
                 Employees = new List<Employee>() {employee}
+                
             }).ToList());
+            
             return new UploadEmployeeFileDto();
+            
         }
         
     }

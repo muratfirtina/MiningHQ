@@ -1,5 +1,5 @@
 namespace Application.Storage.Cloudinary;
 
-public interface ICloudinaryStorage : IStorage
+public interface ICloudinaryStorage : IBlobService
 {
 }

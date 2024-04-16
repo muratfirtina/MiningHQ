@@ -1,58 +1,96 @@
+using Application.Services.Files;
 using Application.Storage;
 using Application.Storage.Azure;
 using Application.Storage.Cloudinary;
 using Application.Storage.Google;
 using Application.Storage.Local;
-using Infrastructure.Services.Storage.Azure;
-using Infrastructure.Services.Storage.Cloudinary;
-using Infrastructure.Services.Storage.Google;
-using Infrastructure.Services.Storage.Local;
+using Infrastructure.Enums;
 using Microsoft.AspNetCore.Http;
 
 namespace Infrastructure.Services.Storage;
 
-public class StorageService : FileService, IStorageService
+public class StorageService : IStorageService
 {
     private readonly ILocalStorage _localStorage;
     private readonly ICloudinaryStorage _cloudinaryStorage;
     private readonly IAzureStorage _azureStorage;
     private readonly IGoogleStorage _googleStorage;
-    readonly IStorage _storage;
+    private readonly IFileNameService _fileNameService;
 
-    public StorageService(IStorage storage, ILocalStorage localStorage, ICloudinaryStorage cloudinaryStorage, IAzureStorage azureStorage, IGoogleStorage googleStorage)
+    public StorageService(ILocalStorage localStorage, ICloudinaryStorage cloudinaryStorage, IAzureStorage azureStorage, IGoogleStorage googleStorage, IFileNameService fileNameService)
     {
-        _storage = storage;
         _localStorage = localStorage;
         _cloudinaryStorage = cloudinaryStorage;
         _azureStorage = azureStorage;
         _googleStorage = googleStorage;
+        _fileNameService = fileNameService;
     }
 
-    public async Task<List<(string fileName, string path, string containerName)>> UploadAsync(string category, string path,
-        IFormFileCollection files)
+    public async Task<List<(string fileName, string path, string category,string storageType)>> UploadAsync(string category, string path,
+        List<IFormFile> files)
     {
-        string newPath = await PathRenameAsync(path);
-        
-        // Tüm storage servislerin upload işlemlerini burada topluyoruz. Bir dosyayı aynı anda birden fazla storage servisine yükleyebiliriz.
-        List<(string fileName, string path, string containerName)> datas = new();
-        datas.AddRange(await _localStorage.UploadAsync(category, newPath, files));
-        //datas.AddRange(await _cloudinaryStorage.UploadAsync(category, path, files));
-        datas.AddRange(await _azureStorage.UploadAsync(category, newPath, files));
-        
-        datas.AddRange(await _googleStorage.UploadAsync(category, newPath, files));
-        return datas;
+        List<(string fileName, string path, string category,string storageType)> datas = new List<(string fileName, string path, string category,string storageType)>();
+        foreach (var file in files)
+        {
 
-        
+            await _fileNameService.FileMustBeInFileFormat(file);
+            string storageType = StorageType.Local.ToString();
+            string newPath = await _fileNameService.PathRenameAsync(path);
+            var fileNewName = await _fileNameService.FileRenameAsync(newPath, file.FileName,HasFile);
+            
+            var memoryStream = new MemoryStream();
+            await file.CopyToAsync(memoryStream);
+
+            // Dosyayı her bir storage'a yükle
+            memoryStream.Position = 0; // Akışın başına dön
+            
+            await UploadToStorage(category, newPath, fileNewName, memoryStream);
+            datas.Add((fileNewName, newPath, category, storageType));
+
+            memoryStream.Close(); // MemoryStream'i manuel olarak kapat
+        }
+
+        return datas;
     }
 
-    public async Task DeleteAsync(string path) 
-        => await _storage.DeleteAsync(path);
+    private async Task UploadToStorage(string category, string path, string fileName, MemoryStream fileStream)
+    {
+        // MemoryStream'in pozisyonunu sıfırla
+        fileStream.Position = 0;
+        await _localStorage.UploadFileToStorage(category, path, fileName, new MemoryStream(fileStream.ToArray()));
+
+        fileStream.Position = 0;
+        await _cloudinaryStorage.UploadFileToStorage(category, path, fileName, new MemoryStream(fileStream.ToArray()));
+        
+        fileStream.Position = 0;
+        await _azureStorage.UploadFileToStorage(category, path, fileName, new MemoryStream(fileStream.ToArray()));
+        
+        fileStream.Position = 0;
+        await _googleStorage.UploadFileToStorage(category, path, fileName, new MemoryStream(fileStream.ToArray()));
+    }
+
+    public async Task DeleteAsync(string path)
+    {
+        await _localStorage.DeleteAsync(path);
+        await _cloudinaryStorage.DeleteAsync(path);
+        //await _azureStorage.DeleteAsync(path);
+        await _googleStorage.DeleteAsync(path);
+    }
 
     public List<string> GetFiles(string path)
-        => _storage.GetFiles(path);
+    {
+        // Burada bir örnekleme yapılıyor; gerçekte, her bir storage'tan dosyaları birleştirebilirsiniz.
+        return _localStorage.GetFiles(path);
+    }
 
     public bool HasFile(string path, string fileName)
-        => _storage.HasFile(path, fileName);
+    {
+        // Bu örnekte local storage kontrol ediliyor, diğerleri de benzer şekilde kontrol edilebilir.
+        return _localStorage.HasFile(path, fileName);
+    }
 
-    public string StorageName { get => _storage.GetType().Name ; }
+    public string StorageName { get; } 
+
+    
+    
 }

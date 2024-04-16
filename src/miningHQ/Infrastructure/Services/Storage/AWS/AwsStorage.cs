@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Infrastructure.Services.Storage.AWS;
 
-public class AwsStorage:FileService, IAwsStorage
+public class AwsStorage:IAwsStorage
 {
     private readonly IAmazonS3 _s3Client;
 
@@ -13,15 +13,15 @@ public class AwsStorage:FileService, IAwsStorage
         _s3Client = s3Client;
     }
 
-    public async Task<List<(string fileName, string path, string containerName)>> UploadAsync(string category, string path,
-        IFormFileCollection files)
+    /*public async Task<List<(string fileName, string path, string containerName)>> UploadAsync(string category,
+        string path,
+        List<IFormFile> files)
     {
         List<(string fileName, string path, string containerName)> datas = new();
         
         foreach (IFormFile file in files)
         {
-            string fileNewName = await FileRenameAsync(path, file.FileName, HasFile);
-            FileMustBeInFileFormat(file);
+            
             using (var memoryStream = new MemoryStream())
             {
                 await file.CopyToAsync(memoryStream);
@@ -31,6 +31,15 @@ public class AwsStorage:FileService, IAwsStorage
             }
         }
         return datas;
+    }*/
+
+    public async Task<List<(string fileName, string path, string containerName)>> UploadFileToStorage(string category,
+        string path, string fileName, MemoryStream fileStream)
+    {
+        List<(string fileName, string path, string containerName)> datas = new();
+        await _s3Client.UploadObjectFromStreamAsync("mininghq", $"{category}/{path}/{fileName}", fileStream, null);
+        
+        return null;
     }
 
     public async Task DeleteAsync(string path)

@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Infrastructure.Services.Storage.Google;
 
-public class GoogleStorage : FileService, IGoogleStorage
+public class GoogleStorage : IGoogleStorage
 {
     private readonly StorageClient _storageClient;
 
@@ -25,24 +25,36 @@ public class GoogleStorage : FileService, IGoogleStorage
         _storageClient = StorageClient.Create(credential);
     }
 
-    public async Task<List<(string fileName, string path, string containerName)>> UploadAsync(string category, string path, IFormFileCollection files)
+    /*public async Task<List<(string fileName, string path, string containerName)>> UploadAsync(string category,
+        string path, List<IFormFile> files)
     {
         List<(string fileName, string path, string containerName)> datas = new();
         
         foreach (IFormFile file in files)
         {
-            string fileNewName = await FileRenameAsync(path, file.FileName, HasFile);
-            await FileMustBeInFileFormat(file);
+            
             using (var memoryStream = new MemoryStream())
             {
                 await file.CopyToAsync(memoryStream);
                 memoryStream.Position = 0;
-                await _storageClient.UploadObjectAsync("mininghq", $"{category}/{path}/{fileNewName}", null, memoryStream);
+                await _storageClient.UploadObjectAsync("mininghq", $"{category}/{path}/{file.FileName}", null, memoryStream);
                 //datas.Add((file.FileName, System.IO.Path.Combine(path, fileNewName), category));
             }
         }
         return datas;
 
+    }*/
+
+
+    public async Task<List<(string fileName, string path, string containerName)>> UploadFileToStorage(string category,
+        string path, string fileName, MemoryStream fileStream)
+    {
+        List<(string fileName, string path, string containerName)> datas = new();
+        await _storageClient.UploadObjectAsync("mininghq", $"{category}/{path}/{fileName}", null, fileStream);
+        
+        return null;
+        
+        
     }
 
     public async Task DeleteAsync(string path)

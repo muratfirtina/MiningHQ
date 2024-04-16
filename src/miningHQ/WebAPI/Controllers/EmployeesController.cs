@@ -113,7 +113,7 @@ public class EmployeesController : BaseController
         return Ok(response);
     }
     
-    [HttpPost("[action]")]
+    /*[HttpPost("[action]")]
     public async Task<IActionResult> UploadEmployeePhoto([FromForm] string category, [FromForm] string path, [FromForm] IFormFileCollection files, [FromForm] string employeeId)
     {
         if(files == null || files.Count == 0)
@@ -159,7 +159,7 @@ public class EmployeesController : BaseController
         }
 
         return Ok();
-    }
+    }*/
 
     
     [HttpGet("[action]/{employeeId}")]

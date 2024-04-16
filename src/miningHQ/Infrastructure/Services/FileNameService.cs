@@ -1,3 +1,4 @@
+using Application.Services.Files;
 using Core.CrossCuttingConcerns.Exceptions.Types;
 using Infrastructure.Operations;
 using Microsoft.AspNetCore.Http;
@@ -5,11 +6,11 @@ using System.Text.RegularExpressions;
 
 namespace Infrastructure.Services;
 
-public class FileService
+public class FileNameService : IFileNameService
 
 {
-    protected delegate bool HasFile(string pathOrContainerName, string fileName);
-    protected async Task<string> FileRenameAsync(string pathOrContainerName,string fileName, HasFile hasFileMethod)
+    
+    public async Task<string> FileRenameAsync(string pathOrContainerName,string fileName, IFileNameService.HasFile hasFileMethod)
     {
         string extension = Path.GetExtension(fileName);
         string oldName = Path.GetFileNameWithoutExtension(fileName);
@@ -23,7 +24,7 @@ public class FileService
         //string newFileName = regex.Replace(regulatedFileName, string.Empty);//geçersiz karakterleri siler ve yeni dosya ismi oluşturur.
         DateTime datetimenow = DateTime.UtcNow;
         string datetimeutcnow = datetimenow.ToString("yyyyMMddHHmmss");//dosya isminin sonuna eklenen tarih bilgisi
-        string fullName = $"{regulatedFileName}-{extension}";//dosya ismi ve uzantısı birleştirilir ve yeni dosya ismi oluşturulur.
+        string fullName = $"{regulatedFileName}-{datetimeutcnow}{extension}";//dosya ismi ve uzantısı birleştirilir ve yeni dosya ismi oluşturulur.
 
         if (hasFileMethod(pathOrContainerName, fullName))
         {
@@ -37,8 +38,8 @@ public class FileService
 
         return fullName;
     }
-
-    protected async Task<string> PathRenameAsync(string pathOrContainerName)
+    
+    public async Task<string> PathRenameAsync(string pathOrContainerName)
     {
         string regulatedPath = NameOperation.CharacterRegulatory(pathOrContainerName);
         regulatedPath = regulatedPath.ToLower().Trim('-', ' '); //harfleri küçültür ve baştaki ve sondaki - ve boşlukları siler

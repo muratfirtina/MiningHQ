@@ -403,3 +403,4 @@ FodyWeavers.xsd
 #appsettings
 appsettings.json
 appsettings.Production.json
+wwwroot/
