@@ -4,6 +4,7 @@ using Azure.Storage.Blobs.Models;
 using Core.CrossCuttingConcerns.Exceptions.Types;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using File = Domain.Entities.File;
 
 namespace Infrastructure.Services.Storage.Azure;
 
@@ -50,7 +51,11 @@ public class AzureStorage : IAzureStorage
         await blobClient.UploadAsync(fileStream);
         return null;
     }
-    
+
+
+    public Task<List<T>> GetFiles<T>(string category, string path) where T : File, new() => throw new NotImplementedException();
+
+    public Task<List<T>?> GetFiles<T>(string employeeId) where T : File, new() => throw new NotImplementedException();
 
     public bool HasFile(string path, string fileName)
     {
@@ -69,7 +74,7 @@ public class AzureStorage : IAzureStorage
         await blobClient.DeleteAsync();
     }
     
-    public List<string> GetFiles(string path)
+    public async Task<List<string?>> GetFiles(string path, string category)
     {
         _blobContainerClient = _blobServiceClient.GetBlobContainerClient(path);
         return _blobContainerClient.GetBlobs().Select(b => b.Name).ToList();

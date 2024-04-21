@@ -1,4 +1,5 @@
 using Application.Features.Employees.Dtos;
+using Application.Features.Employees.Queries.GetById;
 using Application.Features.Employees.Queries.GetFilesByEmployeeId;
 using Application.Services.Repositories;
 using Domain.Entities;
@@ -11,10 +12,9 @@ namespace Persistence.Repositories;
 
 public class EmployeeRepository : EfRepositoryBase<Employee, Guid, MiningHQDbContext>, IEmployeeRepository
 {
-    private readonly IConfiguration _configuration;
-    public EmployeeRepository(MiningHQDbContext context, IConfiguration configuration) : base(context)
+    public EmployeeRepository(MiningHQDbContext context) : base(context)
     {
-        _configuration = configuration;
+        
     }
     
     public async Task<List<EmployeeWithTimekeepingsDto>> GetEmployeesWithTimekeepings(int year, int month, int pageIndex, int pageSize)
@@ -41,27 +41,19 @@ public class EmployeeRepository : EfRepositoryBase<Employee, Guid, MiningHQDbCon
 
     public async Task<List<GetEmployeeFilesDto>> GetFilesByEmployeeId(string employeeId)
     {
-        var storageProvider = _configuration["StorageProvider"];
-        var azureStorageUrl = _configuration["AzureStorageUrl"];
-        var googleStorageUrl = _configuration["GoogleStorageUrl"];
-        //var awsStorageUrl = _configuration["AwsStorageUrl"];
-        var localStorageUrl = _configuration["LocalStorageUrl"];;
         
         var query = Context.Employees
             .Where(e => e.Id == Guid.Parse(employeeId))
             .SelectMany(e => e.EmployeeFiles)
             .OrderByDescending(e => e.CreatedDate)
-            .Select(e => new GetEmployeeFilesDto
+            .Select(ef => new GetEmployeeFilesDto
             {
-                FileName = e.Name,
-                Path = storageProvider == "AzureStorage" ? $"{azureStorageUrl}{e.Path}/{e.Name}" :
-                    storageProvider == "GoogleStorage" ? $"{googleStorageUrl}{e.Category}/{e.Path}/{e.Name}" :
-                    //storageProvider == "AwsStorage" ? $"{awsStorageUrl}{e.Category}/{e.Path}" :
-                    storageProvider == "LocalStorage" ? $"{localStorageUrl}{e.Category}/{e.Path}/{e.Name}" : $"{e.Path}/{e.Name}",
-                Showcase = e.Showcase,
-                Storage = e.Storage,
-                Category = e.Category,
-                Id = e.Id.ToString()
+                FileName = ef.Name,
+                Path = ef.Path,
+                Showcase = ef.Showcase,
+                Storage = ef.Storage,
+                Category = ef.Category,
+                Id = ef.Id,
             }).ToListAsync();
 
         return await query;
@@ -98,6 +90,30 @@ public class EmployeeRepository : EfRepositoryBase<Employee, Guid, MiningHQDbCon
 
         return await query;
         
+    }
+    
+    public async Task<GetByIdEmployeeResponse> GetEmployeeWithFiles(string employeeId)
+    {
+        var query = Context.Employees
+            .Where(e => e.Id == Guid.Parse(employeeId))
+            .Select(e => new GetByIdEmployeeResponse
+            {
+                
+                FirstName = e.FirstName,
+                LastName = e.LastName,
+                EmployeeFiles = e.EmployeeFiles
+                    .Select(ef => new EmployeeFile
+                    {
+                        Id = ef.Id,
+                        Name = ef.Name,
+                        Path = ef.Path,
+                        Category = ef.Category,
+                        Storage = ef.Storage,
+                        Showcase = ef.Showcase
+                    }).ToList()
+            }).FirstOrDefaultAsync();
+
+        return await query;
     }
     
     

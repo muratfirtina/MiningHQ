@@ -1,15 +1,24 @@
+using Application.Services.Repositories;
 using Application.Storage.Local;
 using Core.CrossCuttingConcerns.Exceptions.Types;
+using Infrastructure.Enums;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Services.Storage.Local;
 
 public class LocalStorage : ILocalStorage
 {
+    private readonly IEmployeeRepository _employeeRepository;
+    private readonly IFileRepository _fileRepository;
     private readonly string _baseFolderPath = Path.Combine("wwwroot");
+    private readonly StorageSettings _storageSettings;
     
-    public LocalStorage()
+    public LocalStorage(IEmployeeRepository employeeRepository, IOptions<StorageSettings> storageSettings, IFileRepository fileRepository)
     {
+        _employeeRepository = employeeRepository;
+        _fileRepository = fileRepository;
+        _storageSettings = storageSettings.Value;
         if (!Directory.Exists(_baseFolderPath))
         {
             Directory.CreateDirectory(_baseFolderPath);
@@ -71,11 +80,40 @@ public class LocalStorage : ILocalStorage
         
     }
 
-    public List<string> GetFiles(string path)
+    public async Task<List<T>?> GetFiles<T>(string employeeId) where T : Domain.Entities.File, new()
     {
-        DirectoryInfo directoryInfo = new DirectoryInfo(path);
-        return directoryInfo.GetFiles().Select(f =>f.Name).ToList();
+        var baseUrl = _storageSettings.LocalStorageUrl; // Ayarlardan URL alınır
+        
+        if (string.IsNullOrEmpty(employeeId))
+        {
+            return null;
+        }
+        var files = await _employeeRepository.GetFilesByEmployeeId(employeeId);
+        return files.Select(file => new T
+        {
+            Name = file.FileName,
+            Path = file.Path,
+            Category = file.Category,
+            Storage = file.Storage,
+            Id = file.Id,
+            Url = $"{baseUrl}/{file.Category}/{file.Path}/{file.FileName}"
+            
+        }).ToList();
+        
     }
+
+    /*public async Task<List<string>> GetFiles(string category,string path)
+    {
+        
+        var fullPath = Path.Combine(_baseFolderPath, category, path);
+        if (!Directory.Exists(fullPath))
+            return new List<string>();
+
+        var baseUrl = _storageSettings.LocalStorageUrl; // Ayarlardan URL alınır
+        return Directory.GetFiles(fullPath)
+            .Select(fileName => $"{baseUrl}/{category}/{path}/{Path.GetFileName(fileName)}")
+            .ToList();
+    }*/
 
     public bool HasFile(string path, string fileName) 
         => File.Exists(Path.Combine(path, fileName));
@@ -100,7 +138,7 @@ public class LocalStorage : ILocalStorage
 
     }
     
-    public string ExtractLocalPath(string fullPath)
+    /*public string ExtractLocalPath(string fullPath)
     {
         // Örneğin, Cloudinary URL'si veya karmaşık bir dosya yolu verildiğinde,
         // yerel dosya sistemindeki klasör yapısına ve dosya adına karşılık gelen kısmı çıkarmak için
@@ -129,7 +167,7 @@ public class LocalStorage : ILocalStorage
 
         // Eğer fullPath beklenen formatta değilse, orijinal fullPath'i döndür veya uygun bir hata yönetimi yap
         return fullPath;
-    }
+    }*/
     
     public async Task FileMustBeInImageFormat(IFormFile formFile)
     {

@@ -1,4 +1,5 @@
 using Application.Features.Employees.Dtos;
+using Application.Features.Employees.Queries.GetById;
 using Application.Features.Employees.Queries.GetFilesByEmployeeId;
 using Domain.Entities;
 using Core.Persistence.Repositories;
@@ -11,4 +12,5 @@ public interface IEmployeeRepository : IAsyncRepository<Employee, Guid>, IReposi
     Task<List<GetEmployeeFilesDto>> GetFilesByEmployeeId(string employeeId);
     Task ChangeShowcase(string employeeId, string fileId,bool showcase);
     Task<EmployeePhoto?> GetEmployeePhoto(string employeeId);
+    Task<GetByIdEmployeeResponse> GetEmployeeWithFiles(string employeeId);
 }

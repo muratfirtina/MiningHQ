@@ -24,5 +24,6 @@ public class GetByIdEmployeeResponse : IResponse
     
     public int? CurrentLeaveDays { get; set; }
     public ICollection<EmployeeFile>? EmployeeFiles { get; set; }
+    
 
 }

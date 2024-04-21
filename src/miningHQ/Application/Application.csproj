@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Features\Employees\Commands\DeleteEmployeeFile\" />
     <Folder Include="Services\Repositories" />
   </ItemGroup>
 

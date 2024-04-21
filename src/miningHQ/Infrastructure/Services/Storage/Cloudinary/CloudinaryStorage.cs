@@ -82,10 +82,21 @@ public class CloudinaryStorage : ICloudinaryStorage
         await _cloudinary.DestroyAsync(deletionParams);
     }
 
-    public List<string> GetFiles(string path)
+    public Task<List<T>?> GetFiles<T>(string employeeId) where T : Domain.Entities.File, new() => throw new NotImplementedException();
+
+    public Task<List<T>> GetFiles<T>(string category, string path) where T : Domain.Entities.File, new() => throw new NotImplementedException();
+
+    public async Task<List<string?>> GetFiles(string path, string category)
     {
         DirectoryInfo directoryInfo = new DirectoryInfo(path);
-        return directoryInfo.GetFiles().Select(f =>f.Name).ToList();
+        var files = directoryInfo.GetFiles();
+        List<string> datas = new();
+        foreach (var file in files)
+        {
+            datas.Add(file.Name);
+        }
+        return datas;
+        
     }
 
     public bool HasFile(string path, string fileName) 

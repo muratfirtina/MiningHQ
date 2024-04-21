@@ -6,6 +6,7 @@ using Application.Storage.Google;
 using Application.Storage.Local;
 using Infrastructure.Enums;
 using Microsoft.AspNetCore.Http;
+using File = Domain.Entities.File;
 
 namespace Infrastructure.Services.Storage;
 
@@ -74,14 +75,20 @@ public class StorageService : IStorageService
         await _localStorage.DeleteAsync(path);
         await _cloudinaryStorage.DeleteAsync(path);
         //await _azureStorage.DeleteAsync(path);
-        await _googleStorage.DeleteAsync(path);
+        //await _googleStorage.DeleteAsync(path);
     }
 
-    public List<string> GetFiles(string path)
+    public async Task<List<T>?> GetFiles<T>(string employeeId) where T : File, new()
     {
-        // Burada bir örnekleme yapılıyor; gerçekte, her bir storage'tan dosyaları birleştirebilirsiniz.
-        return _localStorage.GetFiles(path);
+        return await _localStorage.GetFiles<T>(employeeId);
     }
+
+    /*public async Task<List<string>> GetFiles(string category,string path)
+    {
+        string newPath = await _fileNameService.PathRenameAsync(path);
+        // Burada bir örnekleme yapılıyor; gerçekte, her bir storage'tan dosyaları birleştirebilirsiniz.
+        return await _localStorage.GetFiles(category,newPath);
+    }*/
 
     public bool HasFile(string path, string fileName)
     {

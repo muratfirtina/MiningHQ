@@ -21,6 +21,7 @@ using Core.Persistence.Dynamic;
 using Domain.Entities;
 using Infrastructure.Enums;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 
 namespace WebAPI.Controllers;
 
@@ -113,6 +114,15 @@ public class EmployeesController : BaseController
         return Ok(response);
     }
     
+    // EmployeeId'ye ait resimleri getir
+    [HttpGet("[action]/{employeeId}")]
+    public async Task<IActionResult> GetImagesByEmployeeId([FromRoute] string employeeId)
+    {
+        var response = await Mediator.Send(new GetFilesByEmployeeIdQuery { EmployeeId =employeeId});
+        return Ok(response);
+    }
+    
+    
     /*[HttpPost("[action]")]
     public async Task<IActionResult> UploadEmployeePhoto([FromForm] string category, [FromForm] string path, [FromForm] IFormFileCollection files, [FromForm] string employeeId)
     {
@@ -167,15 +177,6 @@ public class EmployeesController : BaseController
     {
         var photo = await _employeeRepository.GetEmployeePhoto(employeeId);
         return Ok(photo);
-    }
-    
-    
-    // EmployeeId'ye ait resimleri getir
-    [HttpGet("[action]/{employeeId}")]
-    public async Task<IActionResult> GetImagesByEmployeeId([FromRoute] string employeeId)
-    {
-        var response = await Mediator.Send(new GetFilesByEmployeeIdQuery { EmployeeId = employeeId });
-        return Ok(response);
     }
     
     

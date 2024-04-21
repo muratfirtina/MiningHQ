@@ -1,19 +1,27 @@
+using Application.Services.Repositories;
 using Application.Storage.Google;
 using Core.CrossCuttingConcerns.Exceptions.Types;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Storage.V1;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using File = Domain.Entities.File;
 
 namespace Infrastructure.Services.Storage.Google;
 
 public class GoogleStorage : IGoogleStorage
 {
     private readonly StorageClient _storageClient;
+    private readonly IEmployeeRepository _employeeRepository;
+    private readonly StorageSettings _storageSettings;
+    private readonly string _bucketName = "mininghq";
 
-    public GoogleStorage(IConfiguration configuration)
+    public GoogleStorage(IConfiguration configuration, IEmployeeRepository employeeRepository, IOptions<StorageSettings> storageSettings)
     {
-        
+        _employeeRepository = employeeRepository;
+        _storageSettings = storageSettings.Value;
+
         var credentialsPath = configuration["Storage:Google:CredentialsFilePath"];
         if (string.IsNullOrEmpty(credentialsPath))
         {
@@ -24,26 +32,6 @@ public class GoogleStorage : IGoogleStorage
         var credential = GoogleCredential.FromFile(credentialsPath);
         _storageClient = StorageClient.Create(credential);
     }
-
-    /*public async Task<List<(string fileName, string path, string containerName)>> UploadAsync(string category,
-        string path, List<IFormFile> files)
-    {
-        List<(string fileName, string path, string containerName)> datas = new();
-        
-        foreach (IFormFile file in files)
-        {
-            
-            using (var memoryStream = new MemoryStream())
-            {
-                await file.CopyToAsync(memoryStream);
-                memoryStream.Position = 0;
-                await _storageClient.UploadObjectAsync("mininghq", $"{category}/{path}/{file.FileName}", null, memoryStream);
-                //datas.Add((file.FileName, System.IO.Path.Combine(path, fileNewName), category));
-            }
-        }
-        return datas;
-
-    }*/
 
 
     public async Task<List<(string fileName, string path, string containerName)>> UploadFileToStorage(string category,
@@ -63,13 +51,60 @@ public class GoogleStorage : IGoogleStorage
         await storage.DeleteObjectAsync("mininghq", path);
     }
 
-    public List<string> GetFiles(string path)
+    public async Task<List<T>?> GetFiles<T>(string employeeId) where T : File, new()
+    {
+        var baseUrl = _storageSettings.GoogleStorageUrl; // Ayarlardan URL alınır
+        //employeeId ye göre category ve path bul.
+        var employeeFiles = await _employeeRepository.GetFilesByEmployeeId(employeeId);
+        if (employeeFiles == null || !employeeFiles.Any())
+            return null; 
+
+        List<T> files = new List<T>();
+
+        foreach (var employeeFileDto in employeeFiles) 
+        {
+            var prefix = $"{employeeFileDto.Category}/{employeeFileDto.Path}/";
+            var objects = _storageClient.ListObjects(_bucketName, prefix);
+
+            // Assuming your _storageClient handles finding the relevant file based on the metadata
+            var matchingObject = objects.FirstOrDefault(obj => obj.Name.EndsWith(employeeFileDto.FileName)); 
+
+            if (matchingObject != null)
+            {
+                var file = new T
+                {
+                    Id = employeeFileDto.Id,
+                    Name = employeeFileDto.FileName,
+                    Path = employeeFileDto.Path,
+                    Category = employeeFileDto.Category,
+                    Storage = employeeFileDto.Storage, 
+                    Url = $"{baseUrl}/{matchingObject.Name}"
+                };
+                files.Add(file);
+            }
+        }
+
+        return files;
+    }
+        
+    
+
+    /*
+    public Task<List<T>> GetFiles<T>(string category, string path) where T : File, new() => throw new NotImplementedException();
+    */
+
+    /*public async Task<List<string?>> GetFiles(string path, string category)
     {
         var storage = StorageClient.Create();
         var steam = storage.ListObjects("mininghq", path);
-        return steam.Select(x => x.Name).ToList();
+        List<string> files = new();
+        foreach (var obj in steam)
+        {
+            files.Add(obj.Name);
+        }
+        return files;
         
-    }
+    }*/
 
 
 

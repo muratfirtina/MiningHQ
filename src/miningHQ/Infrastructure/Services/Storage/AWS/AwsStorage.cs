@@ -1,6 +1,7 @@
 using Amazon.S3;
 using Application.Storage.AWS;
 using Microsoft.AspNetCore.Http;
+using File = Domain.Entities.File;
 
 namespace Infrastructure.Services.Storage.AWS;
 
@@ -47,10 +48,15 @@ public class AwsStorage:IAwsStorage
            await _s3Client.DeleteObjectAsync("mininghq", path);
     }
 
-    public List<string> GetFiles(string path)
+    public Task<List<T>?> GetFiles<T>(string employeeId) where T : File, new() => throw new NotImplementedException();
+
+    public Task<List<T>> GetFiles<T>(string category, string path) where T : File, new() => throw new NotImplementedException();
+
+    public async Task<List<string?>> GetFiles(string path, string category)
     {
-        _s3Client.ListObjectsAsync("mininghq", path);
-        return new List<string>();
+        var response = await _s3Client.ListObjectsAsync("mininghq", $"{path}");
+        var files = response.S3Objects.Select(x => x.Key).ToList();
+        return files;
     }
 
     public bool HasFile(string path, string fileName)

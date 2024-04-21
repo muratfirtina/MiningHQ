@@ -5,6 +5,7 @@ using Application.Features.Employees.Commands.UpdateShowcase;
 using Application.Features.Employees.Commands.UploadEmployeeFile;
 using Application.Features.Employees.Dtos;
 using Application.Features.Employees.Queries.GetById;
+using Application.Features.Employees.Queries.GetFilesByEmployeeId;
 using Application.Features.Employees.Queries.GetList;
 using Application.Features.Employees.Queries.GetList.ShortDetail;
 using Application.Features.Employees.Queries.GetListByDynamic;
@@ -28,6 +29,7 @@ public class MappingProfiles : Profile
         CreateMap<Employee, GetByIdEmployeeResponse>()
             .ForMember(dest => dest.TotalUsedLeaveDays, opt => opt.MapFrom(src => src.EmployeeLeaveUsages.Count))
             .ForMember(dest => dest.TotalEntitledLeaveDays, opt => opt.MapFrom(src => src.EmployeeLeaveUsages.Count))
+            .ForMember(dest => dest.EmployeeFiles, opt => opt.MapFrom(src => src.EmployeeFiles))
             .ReverseMap();
         CreateMap<Employee, GetListEmployeeListItemDto>().ReverseMap();
         
@@ -64,6 +66,18 @@ public class MappingProfiles : Profile
 
         CreateMap<UpdateShowcaseCommand, UpdateShowcaseResponse>()
             .ReverseMap();
+        
+        CreateMap<EmployeeFile, GetEmployeeFilesDto>()
+            //.ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category))
+            //.ForMember(dest => dest.Path, opt => opt.MapFrom(src => src.Path))
+            //.ForMember(dest => dest.FileName, opt => opt.MapFrom(src => src.Name))
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+            //.ForMember(dest => dest.Storage, opt => opt.MapFrom(src => src.Storage))
+            .ForMember(dest => dest.Showcase, opt => opt.MapFrom(src => src.Showcase))
+            .ForMember(dest => dest.Url, opt => opt.MapFrom(src => src.Url))
+            .ReverseMap();
+        
+        
 
     }
 }

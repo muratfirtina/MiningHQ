@@ -17,13 +17,15 @@ using Infrastructure.Services.Storage.Azure;
 using Infrastructure.Services.Storage.Cloudinary;
 using Infrastructure.Services.Storage.Google;
 using Infrastructure.Services.Storage.Local;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure;
 
 public static class InfrastructureServiceRegistration
 {
-    public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
+    
+    public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<ILocalStorage, LocalStorage>();
         services.AddScoped<ICloudinaryStorage, CloudinaryStorage>();
@@ -31,6 +33,9 @@ public static class InfrastructureServiceRegistration
         services.AddScoped<IGoogleStorage, GoogleStorage>();
         services.AddScoped<IStorageService, StorageService>();
         services.AddScoped<IFileNameService, FileNameService>();
+        
+        services.Configure<StorageSettings>(configuration.GetSection("StorageUrls"));
+        
         
         return services;
     }

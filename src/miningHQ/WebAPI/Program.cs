@@ -27,13 +27,14 @@ builder.Services.AddControllers();
 builder.Services.AddApplicationServices();
 builder.Services.AddSecurityServices();
 builder.Services.AddPersistenceServices(builder.Configuration);
-builder.Services.AddInfrastructureServices();
+builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddHttpContextAccessor();
+
 
 builder.Services.AddStorage<LocalStorage>();
 builder.Services.AddStorage<CloudinaryStorage>();
-builder.Services.AddStorage<AzureStorage>();
-builder.Services.AddStorage<GoogleStorage>();
+//builder.Services.AddStorage<AzureStorage>();
+//builder.Services.AddStorage<GoogleStorage>();
 //builder.Services.AddStorage<AwsStorage>();
 //builder.Services.AddAWSService<IAmazonS3>(builder.Configuration.GetAWSOptions("Storage:AWS"));
 /*builder.Services.AddSingleton<IAmazonS3>(sp =>
