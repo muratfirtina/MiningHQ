@@ -6,10 +6,11 @@ public class CreateLeaveTypeCommandValidator : AbstractValidator<CreateLeaveType
 {
     public CreateLeaveTypeCommandValidator()
     {
-        RuleFor(c => c.Id).NotEmpty();
-        RuleFor(c => c.EmployeeLeaveId).NotEmpty();
-        RuleFor(c => c.EmployeeLeaveUsage).NotEmpty();
-        RuleFor(c => c.UsageDate).NotEmpty();
-        RuleFor(c => c.ReturnDate).NotEmpty();
+        RuleFor(c => c.Name).NotEmpty();
+        //RuleFor(c => c.Id).NotEmpty();
+        //RuleFor(c => c.EmployeeLeaveId).NotEmpty();
+        //RuleFor(c => c.EmployeeLeaveUsage).NotEmpty();
+        //RuleFor(c => c.UsageDate).NotEmpty();
+        //RuleFor(c => c.ReturnDate).NotEmpty();
     }
 }

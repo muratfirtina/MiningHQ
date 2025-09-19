@@ -1,93 +1,128 @@
+// Infrastructure/Services/Storage/Local/LocalStorage.cs - Mevcut class'a bu method'u ekleyin
+
+using Application.Enums;
+using Application.Services.Files;
 using Application.Services.Repositories;
+using Application.Storage;
 using Application.Storage.Local;
 using Core.CrossCuttingConcerns.Exceptions.Types;
-using Infrastructure.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
+using File = Domain.Entities.File;
 
 namespace Infrastructure.Services.Storage.Local;
 
 public class LocalStorage : ILocalStorage
 {
+    // Mevcut constructor ve field'lar aynı kalacak...
     private readonly IEmployeeRepository _employeeRepository;
-    private readonly IFileRepository _fileRepository;
+    private readonly IFileNameService _fileNameService;
     private readonly string _baseFolderPath = Path.Combine("wwwroot");
     private readonly StorageSettings _storageSettings;
     
-    public LocalStorage(IEmployeeRepository employeeRepository, IOptions<StorageSettings> storageSettings, IFileRepository fileRepository)
+    public string StorageName => "LocalStorage";
+
+    public LocalStorage(IEmployeeRepository employeeRepository, IOptions<StorageSettings> storageSettings, IFileNameService fileNameService)
     {
         _employeeRepository = employeeRepository;
-        _fileRepository = fileRepository;
+        _fileNameService = fileNameService;
         _storageSettings = storageSettings.Value;
+        
         if (!Directory.Exists(_baseFolderPath))
         {
             Directory.CreateDirectory(_baseFolderPath);
         }
     }
-    /*public async Task<List<(string fileName, string path, string containerName)>> UploadAsync(string category,
-        string path, List<IFormFile> files)
+
+    // ⭐ YENİ METHOD: Base64 dönüştürme
+    public async Task<Base64FileResult?> GetFileAsBase64Async(string category, string path, string fileName)
     {
-        
-        var employeeFolderPath = Path.Combine(_baseFolderPath, category, path);
-        if (!Directory.Exists(employeeFolderPath))
+        try
         {
-            Directory.CreateDirectory(employeeFolderPath);
+            var physicalPath = Path.Combine(_baseFolderPath, category, path, fileName);
+
+            if (!System.IO.File.Exists(physicalPath))
+            {
+                return null;
+            }
+
+            var bytes = await System.IO.File.ReadAllBytesAsync(physicalPath);
+            var base64String = Convert.ToBase64String(bytes);
+
+            // MIME type'ı belirle
+            var extension = Path.GetExtension(physicalPath).ToLower();
+            var mimeType = extension switch
+            {
+                ".jpg" or ".jpeg" => "image/jpeg",
+                ".png" => "image/png",
+                ".gif" => "image/gif",
+                ".webp" => "image/webp",
+                ".bmp" => "image/bmp",
+                ".svg" => "image/svg+xml",
+                ".heic" => "image/heic",
+                _ => "image/jpeg"
+            };
+
+            return new Base64FileResult
+            {
+                Base64 = base64String,
+                MimeType = mimeType,
+                FileSize = bytes.Length
+            };
         }
-        
-        List<(string fileName, string path, string containerName)> datas = new ();
-        foreach (IFormFile file in files)
+        catch (Exception ex)
         {
+            // Log the error if you have logging
+            return null;
+        }
+    }
+
+    // Mevcut method'lar aynı kalacak (UploadAsync, DeleteAsync, vs.)
+    public async Task<List<(string fileName, string path, string category, string storageType)>> UploadAsync(string category, string path, List<IFormFile> files)
+    {
+        // Mevcut implementasyon...
+        List<(string fileName, string path, string category, string storageType)> results = new();
+        
+        foreach (var file in files)
+        {
+            await FileMustBeInFileFormat(file);
             
-            await CopyFileAsync(Path.Combine(employeeFolderPath, file.FileName), file);
-            datas.Add((file.FileName, Path.Combine(path, file.FileName), category));
-        }
-        return datas;
-        
-    }*/
-
-
-    public async Task<List<(string fileName, string path, string containerName)>> UploadFileToStorage(string category,
-        string path, string fileName, MemoryStream fileStream)
-    {
-        var employeeFolderPath = Path.Combine(_baseFolderPath, category, path);
-        
-        if (!Directory.Exists(employeeFolderPath))
-        {
-            Directory.CreateDirectory(employeeFolderPath);
+            string newPath = await _fileNameService.PathRenameAsync(path);
+            string fileNewName = await _fileNameService.FileRenameAsync(newPath, file.FileName, HasFile);
+            
+            var employeeFolderPath = Path.Combine(_baseFolderPath, category, newPath);
+            if (!Directory.Exists(employeeFolderPath))
+            {
+                Directory.CreateDirectory(employeeFolderPath);
+            }
+            
+            var fullFilePath = Path.Combine(employeeFolderPath, fileNewName);
+            await SaveFileAsync(fullFilePath, file);
+            
+            results.Add((fileNewName, newPath, category, StorageType.Local.ToString()));
         }
         
-        List<(string fileName, string path, string containerName)> datas = new();
-        
-        //dosyayı locale kaydet
-        var filePath = Path.Combine(employeeFolderPath, fileName);
-        await using FileStream fileStream1 = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None, 1024 * 1024, useAsync:false);
-        await fileStream.CopyToAsync(fileStream1);
-        await fileStream1.FlushAsync();
-        
-        datas.Add((fileName, path, category));
-
-        return null;
+        return results;
     }
 
     public async Task DeleteAsync(string path)
     {
-        //var localPath = ExtractLocalPath(path); // Dosya yolu çıkar
-        var filePath = Path.Combine(_baseFolderPath, path); // Dosya yolu ve adını birleştir
-        if (File.Exists(filePath))
+        var filePath = Path.Combine(_baseFolderPath, path);
+        if (System.IO.File.Exists(filePath))
         {
-            File.Delete(filePath);
+            System.IO.File.Delete(filePath);
         }
-        
     }
 
-    public async Task<List<T>?> GetFiles<T>(string employeeId) where T : Domain.Entities.File, new()
+    public async Task<List<T>?> GetFiles<T>(string employeeId) where T : File, new()
     {
-        var baseUrl = _storageSettings.LocalStorageUrl; // Ayarlardan URL alınır
+        var baseUrl = _storageSettings.LocalStorageUrl;
         
         if (string.IsNullOrEmpty(employeeId))
         {
             return null;
         }
+        
         var files = await _employeeRepository.GetFilesByEmployeeId(employeeId);
         return files.Select(file => new T
         {
@@ -97,95 +132,45 @@ public class LocalStorage : ILocalStorage
             Storage = file.Storage,
             Id = file.Id,
             Url = $"{baseUrl}/{file.Category}/{file.Path}/{file.FileName}"
-            
         }).ToList();
-        
     }
-
-    /*public async Task<List<string>> GetFiles(string category,string path)
-    {
-        
-        var fullPath = Path.Combine(_baseFolderPath, category, path);
-        if (!Directory.Exists(fullPath))
-            return new List<string>();
-
-        var baseUrl = _storageSettings.LocalStorageUrl; // Ayarlardan URL alınır
-        return Directory.GetFiles(fullPath)
-            .Select(fileName => $"{baseUrl}/{category}/{path}/{Path.GetFileName(fileName)}")
-            .ToList();
-    }*/
 
     public bool HasFile(string path, string fileName) 
-        => File.Exists(Path.Combine(path, fileName));
-    
-    async Task<bool> CopyFileAsync(string path, IFormFile file)
-    {
-        try
-        {
-            await using FileStream fileStream = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None, 1024 * 1024, useAsync:false);
-            
-            await file.CopyToAsync(fileStream);
-            await fileStream.FlushAsync();
-            return true;
+        => System.IO.File.Exists(Path.Combine(_baseFolderPath, path, fileName));
 
-        }
-        catch (Exception e)
-        {
-            //todo: loglama yapılacak!
-            throw e;
-        }
-        
-
-    }
-    
-    /*public string ExtractLocalPath(string fullPath)
-    {
-        // Örneğin, Cloudinary URL'si veya karmaşık bir dosya yolu verildiğinde,
-        // yerel dosya sistemindeki klasör yapısına ve dosya adına karşılık gelen kısmı çıkarmak için
-        // bir mantık geliştirmeniz gerekebilir.
-    
-        // Örnek fullPath:
-        // "/Users/muratfirtina/Projects/GitHub/MiningHQFull/MiningHQ/src/miningHQ/WebAPI/wwwroot/images/http:/res.cloudinary.com/mininghq/image/upload/v1712050438/employee-images/LÜTFİ BURSALI/a64d8339-c5bf-469c-9d0e-681abed1e15b-20240402093356.jpg/_a64d8339-c5bf-469c-9d0e-681abed1e15b.jpeg"
-
-        // fullPath içindeki 'wwwroot' kelimesinden sonra gelen kısmı almak için
-        var startIndex = fullPath.IndexOf("wwwroot") + "wwwroot".Length;
-        if(startIndex > -1)
-        {
-            var relativePath = fullPath.Substring(startIndex);
-
-            // Eğer URL'den dosya adını çıkarmak istiyorsanız, ek işlemler yapılabilir
-            // Örneğin, son '/' karakterinden sonrasını almak gibi
-            var lastIndex = relativePath.LastIndexOf('/');
-            if(lastIndex > -1)
-            {
-                relativePath = relativePath.Substring(0, lastIndex); // Son dosya adını kaldır
-            }
-
-            // Temizlenmiş yerel yol
-            return relativePath;
-        }
-
-        // Eğer fullPath beklenen formatta değilse, orijinal fullPath'i döndür veya uygun bir hata yönetimi yap
-        return fullPath;
-    }*/
-    
     public async Task FileMustBeInImageFormat(IFormFile formFile)
     {
         List<string> extensions = new() { ".jpg", ".png", ".jpeg", ".webp", ".heic" };
-
         string extension = Path.GetExtension(formFile.FileName).ToLower();
+        
         if (!extensions.Contains(extension))
-            throw new BusinessException("Unsupported format");
+            throw new BusinessException("Unsupported image format");
+        
         await Task.CompletedTask;
     }
     
     public async Task FileMustBeInFileFormat(IFormFile formFile)
     {
         List<string> extensions = new() { ".jpg", ".png", ".jpeg", ".webp", ".pdf", ".doc", ".docx", ".xls", ".xlsx", ".heic" };
-
         string extension = Path.GetExtension(formFile.FileName).ToLower();
+        
         if (!extensions.Contains(extension))
-            throw new BusinessException("Unsupported format");
+            throw new BusinessException("Unsupported file format");
+        
         await Task.CompletedTask;
+    }
+
+    private async Task SaveFileAsync(string filePath, IFormFile file)
+    {
+        try
+        {
+            await using var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None, 1024 * 1024, useAsync: true);
+            await file.CopyToAsync(fileStream);
+            await fileStream.FlushAsync();
+        }
+        catch (Exception ex)
+        {
+            throw new BusinessException($"File save failed: {ex.Message}");
+        }
     }
 }

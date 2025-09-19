@@ -10,11 +10,12 @@ namespace Application.Features.LeaveTypes.Commands.Create;
 
 public class CreateLeaveTypeCommand : IRequest<CreatedLeaveTypeResponse>//, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
 {
-    public Guid Id { get; set; }
-    public Guid EmployeeLeaveId { get; set; }
-    public EmployeeLeaveUsage EmployeeLeaveUsage { get; set; }
-    public DateTime? UsageDate { get; set; }
-    public DateTime? ReturnDate { get; set; }
+    //public Guid Id { get; set; }
+    public string Name { get; set; }
+    //public Guid EmployeeLeaveId { get; set; }
+    //public EmployeeLeaveUsage EmployeeLeaveUsage { get; set; }
+    //public DateTime? UsageDate { get; set; }
+    //public DateTime? ReturnDate { get; set; }
 
     public string[] Roles => new[] { Admin, Write, LeaveTypesOperationClaims.Create };
 

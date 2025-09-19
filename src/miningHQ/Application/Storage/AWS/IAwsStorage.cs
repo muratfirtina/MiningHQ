@@ -1,6 +1,6 @@
 namespace Application.Storage.AWS;
 
-public interface IAwsStorage:IBlobService
+public interface IAwsStorage:IStorageService
 {
     
 }

@@ -1,4 +1,4 @@
-namespace Infrastructure.Enums;
+namespace Application.Enums;
 
 public enum StorageType
 {

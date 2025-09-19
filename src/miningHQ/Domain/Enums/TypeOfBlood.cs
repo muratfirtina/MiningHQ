@@ -2,6 +2,7 @@ namespace Domain.Enums;
 
 public enum TypeOfBlood
 {
+    None = 0,
     APositive = 1,
     ANegative = 2,
     BPositive = 3,

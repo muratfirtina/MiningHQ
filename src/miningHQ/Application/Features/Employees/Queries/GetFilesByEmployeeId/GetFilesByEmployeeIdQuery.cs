@@ -18,26 +18,26 @@ public class GetFilesByEmployeeIdQuery: IRequest<List<GetEmployeeFilesDto>>//,IS
     public string[] Roles => new[] { Admin, Read };
     
     
-    public class GetImagesByEmployeeIdQueryHandler : IRequestHandler<GetFilesByEmployeeIdQuery, List<GetEmployeeFilesDto>>
+    
+    public class GetFilesByEmployeeIdQueryHandler : IRequestHandler<GetFilesByEmployeeIdQuery, List<GetEmployeeFilesDto>>
     {
-        private readonly IStorage _storage;
+        private readonly IStorageFactory _storageFactory;  // ⭐ IStorage yerine IStorageFactory
         private readonly IMapper _mapper;
-        private readonly IEmployeeRepository _employeeRepository;
 
-        public GetImagesByEmployeeIdQueryHandler(IStorage storage, IMapper mapper, IEmployeeRepository employeeRepository)
+        public GetFilesByEmployeeIdQueryHandler(IStorageFactory storageFactory, IMapper mapper)
         {
-            _storage = storage;
+            _storageFactory = storageFactory;  // ⭐ Factory injection
             _mapper = mapper;
-            _employeeRepository = employeeRepository;
         }
 
         public async Task<List<GetEmployeeFilesDto>> Handle(GetFilesByEmployeeIdQuery request, CancellationToken cancellationToken)
         {
-            
-            var files = await _storage.GetFiles<EmployeeFile>(request.EmployeeId);
+            // ⭐ Factory'den default storage service al
+            var storageService = _storageFactory.GetDefaultStorageService();
+        
+            var files = await storageService.GetFiles<EmployeeFile>(request.EmployeeId);
             var filesDto = _mapper.Map<List<GetEmployeeFilesDto>>(files);
             return filesDto;
-            
         }
     }
 }

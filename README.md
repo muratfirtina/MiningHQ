@@ -1,161 +1,329 @@
-<h1 align="center">MiningHQ</h1>
+# MiningHQ Backend - Mining Operations Management System
 
-<br />
+## 📋 Proje Hakkında
 
-<p align="center">
-  <a href="https://github.com/muratfirtina/MiningHQ/graphs/contributors"><img src="https://img.shields.io/github/contributors/muratfirtina/MiningHQ.svg?style=for-the-badge"></a>
-  <a href="https://github.com/muratfirtina/MiningHQ/network/members"><img src="https://img.shields.io/github/forks/muratfirtina/MiningHQ.svg?style=for-the-badge"></a>
-  <a href="https://github.com/muratfirtina/MiningHQ/stargazers"><img src="https://img.shields.io/github/stars/muratfirtina/MiningHQ.svg?style=for-the-badge"></a>
-  <a href="https://github.com/muratfirtina/MiningHQ/issues"><img src="https://img.shields.io/github/issues/muratfirtina/MiningHQ.svg?style=for-the-badge"></a>
-  <a href="https://github.com/kmuratfirtina/MiningHQ/blob/master/LICENSE"><img src="https://img.shields.io/github/license/muratfirtina/MiningHQ.svg?style=for-the-badge"></a>
-</p><br />
+MiningHQ Backend, maden işletmeleri için tasarlanmış kapsamlı bir yönetim sistemi API'sidir. Bu sistem, personel yönetimi, makine takibi, günlük iş verileri, yakıt tüketimi, bakım yönetimi ve izin takibi gibi maden işletmelerinin temel ihtiyaçlarını karşılayan modern bir Clean Architecture yaklaşımıyla geliştirilmiştir.
 
-## 💻 About The Project
-<h3 align="center">"This is a mining site job tracking program. It can be used to calculate the efficiency of machines and maintain records of employees."</h3>
+## 🏗️ Mimari Yapısı
 
-### Built With
+Bu proje, Clean Architecture prensiplerine göre tasarlanmış ve aşağıdaki katmanlardan oluşmaktadır:
 
-[![](https://img.shields.io/badge/.NET%20Core-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)](https://learn.microsoft.com/tr-tr/dotnet/welcome)
+### 🔧 Core Packages (Ortak Kütüphaneler)
+- **Core.Application**: CQRS, MediatR, AutoMapper, pipelines
+- **Core.Persistence**: Entity Framework, Repository Pattern, Dynamic Query
+- **Core.Security**: JWT, Authentication, Authorization, 2FA
+- **Core.CrossCuttingConcerns**: Exception Handling, Logging, Validation
+- **Core.Mailing**: Email gönderimi (MailKit entegrasyonu)
+- **Core.ElasticSearch**: Arama ve veri indeksleme
+- **Core.Test**: Test altyapısı ve mock helpers
+- **Core.WebAPI**: Swagger entegrasyonu ve API ortak yapılar
 
-It is a WebAPI project written in .NetCore. It can be run and used just like a classic WebAPI project.
+### 🎯 MiningHQ Specific Layers
+- **Domain**: Entity'ler, Enum'lar, Domain Logic
+- **Application**: Use Cases, CQRS Commands/Queries, Business Rules
+- **Persistence**: Entity Framework DbContext, Repository implementasyonları
+- **Infrastructure**: External servisler, Cloud storage entegrasyonları
+- **WebAPI**: Controllers, API endpoints, middleware'ler
 
-## ⚙️ Getting Started
+## 🗃️ Veritabanı Yapısı
 
-To get a local copy up and running follow these simple steps.
+### Ana Entity'ler
 
-### Prerequisites
+#### 👥 İnsan Kaynakları
+- **Employee**: Çalışan bilgileri (ad, soyad, doğum tarihi, işe giriş/çıkış tarihleri, kan grubu, acil durum iletişim)
+- **Department**: Departman yönetimi
+- **Job**: Pozisyon/görev tanımları
+- **EmployeePhoto**: Çalışan fotoğrafları
+- **EmployeeFile**: Çalışan dosyaları
+- **Timekeeping**: Mesai takibi
+- **Overtime**: Fazla mesai kayıtları
 
-- .NET 7
+#### 🏭 İzin Yönetimi
+- **LeaveType**: İzin türleri (yıllık, hastalık, mazeret vb.)
+- **EntitledLeave**: Çalışanların hak ettiği izinler
+- **EmployeeLeaveUsage**: Kullanılan izin kayıtları
 
-### Installation
+#### 🚛 Makine ve Ekipman Yönetimi
+- **Machine**: Makine kayıtları
+- **Brand**: Marka bilgileri (Caterpillar, Volvo, Liebherr vb.)
+- **Model**: Makine modelleri
+- **MachineType**: Makine türleri (ekskavatör, damperli kamyon vb.)
+- **Maintenance**: Bakım kayıtları
+- **MaintenanceType**: Bakım türleri
+- **MaintenanceFile**: Bakım dosyaları
 
-1. Add submodule to your backend project repository
-   ```sh
-   git submodule add https://github.com/muratfirtina/MiningHQ.git src/MiningHQ
-   ```
+#### 📊 Operasyonel Veriler
+- **DailyWorkData**: Günlük iş verileri (çalışma saatleri, üretim miktarları)
+- **DailyFuelConsumptionData**: Günlük yakıt tüketimi verileri
+- **Quarry**: Ocak/maden sahası bilgileri
 
-- Run the following command to update this module
-  ```sh
-   git submodule update --remote src/MiningHQ
-   ```
-  
-## 🚀 Usage
+#### 📎 Dosya Yönetimi
+- **File**: Dosya yönetimi (çoklu cloud storage desteği)
 
-1. Check this [MiningHQ](https://github.com/muratfirtina/MiningHQ.git) repository
-2. Run the following command to update this module
+### 🔐 Güvenlik Yapısı
+- **User**: Kullanıcı hesapları (Core.Security'den extend)
+- **OperationClaim**: Yetki tanımları
+- **UserOperationClaim**: Kullanıcı-yetki ilişkileri
+- **RefreshToken**: JWT refresh token'ları
+- **EmailAuthenticator & OtpAuthenticator**: 2FA desteği
 
-### Analysis
+## 🚀 Kullanılan Teknolojiler
 
-1. If not, Install dotnet tool `dotnet tool restore`.
-2. Run anaylsis command `dotnet roslynator analyze`
-3. Run format command `dotnet csharpier .`
-4. Run test command `dotnet test`
-5. Run build command `dotnet build`
-6. Run publish command `dotnet publish`
-7. Run clean command `dotnet clean`
-8. Run restore command `dotnet restore`
-9. Run pack command `dotnet pack`
-10. Run migrate command `dotnet ef database update`
-11. Run add migration command `dotnet ef migrations add <migrationName>`
-12. Run remove migration command `dotnet ef migrations remove`
+### Backend Framework & ORM
+- **.NET 7.0**: Modern C# özellikleri
+- **Entity Framework Core**: Code-First yaklaşımı
+- **PostgreSQL**: Ana veritabanı
+- **AutoMapper**: Object-Object mapping
+- **MediatR**: CQRS pattern implementasyonu
 
+### Authentication & Security
+- **JWT Bearer Tokens**: API authentication
+- **2FA Support**: Email ve OTP tabanlı iki faktörlü doğrulama
+- **BCrypt**: Password hashing
+- **Role-based Authorization**: Rol tabanlı yetkilendirme
 
-<br />
-<br />
-<h1 align="center">corePackages</h1>
+### Cloud Storage & File Management
+- **Multiple Storage Providers**:
+  - Local Storage
+  - Azure Blob Storage
+  - AWS S3
+  - Google Cloud Storage
+  - Cloudinary (image processing)
 
-<p align="center">
-  <a href="https://github.com/kodlamaio-projects/nArchitecture.Core/graphs/contributors"><img src="https://img.shields.io/github/contributors/kodlamaio-projects/nArchitecture.Core.svg?style=for-the-badge"></a>
-  <a href="https://github.com/kodlamaio-projects/nArchitecture.Core/network/members"><img src="https://img.shields.io/github/forks/kodlamaio-projects/nArchitecture.Core.svg?style=for-the-badge"></a>
-  <a href="https://github.com/kodlamaio-projects/nArchitecture.Core/stargazers"><img src="https://img.shields.io/github/stars/kodlamaio-projects/nArchitecture.Core.svg?style=for-the-badge"></a>
-  <a href="https://github.com/kodlamaio-projects/nArchitecture.Core/issues"><img src="https://img.shields.io/github/issues/kodlamaio-projects/nArchitecture.Core.svg?style=for-the-badge"></a>
-  <a href="https://github.com/kodlamaio-projects/nArchitecture.Core/blob/master/LICENSE"><img src="https://img.shields.io/github/license/kodlamaio-projects/nArchitecture.Core.svg?style=for-the-badge"></a>
-</p><br />
+### Logging & Monitoring
+- **Serilog**: Yapısal logging
+- **Multiple Log Destinations**:
+  - File logging
+  - PostgreSQL
+  - ElasticSearch
+  - MongoDB
+  - Graylog
+  - RabbitMQ
+  - MS SQL Server
 
-<p align="center">
-  <a href="https://github.com/kodlamaio-projects/nArchitecture.Core"><img src="https://user-images.githubusercontent.com/53148314/194872467-827dc967-acee-4bca-88a2-59ed5695bebf.png" height="125"></a>
-  <h3 align="center">.NetCore Core Packages
-</h3>
-  <p align="center">
-    <!-- PROJECT_DESCRIPTION -->
-    <!-- <br />
-    <a href="https://github.com/kodlamaio-projects/nArchitecture.Core"><strong>Explore the docs »</strong></a>
-    <br /> -->
-    <!-- <br />
-    <a href="https://github.com/kodlamaio-projects/nArchitecture.Core">View Demo</a>
-    · -->
-    <a href="https://github.com/kodlamaio-projects/nArchitecture.Core/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/kodlamaio-projects/nArchitecture.Core/issues">Request Feature</a>
-  </p>
+### Caching & Search
+- **Redis**: Distributed caching
+- **ElasticSearch**: Full-text search ve analytics
 
+### Email & Communications
+- **MailKit**: SMTP email gönderimi
+- **Email Templates**: HTML email templates
 
-## 💻 About The Project
+## 📡 API Endpoints
 
-A project has been created that includes Advanced Repository, Dynamic Querying, JWT, OTP, Google & Microsoft Auth, Role Based Management, Distributed Caching(Redis), Logging (Serilog), Elastic Search, and much more. By contributing, you can support the project and learn new things.
+### 🔐 Authentication
+```
+POST /api/auth/register - Kullanıcı kaydı
+POST /api/auth/login - Giriş
+POST /api/auth/refresh-token - Token yenileme
+POST /api/auth/revoke-token - Token iptal
+POST /api/auth/enable-email-authenticator - Email 2FA aktifleştirme
+POST /api/auth/verify-email-authenticator - Email 2FA doğrulama
+POST /api/auth/enable-otp-authenticator - OTP 2FA aktifleştirme
+POST /api/auth/verify-otp-authenticator - OTP 2FA doğrulama
+```
 
-### Built With
+### 👥 Employee Management
+```
+GET /api/employees - Çalışan listesi
+GET /api/employees/{id} - Çalışan detayı
+POST /api/employees - Yeni çalışan
+PUT /api/employees - Çalışan güncelleme
+DELETE /api/employees/{id} - Çalışan silme
+```
 
-[![](https://img.shields.io/badge/.NET%20Core-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)](https://learn.microsoft.com/tr-tr/dotnet/welcome)
+### 🚛 Machine Management
+```
+GET /api/machines - Makine listesi
+GET /api/machines/{id} - Makine detayı
+POST /api/machines - Yeni makine
+PUT /api/machines - Makine güncelleme
+DELETE /api/machines/{id} - Makine silme
+```
 
-## ⚙️ Getting Started
+### 📊 Data Management
+```
+GET /api/dailyworkdatas - Günlük iş verileri
+POST /api/dailyworkdatas - Yeni iş verisi
+GET /api/dailyfuelconsumptiondatas - Yakıt tüketimi verileri
+POST /api/dailyfuelconsumptiondatas - Yeni yakıt verisi
+```
 
-To get a local copy up and running follow these simple steps.
+### 🔧 Maintenance
+```
+GET /api/maintenances - Bakım kayıtları
+POST /api/maintenances - Yeni bakım kaydı
+GET /api/maintenance-types - Bakım türleri
+```
 
-### Prerequisites
+### 🏢 Organization
+```
+GET /api/departments - Departmanlar
+GET /api/jobs - Pozisyonlar
+GET /api/quarries - Ocaklar/Sahalar
+GET /api/brands - Markalar
+GET /api/models - Modeller
+```
 
-- .NET 7
+## ⚙️ Kurulum ve Çalıştırma
 
-### Installation
+### Gereksinimler
+- .NET 7.0 SDK
+- PostgreSQL 13+
+- Redis (opsiyonel - caching için)
+- ElasticSearch (opsiyonel - search için)
 
-1. Add submodule to your backend project repository
-   ```sh
-   git submodule add https://github.com/kodlamaio-projects/nArchitecture.Core.git src/corePackages
-   ```
+### Kurulum Adımları
 
-- Run the following command to update this module
-  ```sh
-   git submodule update --remote src/corePackages
-   ```
+1. **Repository'yi klonlayın**
+```bash
+git clone [repository-url]
+cd MiningHQ
+```
 
-## 🚀 Usage
+2. **Bağımlılıkları yükleyin**
+```bash
+dotnet restore
+```
 
-1. Check this [nArchitecture.RentACar](https://github.com/kodlamaio-projects/nArchitecture.Core) repository
+3. **Veritabanı ayarlarını yapılandırın**
+`appsettings.json` dosyasında PostgreSQL connection string'ini ayarlayın:
+```json
+{
+  "ConnectionStrings": {
+    "PostgreSQL": "User ID=postgres;Password=yourpassword;Host=localhost;Port=5432;Database=MiningHQDbContext;"
+  }
+}
+```
 
-### Analysis
+4. **Migration'ları uygulayın**
+```bash
+cd src/miningHQ/Persistence
+dotnet ef database update --startup-project ../WebAPI
+```
 
-1. If not, Install dotnet tool `dotnet tool restore`.
-2. Run anaylsis command `dotnet roslynator analyze`
+5. **Uygulamayı çalıştırın**
+```bash
+cd src/miningHQ/WebAPI
+dotnet run
+```
 
-### Format
+API, `http://localhost:5278` adresinde çalışacaktır.
+Swagger UI: `http://localhost:5278/swagger`
 
-1. If not, Install dotnet tool `dotnet tool restore`.
-2. Run format command `dotnet csharpier .`
+## 🔧 Yapılandırma
 
-## 🚧 Roadmap
+### JWT Configuration
+```json
+{
+  "TokenOptions": {
+    "AccessTokenExpiration": 10,
+    "Audience": "miningHQ@kodlama.io",
+    "Issuer": "nArchitecture@kodlama.io",
+    "RefreshTokenTTL": 2,
+    "SecurityKey": "strongandsecretkeystrongandsecretkey"
+  }
+}
+```
 
-See the [open issues](https://github.com/kodlamaio-projects/nArchitecture.Core/issues) for a list of proposed features (and known issues).
+### Storage Configuration
+```json
+{
+  "StorageUrls": {
+    "StorageProvider": "LocalStorage",
+    "AzureStorageUrl": "https://mininghq.blob.core.windows.net/",
+    "GoogleStorageUrl": "https://storage.cloud.google.com/mininghq",
+    "AWSStorageUrl": "https://mininghq.s3.eu-north-1.amazonaws.com/",
+    "LocalStorageUrl": "http://localhost:5278/"
+  }
+}
+```
 
-## 🤝 Contributing
+## 🏗️ Geliştirici Notları
 
-Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+### CQRS Pattern
+Projede CQRS pattern kullanılmaktadır:
+- **Commands**: Veri değiştiren işlemler (Create, Update, Delete)
+- **Queries**: Veri okuma işlemleri (GetById, GetList)
 
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b <feature>/<amazingFeature>'`)
-3. Commit your Changes (`git commit -m '<semanticCommitType>(<scope>): <amazingFeature>'`)
-   💡 Check [Semantic Commit Messages](./docs/Semantic%20Commit%20Messages.md)
-4. Push to the Branch (`git push origin <feature>/<amazingFeature>`)
-5. Open a Pull Request
+### Business Rules
+Her feature için business rules sınıfı mevcuttur:
+```csharp
+public class EmployeeBusinessRules : BaseBusinessRules
+{
+    public Task EmployeeShouldExistWhenSelected(Employee? employee)
+    {
+        if (employee == null)
+            throw new BusinessException(EmployeesBusinessMessages.EmployeeNotExists);
+        return Task.CompletedTask;
+    }
+}
+```
 
-## ⚖️ License
+### Validation
+FluentValidation kullanılarak input validation:
+```csharp
+public class CreateEmployeeCommandValidator : AbstractValidator<CreateEmployeeCommand>
+{
+    public CreateEmployeeCommandValidator()
+    {
+        RuleFor(c => c.FirstName).NotEmpty();
+        RuleFor(c => c.LastName).NotEmpty();
+    }
+}
+```
 
-Distributed under the MIT License. See `LICENSE` for more information.
+### Caching
+Redis ile automatic caching:
+```csharp
+public class GetListEmployeeQuery : IRequest<GetListResponse<GetListEmployeeListItemDto>>, 
+    ICachableRequest
+{
+    public string CacheKey => $"GetListEmployee({PageRequest.PageIndex},{PageRequest.PageSize})";
+    public TimeSpan? SlidingExpiration { get; set; }
+}
+```
 
-## 📧 Contact
+## 🧪 Testing
 
-**Project Link:** [https://github.com/kodlamaio-projects/nArchitecture.Core](https://github.com/kodlamaio-projects/nArchitecture.Core)
+Test projesi mevcuttur:
+```bash
+cd tests/Application.Tests
+dotnet test
+```
 
-<!-- ## 🙏 Acknowledgements
-- []() -->
+## 📈 Performance Features
 
-<!-- readme template author: https://github.com/ahmet-cetinkaya -->
+- **Pagination**: Büyük veri setleri için sayfalama
+- **Dynamic Filtering**: Dinamik filtreleme ve sıralama
+- **Caching**: Redis ile otomatik cache yönetimi
+- **Lazy Loading**: Entity Framework lazy loading
+- **Async/Await**: Asenkron programlama
+
+## 🔒 Güvenlik Özellikleri
+
+- JWT based authentication
+- Role-based authorization
+- 2FA support (Email & OTP)
+- Password hashing with BCrypt
+- CORS policy configuration
+- Request validation pipelines
+- Business rule validation
+
+## 📝 Logging
+
+Comprehensive logging with Serilog:
+- Structured logging
+- Multiple sinks (File, Database, ElasticSearch)
+- Request/Response logging
+- Error tracking
+- Performance monitoring
+
+## 🌐 API Versioning & Documentation
+
+- Swagger/OpenAPI documentation
+- Bearer token authentication in Swagger
+- Detailed API documentation
+- Request/Response examples
+
+Bu backend API, modern maden işletmelerinin tüm operasyonel ihtiyaçlarını karşılayacak şekilde tasarlanmış olup, yüksek performans, güvenlik ve ölçeklenebilirlik özelliklerine sahiptir.

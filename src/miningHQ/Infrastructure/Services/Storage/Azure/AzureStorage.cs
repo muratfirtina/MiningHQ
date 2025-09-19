@@ -1,83 +1,74 @@
+using Application.Services.Files;
+using Application.Services.Repositories;
+using Application.Storage;
 using Application.Storage.Azure;
-using Azure.Storage.Blobs;
-using Azure.Storage.Blobs.Models;
 using Core.CrossCuttingConcerns.Exceptions.Types;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using File = Domain.Entities.File;
 
 namespace Infrastructure.Services.Storage.Azure;
 
 public class AzureStorage : IAzureStorage
-
 {
-    readonly BlobServiceClient _blobServiceClient;
-    BlobContainerClient _blobContainerClient;
+    private readonly IEmployeeRepository _employeeRepository;
+    private readonly IFileNameService _fileNameService;
+    private readonly StorageSettings _storageSettings;
 
-    public AzureStorage(IConfiguration configuration)
+    public Task<Base64FileResult?> GetFileAsBase64Async(string category, string path, string fileName) => throw new NotImplementedException();
+
+    public string StorageName => "AzureStorage";
+
+    public AzureStorage(IEmployeeRepository employeeRepository, IOptions<StorageSettings> storageSettings, IFileNameService fileNameService)
     {
-        _blobServiceClient = new BlobServiceClient(configuration["Storage:Azure"]);
+        _employeeRepository = employeeRepository;
+        _fileNameService = fileNameService;
+        _storageSettings = storageSettings.Value;
     }
 
-    /*public async Task<List<(string fileName, string path, string containerName)>> UploadAsync(string category,
-        string path,
-        List<IFormFile> files)
+    public async Task<List<(string fileName, string path, string category, string storageType)>> UploadAsync(string category, string path, List<IFormFile> files)
     {
-        
-        _blobContainerClient = _blobServiceClient.GetBlobContainerClient(path);
-        await _blobContainerClient.CreateIfNotExistsAsync();
-        _blobContainerClient.SetAccessPolicy(PublicAccessType.BlobContainer);
-        
-
-        foreach (IFormFile file in files)
-        {
-            BlobClient blobClient = _blobContainerClient.GetBlobClient(file.FileName);
-            
-            blobClient.Upload(file.OpenReadStream());
-            //datas.Add((file.FileName, System.IO.Path.Combine(newPath, fileNewName)));
-
-        }
-        return null;
-
-    }*/
-    public async Task<List<(string fileName, string path, string containerName)>> UploadFileToStorage(string category,
-        string path, string fileName, MemoryStream fileStream)
-    {
-        _blobContainerClient = _blobServiceClient.GetBlobContainerClient(path);
-        _blobContainerClient.CreateIfNotExists();
-        _blobContainerClient.SetAccessPolicy(PublicAccessType.BlobContainer);
-        
-        BlobClient blobClient = _blobContainerClient.GetBlobClient(fileName);
-        await blobClient.UploadAsync(fileStream);
-        return null;
+        // TODO: Implement Azure Blob Storage upload
+        throw new NotImplementedException("Azure Storage upload not implemented yet");
     }
-
-
-    public Task<List<T>> GetFiles<T>(string category, string path) where T : File, new() => throw new NotImplementedException();
-
-    public Task<List<T>?> GetFiles<T>(string employeeId) where T : File, new() => throw new NotImplementedException();
-
-    public bool HasFile(string path, string fileName)
-    {
-        _blobContainerClient = _blobServiceClient.GetBlobContainerClient(path);
-        BlobClient blobClient = _blobContainerClient.GetBlobClient(fileName);
-        return blobClient.Exists();
-    }
-
-
-    
 
     public async Task DeleteAsync(string path)
     {
-        _blobContainerClient = _blobServiceClient.GetBlobContainerClient(path);
-        BlobClient blobClient = _blobContainerClient.GetBlobClient(path);
-        await blobClient.DeleteAsync();
+        // TODO: Implement Azure Blob Storage delete
+        throw new NotImplementedException("Azure Storage delete not implemented yet");
     }
-    
-    public async Task<List<string?>> GetFiles(string path, string category)
+
+    public async Task<List<T>?> GetFiles<T>(string employeeId) where T : File, new()
     {
-        _blobContainerClient = _blobServiceClient.GetBlobContainerClient(path);
-        return _blobContainerClient.GetBlobs().Select(b => b.Name).ToList();
+        // TODO: Implement Azure Blob Storage file listing
+        throw new NotImplementedException("Azure Storage get files not implemented yet");
+    }
+
+    public bool HasFile(string path, string fileName)
+    {
+        // TODO: Implement Azure Blob Storage file existence check
+        return false;
+    }
+
+    public async Task FileMustBeInImageFormat(IFormFile formFile)
+    {
+        List<string> extensions = new() { ".jpg", ".png", ".jpeg", ".webp", ".heic" };
+        string extension = Path.GetExtension(formFile.FileName).ToLower();
+        
+        if (!extensions.Contains(extension))
+            throw new BusinessException("Unsupported image format");
+        
+        await Task.CompletedTask;
     }
     
+    public async Task FileMustBeInFileFormat(IFormFile formFile)
+    {
+        List<string> extensions = new() { ".jpg", ".png", ".jpeg", ".webp", ".pdf", ".doc", ".docx", ".xls", ".xlsx", ".heic" };
+        string extension = Path.GetExtension(formFile.FileName).ToLower();
+        
+        if (!extensions.Contains(extension))
+            throw new BusinessException("Unsupported file format");
+        
+        await Task.CompletedTask;
+    }
 }

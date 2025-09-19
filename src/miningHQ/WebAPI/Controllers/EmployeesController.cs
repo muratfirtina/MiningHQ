@@ -3,25 +3,19 @@ using Application.Features.Employees.Commands.Delete;
 using Application.Features.Employees.Commands.Update;
 using Application.Features.Employees.Commands.UpdateShowcase;
 using Application.Features.Employees.Commands.UploadEmployeeFile;
+using Application.Features.Employees.Commands.UploadEmployeePhoto;
 using Application.Features.Employees.Queries.GetById;
+using Application.Features.Employees.Queries.GetEmployeePhoto;
+using Application.Features.Employees.Queries.GetEmployeePhotoBase64;
 using Application.Features.Employees.Queries.GetFilesByEmployeeId;
 using Application.Features.Employees.Queries.GetList;
 using Application.Features.Employees.Queries.GetList.ShortDetail;
 using Application.Features.Employees.Queries.GetListByDynamic;
-using Application.Services.ImageService;
 using Application.Services.Repositories;
-using Application.Storage;
-using Application.Storage.Azure;
-using Application.Storage.Cloudinary;
-using Application.Storage.Google;
-using Application.Storage.Local;
 using Core.Application.Requests;
 using Core.Application.Responses;
 using Core.Persistence.Dynamic;
-using Domain.Entities;
-using Infrastructure.Enums;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.StaticFiles;
 
 namespace WebAPI.Controllers;
 
@@ -29,28 +23,7 @@ namespace WebAPI.Controllers;
 [ApiController]
 public class EmployeesController : BaseController
 {
-    private readonly IWebHostEnvironment _webHostEnvironment;
-    private readonly ILocalStorage _localStorage;
-    private readonly ICloudinaryStorage _cloudinaryStorage;
-    private readonly IFileRepository _fileRepository;
-    private readonly IEmployeeRepository _employeeRepository;
-    private readonly IStorageService _storageService;
-    private readonly IAzureStorage _azureStorage;
-    private readonly IGoogleStorage _googleStorage;
     
-
-    public EmployeesController(IWebHostEnvironment webHostEnvironment, ILocalStorage localStorage, ICloudinaryStorage cloudinaryStorage, IFileRepository fileRepository, IEmployeeRepository employeeRepository, IStorageService storageService, IAzureStorage azureStorage, IGoogleStorage googleStorage)
-    {
-        _webHostEnvironment = webHostEnvironment;
-        _localStorage = localStorage;
-        _cloudinaryStorage = cloudinaryStorage;
-        _fileRepository = fileRepository;
-        _employeeRepository = employeeRepository;
-        _storageService = storageService;
-        _azureStorage = azureStorage;
-        _googleStorage = googleStorage;
-    }
-
     [HttpPost]
     public async Task<IActionResult> Add([FromBody] CreateEmployeeCommand createEmployeeCommand)
     {
@@ -123,60 +96,20 @@ public class EmployeesController : BaseController
     }
     
     
-    /*[HttpPost("[action]")]
-    public async Task<IActionResult> UploadEmployeePhoto([FromForm] string category, [FromForm] string path, [FromForm] IFormFileCollection files, [FromForm] string employeeId)
-    {
-        if(files == null || files.Count == 0)
-            return BadRequest("Dosya bulunamadı.");
-        
-        // Yükleme işleminden önce, çalışanın mevcut fotoğraflarını silin
-        var file = await _employeeRepository.GetEmployeePhoto(employeeId);
-        if (file != null)
-        {
-            
-            await _cloudinaryStorage.DeleteAsync(file.Path);
-            await _azureStorage.DeleteAsync(file.Path);
-            await _localStorage.DeleteAsync(_webHostEnvironment.WebRootPath + "/images/" + category +"/" + file.Name);   
-            await _fileRepository.DeleteAsync(file);
-        }
-        
-
-        // Cloudinary'ye dosya yükleme işlemini burada gerçekleştirin
-        
-        var employee = await _employeeRepository.GetAsync(x => x.Id == Guid.Parse(employeeId));
-        if (employee == null)
-            return BadRequest("Çalışan bulunamadı.");
-        
-        //gelen category ve dosya adını düzenle.
-        
-        var uploadResults = await _googleStorage.UploadAsync(category,path, files);
-        
-        await _localStorage.UploadAsync(category,path, files);
-
-        
-
-        foreach (var uploadResult in uploadResults)
-        {
-            // Yüklenen her bir dosya için veritabanında bir kayıt oluşturun
-            await _fileRepository.AddAsync(new EmployeePhoto()
-            {
-                Name = uploadResult.fileName,
-                Path = uploadResult.path,
-                Category = uploadResult.containerName,
-                Storage = StorageType.Google.ToString(),
-                Employee = employee
-            });
-        }
-
-        return Ok();
-    }*/
+    [HttpPost("[action]")]
+       public async Task<IActionResult> UploadEmployeePhoto([FromForm] UploadEmployeePhotoCommand uploadEmployeePhotoCommand)
+       {
+           UploadEmployeePhotoResponse response = await Mediator.Send(uploadEmployeePhotoCommand);
+           return Ok(response);
+       }
 
     
     [HttpGet("[action]/{employeeId}")]
     public async Task<IActionResult> GetEmployeePhoto([FromRoute] string employeeId)
     {
-        var photo = await _employeeRepository.GetEmployeePhoto(employeeId);
-        return Ok(photo);
+        // ⭐ CQRS pattern'ine uygun olarak Mediator kullanıyoruz
+        GetEmployeePhotoResponse response = await Mediator.Send(new GetEmployeePhotoQuery { EmployeeId = employeeId });
+        return Ok(response);
     }
     
     
@@ -187,5 +120,44 @@ public class EmployeesController : BaseController
         return Ok(response);
     }
     
+    // Presentation/Controllers/EmployeesController.cs'e bu endpoint'i ekleyin
+
+    [HttpGet("get-employee-photo-base64/{employeeId}")]
+    public async Task<IActionResult> GetEmployeePhotoBase64([FromRoute] string employeeId)
+    {
+        try
+        {
+            var query = new GetEmployeePhotoBase64Query { EmployeeId = employeeId };
+            var response = await Mediator.Send(query);
+
+            if (response == null || !response.Success)
+            {
+                return NotFound(new { 
+                    message = response?.Message ?? "Employee photo not found",
+                    success = false 
+                });
+            }
+
+            return Ok(new { 
+                base64 = response.Base64,
+                mimeType = response.MimeType,
+                fileSize = response.FileSize,
+                success = response.Success,
+                message = response.Message,
+                // Opsiyonel ek bilgiler
+                id = response.Id,
+                employeeId = response.EmployeeId,
+                name = response.Name,
+                url = response.Url
+            });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { 
+                message = $"Error: {ex.Message}",
+                success = false 
+            });
+        }
+    }
      
 }

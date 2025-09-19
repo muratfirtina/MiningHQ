@@ -1,6 +1,6 @@
 namespace Application.Storage.Azure;
 
-public interface IAzureStorage : IBlobService
+public interface IAzureStorage : IStorageService
 {
     
 }

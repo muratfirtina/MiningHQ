@@ -1,11 +1,12 @@
 using Amazon.S3;
+using Application.Storage;
 using Application.Storage.AWS;
 using Microsoft.AspNetCore.Http;
 using File = Domain.Entities.File;
 
 namespace Infrastructure.Services.Storage.AWS;
 
-public class AwsStorage:IAwsStorage
+public class AwsStorage:IStorageService
 {
     private readonly IAmazonS3 _s3Client;
 
@@ -43,6 +44,8 @@ public class AwsStorage:IAwsStorage
         return null;
     }
 
+    public Task<List<(string fileName, string path, string category, string storageType)>> UploadAsync(string category, string path, List<IFormFile> files) => throw new NotImplementedException();
+
     public async Task DeleteAsync(string path)
     {
            await _s3Client.DeleteObjectAsync("mininghq", path);
@@ -64,4 +67,11 @@ public class AwsStorage:IAwsStorage
         var response = _s3Client.GetObjectMetadataAsync("mininghq", path);
         return response != null;
     }
+
+    public Task FileMustBeInImageFormat(IFormFile formFile) => throw new NotImplementedException();
+
+    public Task FileMustBeInFileFormat(IFormFile formFile) => throw new NotImplementedException();
+    public Task<Base64FileResult?> GetFileAsBase64Async(string category, string path, string fileName) => throw new NotImplementedException();
+
+    public string StorageName { get; }
 }
