@@ -31,6 +31,7 @@ public class GetListByEmplooyeeShortDetailQueryHandler : IRequestHandler<GetList
             var allEmployees = await _employeeRepository.GetAllAsync(
                 orderBy: e => e.OrderBy(e => e.FirstName),
                 include:e => e.Include(e => e.Job)
+                    .Include(e => e.Department)
                     .Include(e => e.Quarry)
                 );
 
@@ -55,6 +56,7 @@ public class GetListByEmplooyeeShortDetailQueryHandler : IRequestHandler<GetList
                 size: request.PageRequest.PageSize,
                 orderBy: e => e.OrderBy(e => e.FirstName),
                 include:e => e.Include(e => e.Job)
+                    .Include(e => e.Department)
                     .Include(e => e.Quarry)
                 );
             

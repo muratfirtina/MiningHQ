@@ -86,6 +86,9 @@ public class MappingProfiles : Profile
             .ReverseMap();
 
         CreateMap<Employee, GetListByEmplooyeeShortDetailItemDto>()
+            .ForMember(dest => dest.JobName, opt => opt.MapFrom(src => src.Job.Name))
+            .ForMember(dest => dest.DepartmentName, opt => opt.MapFrom(src => src.Department.Name))
+            .ForMember(dest => dest.QuarryName, opt => opt.MapFrom(src => src.Quarry.Name))
             .ReverseMap();
 
         CreateMap<UpdateShowcaseCommand, UpdateShowcaseResponse>()
