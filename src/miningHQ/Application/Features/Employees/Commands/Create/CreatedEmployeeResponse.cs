@@ -1,5 +1,6 @@
 using Core.Application.Responses;
 using Domain.Entities;
+using Domain.Enums;
 
 namespace Application.Features.Employees.Commands.Create;
 
@@ -16,8 +17,9 @@ public class CreatedEmployeeResponse : IResponse
     public string? Address { get; set; }
     public DateTime? HireDate { get; set; }
     public DateTime? DepartureDate { get; set; }
-    public string? LicenseType { get; set; }
-    public string? TypeOfBlood { get; set; }
+    public LicenseTypes? LicenseType { get; set; }
+    public OperatorLicense? OperatorLicense { get; set; }
+    public TypeOfBlood? TypeOfBlood { get; set; }
     public string? EmergencyContact { get; set; }
     public int? TotalLeaveDays { get; set; }
 }

@@ -10,7 +10,9 @@ public class GetListByDynamicEmployeeListItemDto: IDto
     public string LastName { get; set; }
     public string? JobName { get; set; }
     public string? QuarryName { get; set; }
-    public string? TypeOfBlood { get; set; }
+    public LicenseTypes? LicenseType { get; set; }
+    public OperatorLicense? OperatorLicense { get; set; }
+    public TypeOfBlood? TypeOfBlood { get; set; }
     public string? EmergencyContact { get; set; }
  
     

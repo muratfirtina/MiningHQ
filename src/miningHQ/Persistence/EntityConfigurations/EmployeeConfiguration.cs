@@ -1,4 +1,5 @@
 using Domain.Entities;
+using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -21,6 +22,7 @@ public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
         builder.Property(e => e.HireDate).HasColumnName("HireDate");
         builder.Property(e => e.DepartureDate).HasColumnName("DepartureDate");
         builder.Property(e => e.LicenseType).HasColumnName("LicenseType");
+        builder.Property(e => e.OperatorLicense).HasColumnName("OperatorLicense");
         builder.Property(e => e.TypeOfBlood).HasColumnName("TypeOfBlood");
         builder.Property(e => e.EmergencyContact).HasColumnName("EmergencyContact");
         builder.Property(e => e.CreatedDate).HasColumnName("CreatedDate").IsRequired();

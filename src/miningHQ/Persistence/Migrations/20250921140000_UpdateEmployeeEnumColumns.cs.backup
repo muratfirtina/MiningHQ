@@ -1,0 +1,77 @@
+using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
+
+namespace Persistence.Migrations
+{
+    /// <inheritdoc />
+    public partial class UpdateEmployeeEnumColumns : Migration
+    {
+        /// <inheritdoc />
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            // Eğer OperatorLicense kolonu yoksa ekle
+            var sql = @"
+                DO $$ 
+                BEGIN 
+                    IF NOT EXISTS (SELECT 1 FROM information_schema.columns 
+                                   WHERE table_name = 'Employees' AND column_name = 'OperatorLicense') THEN
+                        ALTER TABLE ""Employees"" ADD COLUMN ""OperatorLicense"" INTEGER;
+                    END IF;
+                END $$;
+            ";
+            migrationBuilder.Sql(sql);
+
+            // LicenseType kolonunun tipini kontrol et ve gerekirse güncelle
+            var licenseSql = @"
+                DO $$ 
+                BEGIN 
+                    IF EXISTS (SELECT 1 FROM information_schema.columns 
+                               WHERE table_name = 'Employees' AND column_name = 'LicenseType' AND data_type = 'text') THEN
+                        ALTER TABLE ""Employees"" ALTER COLUMN ""LicenseType"" TYPE INTEGER USING ""LicenseType""::INTEGER;
+                    END IF;
+                END $$;
+            ";
+            migrationBuilder.Sql(licenseSql);
+
+            // TypeOfBlood kolonunun tipini kontrol et ve gerekirse güncelle
+            var bloodSql = @"
+                DO $$ 
+                BEGIN 
+                    IF EXISTS (SELECT 1 FROM information_schema.columns 
+                               WHERE table_name = 'Employees' AND column_name = 'TypeOfBlood' AND data_type = 'text') THEN
+                        ALTER TABLE ""Employees"" ALTER COLUMN ""TypeOfBlood"" TYPE INTEGER USING ""TypeOfBlood""::INTEGER;
+                    END IF;
+                END $$;
+            ";
+            migrationBuilder.Sql(bloodSql);
+        }
+
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            // OperatorLicense kolonunu sil
+            migrationBuilder.DropColumn(
+                name: "OperatorLicense",
+                table: "Employees");
+
+            // Enum kolonlarını tekrar text'e çevir
+            migrationBuilder.AlterColumn<string>(
+                name: "LicenseType",
+                table: "Employees",
+                type: "text",
+                nullable: true,
+                oldClrType: typeof(int),
+                oldType: "integer",
+                oldNullable: true);
+
+            migrationBuilder.AlterColumn<string>(
+                name: "TypeOfBlood",
+                table: "Employees",
+                type: "text",
+                nullable: false,
+                oldClrType: typeof(int),
+                oldType: "integer");
+        }
+    }
+}

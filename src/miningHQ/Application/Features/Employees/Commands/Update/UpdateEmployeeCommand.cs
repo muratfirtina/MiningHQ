@@ -4,6 +4,7 @@ using Application.Features.Employees.Rules;
 using Application.Services.Repositories;
 using AutoMapper;
 using Domain.Entities;
+using Domain.Enums;
 using Core.Application.Pipelines.Authorization;
 using Core.Application.Pipelines.Caching;
 using Core.Application.Pipelines.Logging;
@@ -27,8 +28,9 @@ public class UpdateEmployeeCommand : IRequest<UpdatedEmployeeResponse>//, ISecur
     public string? Address { get; set; }
     public DateTime? HireDate { get; set; }
     public DateTime? DepartureDate { get; set; }
-    public string? LicenseType { get; set; }
-    public string? TypeOfBlood { get; set; }
+    public LicenseTypes? LicenseType { get; set; }
+    public OperatorLicense? OperatorLicense { get; set; }
+    public TypeOfBlood? TypeOfBlood { get; set; }
     public string? EmergencyContact { get; set; }
 
     public string[] Roles => new[] { Admin, Write, EmployeesOperationClaims.Update };
