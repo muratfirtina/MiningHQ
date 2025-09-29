@@ -21,6 +21,9 @@ public class Machine:Entity<Guid>
     
     public ICollection<Maintenance>? Maintenances { get; set; }
     
+    // Navigation properties for files
+    public ICollection<MachineFile> MachineFiles { get; set; } = new List<MachineFile>();
+    
 
     public Machine()
     {

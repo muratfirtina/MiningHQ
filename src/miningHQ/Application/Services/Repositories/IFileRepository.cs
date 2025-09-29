@@ -6,5 +6,6 @@ namespace Application.Services.Repositories;
 
 public interface IFileRepository : IAsyncRepository<File, Guid>, IRepository<File, Guid>
 {
-    Task AddAsync(List<EmployeeFile> toList);
+    Task AddAsync(List<EmployeeFile> employeeFiles);
+    Task AddAsync(List<MachineFile> machineFiles);
 }

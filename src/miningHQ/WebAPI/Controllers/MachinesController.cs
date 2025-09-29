@@ -1,8 +1,10 @@
 using Application.Features.Machines.Commands.Create;
 using Application.Features.Machines.Commands.Delete;
 using Application.Features.Machines.Commands.Update;
+using Application.Features.Machines.Commands.UploadMachineFile;
 using Application.Features.Machines.Queries.GetById;
 using Application.Features.Machines.Queries.GetList;
+using Application.Features.Machines.Queries.GetFilesByMachineId;
 using Core.Application.Requests;
 using Core.Application.Responses;
 using Microsoft.AspNetCore.Mvc;
@@ -49,6 +51,22 @@ public class MachinesController : BaseController
     {
         GetListMachineQuery getListMachineQuery = new() { PageRequest = pageRequest };
         GetListResponse<GetListMachineListItemDto> response = await Mediator.Send(getListMachineQuery);
+        return Ok(response);
+    }
+    
+    // Machine Files Endpoints
+    [HttpPost("[action]")]
+    public async Task<IActionResult> Upload([FromForm] UploadMachineFileCommand uploadMachineFileCommand)
+    {
+        UploadMachineFileDto response = await Mediator.Send(uploadMachineFileCommand);
+        return Ok(response);
+    }
+    
+    // Get MachineId's files
+    [HttpGet("{machineId}/files")]
+    public async Task<IActionResult> GetFilesByMachineId([FromRoute] string machineId)
+    {
+        var response = await Mediator.Send(new GetFilesByMachineIdQuery { MachineId = machineId });
         return Ok(response);
     }
     

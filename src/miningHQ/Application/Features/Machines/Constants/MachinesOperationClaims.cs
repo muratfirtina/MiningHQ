@@ -10,4 +10,6 @@ public static class MachinesOperationClaims
     public const string Create = "Machines.Create";
     public const string Update = "Machines.Update";
     public const string Delete = "Machines.Delete";
+    
+    public const string UploadMachineFile = "Machines.UploadFile";
 }

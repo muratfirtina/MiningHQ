@@ -29,6 +29,7 @@ public class MiningHQDbContext : DbContext
     public DbSet<Machine> Machines { get; set; }
     public DbSet<File> Files { get; set; }
     public DbSet<EmployeeFile> EmployeeFiles { get; set; }
+    public DbSet<MachineFile> MachineFiles { get; set; }
     public DbSet<MaintenanceFile> MaintenanceFiles { get; set; }
     public DbSet<Employee> Employees { get; set; }
     public DbSet<EntitledLeave> EntitledLeaves { get; set; }

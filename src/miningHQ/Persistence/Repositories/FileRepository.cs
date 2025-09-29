@@ -12,10 +12,15 @@ public class FileRepository : EfRepositoryBase<File, Guid, MiningHQDbContext>, I
     {
     }
 
-    public async Task AddAsync(List<EmployeeFile> toList)
+    public async Task AddAsync(List<EmployeeFile> employeeFiles)
     {
-        await Context.Set<EmployeeFile>().AddRangeAsync(toList);
+        await Context.Set<EmployeeFile>().AddRangeAsync(employeeFiles);
         await Context.SaveChangesAsync();
-        
+    }
+
+    public async Task AddAsync(List<MachineFile> machineFiles)
+    {
+        await Context.Set<MachineFile>().AddRangeAsync(machineFiles);
+        await Context.SaveChangesAsync();
     }
 }
