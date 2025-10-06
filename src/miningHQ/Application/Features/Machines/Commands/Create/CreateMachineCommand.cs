@@ -8,6 +8,7 @@ using Core.Application.Pipelines.Caching;
 using Core.Application.Pipelines.Logging;
 using Core.Application.Pipelines.Transaction;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using static Application.Features.Machines.Constants.MachinesOperationClaims;
 
 namespace Application.Features.Machines.Commands.Create;
@@ -19,6 +20,8 @@ public class CreateMachineCommand : IRequest<CreatedMachineResponse>//, ISecured
     public string SerialNumber { get; set; }
     public string Name { get; set; }
     public string MachineTypeId { get; set; }
+    public DateTime? PurchaseDate { get; set; }
+    public string? Description { get; set; }
     
 
     public string[] Roles => new[] { Admin, Write, MachinesOperationClaims.Create };
@@ -44,8 +47,18 @@ public class CreateMachineCommand : IRequest<CreatedMachineResponse>//, ISecured
         public async Task<CreatedMachineResponse> Handle(CreateMachineCommand request, CancellationToken cancellationToken)
         {
             Machine machine = _mapper.Map<Machine>(request);
-
             await _machineRepository.AddAsync(machine);
+
+            // Reload with navigation properties
+            machine = await _machineRepository.GetAsync(
+                predicate: m => m.Id == machine.Id,
+                include: q => q
+                    .Include(m => m.Model)
+                        .ThenInclude(model => model.Brand)
+                    .Include(m => m.Quarry)
+                    .Include(m => m.MachineType),
+                cancellationToken: cancellationToken
+            );
 
             CreatedMachineResponse response = _mapper.Map<CreatedMachineResponse>(machine);
             return response;

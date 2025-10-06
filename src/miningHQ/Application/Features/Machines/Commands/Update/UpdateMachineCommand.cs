@@ -8,6 +8,7 @@ using Core.Application.Pipelines.Caching;
 using Core.Application.Pipelines.Logging;
 using Core.Application.Pipelines.Transaction;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using static Application.Features.Machines.Constants.MachinesOperationClaims;
 
 namespace Application.Features.Machines.Commands.Update;
@@ -16,13 +17,15 @@ public class UpdateMachineCommand : IRequest<UpdatedMachineResponse>//, ISecured
 {
     public Guid Id { get; set; }
     public Guid ModelId { get; set; }
-    public Model? Model { get; set; }
     public Guid QuarryId { get; set; }
-    public Quarry? Quarry { get; set; }
     public string SerialNumber { get; set; }
     public string? Name { get; set; }
     public Guid MachineTypeId { get; set; }
-    public MachineType MachineType { get; set; }
+    public DateTime? PurchaseDate { get; set; }
+    public DateTime? StartWorkDate { get; set; }
+    public int? InitialWorkingHoursOrKm { get; set; }
+    public string? Description { get; set; }
+    public Guid? CurrentOperatorId { get; set; }
 
     public string[] Roles => new[] { Admin, Write, MachinesOperationClaims.Update };
 
@@ -46,13 +49,36 @@ public class UpdateMachineCommand : IRequest<UpdatedMachineResponse>//, ISecured
 
         public async Task<UpdatedMachineResponse> Handle(UpdateMachineCommand request, CancellationToken cancellationToken)
         {
-            Machine? machine = await _machineRepository.GetAsync(predicate: m => m.Id == request.Id, cancellationToken: cancellationToken);
+            Machine? machine = await _machineRepository.GetAsync(
+                predicate: m => m.Id == request.Id, 
+                cancellationToken: cancellationToken
+            );
+            
             await _machineBusinessRules.MachineShouldExistWhenSelected(machine);
+            
             machine = _mapper.Map(request, machine);
-
             await _machineRepository.UpdateAsync(machine!);
 
+            // Reload with navigation properties
+            machine = await _machineRepository.GetAsync(
+                predicate: m => m.Id == request.Id,
+                include: q => q
+                    .Include(m => m.Model)
+                        .ThenInclude(model => model.Brand)
+                    .Include(m => m.Quarry)
+                    .Include(m => m.MachineType)
+                    .Include(m => m.CurrentOperator)
+                    .Include(m => m.DailyWorkDatas),
+                cancellationToken: cancellationToken
+            );
+
             UpdatedMachineResponse response = _mapper.Map<UpdatedMachineResponse>(machine);
+            
+            // Calculate total working hours (initial + accumulated)
+            var accumulatedWorkingHours = machine.DailyWorkDatas?.Sum(d => d.WorkingHoursOrKm) ?? 0;
+            var initialHours = machine.InitialWorkingHoursOrKm ?? 0;
+            response.CurrentWorkingHours = initialHours + accumulatedWorkingHours;
+            
             return response;
         }
     }

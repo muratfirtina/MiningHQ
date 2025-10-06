@@ -17,17 +17,41 @@ public class MappingProfiles : Profile
     public MappingProfiles()
     {
         CreateMap<Machine, CreateMachineCommand>().ReverseMap();
-        CreateMap<Machine, CreatedMachineResponse>().ReverseMap();
+        CreateMap<Machine, CreatedMachineResponse>()
+            .ForMember(d => d.BrandName, opt => opt.MapFrom(s => s.Model.Brand.Name))
+            .ForMember(d => d.ModelName, opt => opt.MapFrom(s => s.Model.Name))
+            .ForMember(d => d.BrandId, opt => opt.MapFrom(s => s.Model.BrandId.ToString()))
+            .ForMember(d => d.QuarryName, opt => opt.MapFrom(s => s.Quarry.Name))
+            .ForMember(d => d.MachineTypeName, opt => opt.MapFrom(s => s.MachineType.Name))
+            .ReverseMap();
         CreateMap<Machine, UpdateMachineCommand>().ReverseMap();
-        CreateMap<Machine, UpdatedMachineResponse>().ReverseMap();
+        CreateMap<Machine, UpdatedMachineResponse>()
+            .ForMember(d => d.BrandName, opt => opt.MapFrom(s => s.Model.Brand.Name))
+            .ForMember(d => d.ModelName, opt => opt.MapFrom(s => s.Model.Name))
+            .ForMember(d => d.BrandId, opt => opt.MapFrom(s => s.Model.BrandId))
+            .ForMember(d => d.QuarryName, opt => opt.MapFrom(s => s.Quarry.Name))
+            .ForMember(d => d.MachineTypeName, opt => opt.MapFrom(s => s.MachineType.Name))
+            .ForMember(d => d.CurrentOperatorName, opt => opt.MapFrom(s => s.CurrentOperator != null ? s.CurrentOperator.FirstName + " " + s.CurrentOperator.LastName : null))
+            .ReverseMap();
         CreateMap<Machine, DeleteMachineCommand>().ReverseMap();
         CreateMap<Machine, DeletedMachineResponse>().ReverseMap();
-        CreateMap<Machine, GetByIdMachineResponse>().ReverseMap();
+        CreateMap<Machine, GetByIdMachineResponse>()
+            .ForMember(d => d.BrandName, opt => opt.MapFrom(s => s.Model.Brand.Name))
+            .ForMember(d => d.ModelName, opt => opt.MapFrom(s => s.Model.Name))
+            .ForMember(d => d.BrandId, opt => opt.MapFrom(s => s.Model.BrandId))
+            .ForMember(d => d.QuarryName, opt => opt.MapFrom(s => s.Quarry.Name))
+            .ForMember(d => d.MachineTypeName, opt => opt.MapFrom(s => s.MachineType.Name))
+            .ForMember(d => d.CurrentOperatorName, opt => opt.MapFrom(s => s.CurrentOperator != null ? s.CurrentOperator.FirstName + " " + s.CurrentOperator.LastName : null))
+            .ReverseMap();
         CreateMap<Machine, GetListMachineListItemDto>()
         .ForMember(d => d.BrandName, opt => opt.MapFrom(s => s.Model.Brand.Name))
         .ForMember(d => d.ModelName, opt => opt.MapFrom(s => s.Model.Name))
         .ForMember(d => d.QuarryName, opt => opt.MapFrom(s => s.Quarry.Name))
         .ForMember(d => d.MachineTypeName, opt => opt.MapFrom(s => s.MachineType.Name))
+        .ForMember(d => d.BrandId, opt => opt.MapFrom(s => s.Model.BrandId))
+        .ForMember(d => d.ModelId, opt => opt.MapFrom(s => s.ModelId))
+        .ForMember(d => d.MachineTypeId, opt => opt.MapFrom(s => s.MachineTypeId))
+        .ForMember(d => d.QuarryId, opt => opt.MapFrom(s => s.QuarryId))
         .ReverseMap();
         CreateMap<Machine, GetListResponse<GetListDynamicDto>>().ReverseMap();
         CreateMap<IPaginate<Machine>, GetListResponse<GetListMachineListItemDto>>().ReverseMap();

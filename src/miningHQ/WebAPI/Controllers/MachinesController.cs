@@ -5,6 +5,7 @@ using Application.Features.Machines.Commands.UploadMachineFile;
 using Application.Features.Machines.Queries.GetById;
 using Application.Features.Machines.Queries.GetList;
 using Application.Features.Machines.Queries.GetFilesByMachineId;
+using Application.Features.Machines.Queries.GetMachineStats;
 using Core.Application.Requests;
 using Core.Application.Responses;
 using Microsoft.AspNetCore.Mvc;
@@ -70,4 +71,11 @@ public class MachinesController : BaseController
         return Ok(response);
     }
     
+    // Get Machine Statistics
+    [HttpGet("{machineId}/stats")]
+    public async Task<IActionResult> GetMachineStats([FromRoute] Guid machineId)
+    {
+        GetMachineStatsResponse response = await Mediator.Send(new GetMachineStatsQuery { MachineId = machineId });
+        return Ok(response);
+    }
 }

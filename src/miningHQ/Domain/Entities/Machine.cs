@@ -9,6 +9,14 @@ public class Machine:Entity<Guid>
     public Quarry? Quarry { get; set; }
     public string SerialNumber { get; set; }
     public string? Name { get; set; }
+    public DateTime? PurchaseDate { get; set; }
+    public DateTime? StartWorkDate { get; set; } // İşe çıkış tarihi
+    public int? InitialWorkingHoursOrKm { get; set; } // Başlangıç makina saati/km
+    public string? Description { get; set; }
+    
+    // Current Operator
+    public Guid? CurrentOperatorId { get; set; }
+    public Employee? CurrentOperator { get; set; }
     
     public ICollection<Employee>? Employees { get; set; }
     

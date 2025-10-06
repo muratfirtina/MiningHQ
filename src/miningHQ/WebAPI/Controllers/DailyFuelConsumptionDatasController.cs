@@ -3,6 +3,7 @@ using Application.Features.DailyFuelConsumptionDatas.Commands.Delete;
 using Application.Features.DailyFuelConsumptionDatas.Commands.Update;
 using Application.Features.DailyFuelConsumptionDatas.Queries.GetById;
 using Application.Features.DailyFuelConsumptionDatas.Queries.GetList;
+using Application.Features.DailyFuelConsumptionDatas.Queries.GetMachineFuelReport;
 using Core.Application.Requests;
 using Core.Application.Responses;
 using Microsoft.AspNetCore.Mvc;
@@ -49,6 +50,22 @@ public class DailyFuelConsumptionDatasController : BaseController
     {
         GetListDailyFuelConsumptionDataQuery getListDailyFuelConsumptionDataQuery = new() { PageRequest = pageRequest };
         GetListResponse<GetListDailyFuelConsumptionDataListItemDto> response = await Mediator.Send(getListDailyFuelConsumptionDataQuery);
+        return Ok(response);
+    }
+
+    [HttpGet("machine-fuel-report/{machineId}")]
+    public async Task<IActionResult> GetMachineFuelReport(
+        [FromRoute] Guid machineId,
+        [FromQuery] DateTime? startDate,
+        [FromQuery] DateTime? endDate)
+    {
+        GetMachineFuelReportQuery query = new()
+        {
+            MachineId = machineId,
+            StartDate = startDate,
+            EndDate = endDate
+        };
+        GetMachineFuelReportResponse response = await Mediator.Send(query);
         return Ok(response);
     }
 }

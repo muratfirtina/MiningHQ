@@ -12,4 +12,14 @@ public class GetListMachineListItemDto : IDto
     public string SerialNumber { get; set; }
     public string Name { get; set; }
     public string MachineTypeName { get; set; }
+    
+    // IDs for easier access
+    public string? BrandId { get; set; }
+    public string? ModelId { get; set; }
+    public string? MachineTypeId { get; set; }
+    public string? QuarryId { get; set; }
+    
+    // Additional fields
+    public DateTime? PurchaseDate { get; set; }
+    public string? Description { get; set; }
 }

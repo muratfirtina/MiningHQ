@@ -5,6 +5,7 @@ using AutoMapper;
 using Domain.Entities;
 using Core.Application.Pipelines.Authorization;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using static Application.Features.Machines.Constants.MachinesOperationClaims;
 
 namespace Application.Features.Machines.Queries.GetById;
@@ -30,10 +31,27 @@ public class GetByIdMachineQuery : IRequest<GetByIdMachineResponse>//, ISecuredR
 
         public async Task<GetByIdMachineResponse> Handle(GetByIdMachineQuery request, CancellationToken cancellationToken)
         {
-            Machine? machine = await _machineRepository.GetAsync(predicate: m => m.Id == request.Id, cancellationToken: cancellationToken);
+            Machine? machine = await _machineRepository.GetAsync(
+                predicate: m => m.Id == request.Id,
+                include: q => q
+                    .Include(m => m.Model)
+                        .ThenInclude(model => model.Brand)
+                    .Include(m => m.Quarry)
+                    .Include(m => m.MachineType)
+                    .Include(m => m.CurrentOperator)
+                    .Include(m => m.DailyWorkDatas),
+                cancellationToken: cancellationToken
+            );
+            
             await _machineBusinessRules.MachineShouldExistWhenSelected(machine);
 
             GetByIdMachineResponse response = _mapper.Map<GetByIdMachineResponse>(machine);
+            
+            // Calculate total working hours (initial + accumulated)
+            var accumulatedWorkingHours = machine.DailyWorkDatas?.Sum(d => d.WorkingHoursOrKm) ?? 0;
+            var initialHours = machine.InitialWorkingHoursOrKm ?? 0;
+            response.CurrentWorkingHours = initialHours + accumulatedWorkingHours;
+            
             return response;
         }
     }

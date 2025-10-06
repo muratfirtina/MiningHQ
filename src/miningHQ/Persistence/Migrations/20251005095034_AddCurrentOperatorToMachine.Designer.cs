@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Persistence.Contexts;
@@ -11,9 +12,11 @@ using Persistence.Contexts;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(MiningHQDbContext))]
-    partial class MiningHQDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251005095034_AddCurrentOperatorToMachine")]
+    partial class AddCurrentOperatorToMachine
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -928,8 +931,8 @@ namespace Persistence.Migrations
                             Email = "admin@admin.com",
                             FirstName = "Admin",
                             LastName = "NArchitecture",
-                            PasswordHash = new byte[] { 138, 172, 143, 25, 210, 142, 159, 104, 19, 198, 125, 132, 172, 144, 5, 124, 248, 138, 240, 131, 63, 22, 123, 89, 158, 72, 207, 156, 236, 97, 94, 79, 136, 97, 107, 201, 215, 196, 162, 132, 124, 110, 184, 197, 46, 3, 250, 28, 209, 204, 89, 237, 33, 7, 244, 215, 128, 113, 98, 195, 181, 112, 84, 111 },
-                            PasswordSalt = new byte[] { 165, 220, 214, 11, 128, 29, 147, 238, 62, 199, 194, 210, 226, 213, 238, 160, 13, 68, 110, 108, 133, 75, 222, 228, 1, 153, 170, 116, 87, 230, 66, 137, 82, 198, 21, 126, 77, 131, 13, 0, 211, 6, 4, 216, 92, 24, 127, 107, 76, 8, 69, 80, 1, 205, 148, 138, 196, 222, 155, 253, 232, 168, 189, 246, 59, 102, 115, 40, 251, 172, 2, 138, 232, 208, 169, 70, 41, 141, 144, 189, 178, 105, 79, 207, 159, 113, 80, 208, 107, 53, 200, 49, 243, 230, 179, 142, 103, 77, 249, 37, 35, 106, 75, 60, 43, 233, 96, 108, 8, 25, 159, 28, 139, 7, 246, 111, 63, 106, 67, 137, 61, 111, 183, 89, 24, 85, 234, 56 },
+                            PasswordHash = new byte[] { 234, 2, 126, 93, 55, 70, 12, 129, 172, 205, 135, 144, 29, 173, 177, 245, 10, 81, 248, 49, 97, 197, 114, 182, 249, 179, 190, 224, 120, 3, 207, 212, 36, 120, 42, 75, 191, 55, 21, 16, 187, 0, 177, 157, 84, 233, 69, 66, 174, 162, 203, 74, 141, 221, 166, 183, 137, 99, 62, 178, 56, 173, 123, 75 },
+                            PasswordSalt = new byte[] { 156, 192, 62, 54, 106, 247, 226, 182, 67, 167, 99, 165, 74, 94, 139, 58, 189, 126, 13, 9, 27, 48, 41, 218, 217, 69, 231, 150, 172, 209, 29, 75, 74, 209, 168, 76, 64, 56, 250, 105, 75, 62, 194, 58, 180, 48, 84, 182, 90, 60, 197, 154, 13, 223, 234, 231, 30, 21, 214, 211, 22, 44, 81, 155, 41, 9, 209, 40, 133, 123, 5, 161, 169, 10, 142, 120, 188, 236, 136, 82, 178, 6, 239, 237, 145, 26, 85, 46, 183, 239, 57, 132, 55, 196, 10, 20, 190, 107, 205, 91, 136, 148, 219, 53, 243, 186, 5, 209, 170, 191, 139, 230, 134, 245, 149, 235, 147, 237, 242, 58, 42, 200, 43, 169, 77, 111, 76, 148 },
                             Status = true
                         });
                 });
@@ -1422,9 +1425,6 @@ namespace Persistence.Migrations
                         .HasColumnType("text")
                         .HasColumnName("Description");
 
-                    b.Property<int?>("InitialWorkingHoursOrKm")
-                        .HasColumnType("integer");
-
                     b.Property<Guid>("MachineTypeId")
                         .HasColumnType("uuid")
                         .HasColumnName("MachineTypeId");
@@ -1449,9 +1449,6 @@ namespace Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("SerialNumber");
-
-                    b.Property<DateTime?>("StartWorkDate")
-                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("timestamp without time zone")

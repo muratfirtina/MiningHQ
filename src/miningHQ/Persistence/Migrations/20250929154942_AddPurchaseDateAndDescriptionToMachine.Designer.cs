@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Persistence.Contexts;
@@ -11,9 +12,11 @@ using Persistence.Contexts;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(MiningHQDbContext))]
-    partial class MiningHQDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250929154942_AddPurchaseDateAndDescriptionToMachine")]
+    partial class AddPurchaseDateAndDescriptionToMachine
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -928,8 +931,8 @@ namespace Persistence.Migrations
                             Email = "admin@admin.com",
                             FirstName = "Admin",
                             LastName = "NArchitecture",
-                            PasswordHash = new byte[] { 138, 172, 143, 25, 210, 142, 159, 104, 19, 198, 125, 132, 172, 144, 5, 124, 248, 138, 240, 131, 63, 22, 123, 89, 158, 72, 207, 156, 236, 97, 94, 79, 136, 97, 107, 201, 215, 196, 162, 132, 124, 110, 184, 197, 46, 3, 250, 28, 209, 204, 89, 237, 33, 7, 244, 215, 128, 113, 98, 195, 181, 112, 84, 111 },
-                            PasswordSalt = new byte[] { 165, 220, 214, 11, 128, 29, 147, 238, 62, 199, 194, 210, 226, 213, 238, 160, 13, 68, 110, 108, 133, 75, 222, 228, 1, 153, 170, 116, 87, 230, 66, 137, 82, 198, 21, 126, 77, 131, 13, 0, 211, 6, 4, 216, 92, 24, 127, 107, 76, 8, 69, 80, 1, 205, 148, 138, 196, 222, 155, 253, 232, 168, 189, 246, 59, 102, 115, 40, 251, 172, 2, 138, 232, 208, 169, 70, 41, 141, 144, 189, 178, 105, 79, 207, 159, 113, 80, 208, 107, 53, 200, 49, 243, 230, 179, 142, 103, 77, 249, 37, 35, 106, 75, 60, 43, 233, 96, 108, 8, 25, 159, 28, 139, 7, 246, 111, 63, 106, 67, 137, 61, 111, 183, 89, 24, 85, 234, 56 },
+                            PasswordHash = new byte[] { 49, 6, 110, 201, 224, 16, 12, 134, 148, 65, 20, 109, 92, 70, 107, 20, 23, 198, 39, 30, 42, 104, 101, 38, 37, 236, 189, 197, 170, 129, 254, 48, 232, 180, 192, 0, 112, 123, 244, 27, 63, 50, 108, 238, 28, 117, 25, 158, 116, 240, 164, 60, 187, 44, 194, 103, 89, 234, 14, 29, 34, 245, 35, 44 },
+                            PasswordSalt = new byte[] { 181, 239, 226, 58, 194, 127, 47, 178, 29, 13, 23, 165, 162, 221, 90, 222, 58, 153, 108, 148, 151, 222, 149, 181, 234, 190, 134, 194, 21, 6, 187, 58, 170, 177, 179, 132, 65, 138, 108, 132, 80, 213, 127, 102, 174, 223, 217, 231, 242, 12, 230, 24, 66, 125, 235, 185, 150, 176, 38, 81, 63, 253, 235, 179, 72, 84, 204, 70, 172, 154, 204, 39, 47, 14, 108, 34, 190, 43, 24, 107, 170, 112, 161, 174, 138, 2, 62, 156, 88, 53, 213, 242, 11, 167, 177, 170, 118, 81, 114, 196, 179, 37, 252, 155, 25, 138, 188, 240, 70, 168, 76, 107, 98, 208, 251, 203, 85, 42, 102, 55, 137, 150, 116, 171, 189, 27, 17, 64 },
                             Status = true
                         });
                 });
@@ -1410,20 +1413,12 @@ namespace Persistence.Migrations
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("CreatedDate");
 
-                    b.Property<Guid?>("CurrentOperatorId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("CurrentOperatorId");
-
                     b.Property<DateTime?>("DeletedDate")
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("DeletedDate");
 
                     b.Property<string>("Description")
-                        .HasColumnType("text")
-                        .HasColumnName("Description");
-
-                    b.Property<int?>("InitialWorkingHoursOrKm")
-                        .HasColumnType("integer");
+                        .HasColumnType("text");
 
                     b.Property<Guid>("MachineTypeId")
                         .HasColumnType("uuid")
@@ -1438,8 +1433,7 @@ namespace Persistence.Migrations
                         .HasColumnName("Name");
 
                     b.Property<DateTime?>("PurchaseDate")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("PurchaseDate");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("QuarryId")
                         .HasColumnType("uuid")
@@ -1450,16 +1444,11 @@ namespace Persistence.Migrations
                         .HasColumnType("text")
                         .HasColumnName("SerialNumber");
 
-                    b.Property<DateTime?>("StartWorkDate")
-                        .HasColumnType("timestamp without time zone");
-
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("UpdatedDate");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CurrentOperatorId");
 
                     b.HasIndex("MachineTypeId");
 
@@ -1985,11 +1974,6 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.Machine", b =>
                 {
-                    b.HasOne("Domain.Entities.Employee", "CurrentOperator")
-                        .WithMany()
-                        .HasForeignKey("CurrentOperatorId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
                     b.HasOne("Domain.Entities.MachineType", "MachineType")
                         .WithMany("Machines")
                         .HasForeignKey("MachineTypeId")
@@ -2007,8 +1991,6 @@ namespace Persistence.Migrations
                         .HasForeignKey("QuarryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("CurrentOperator");
 
                     b.Navigation("MachineType");
 
