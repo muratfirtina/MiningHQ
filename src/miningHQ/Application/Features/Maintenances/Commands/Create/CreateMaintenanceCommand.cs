@@ -15,17 +15,18 @@ namespace Application.Features.Maintenances.Commands.Create;
 public class CreateMaintenanceCommand : IRequest<CreatedMaintenanceResponse>//, ISecuredRequest, ICacheRemoverRequest, ILoggableRequest, ITransactionalRequest
 {
     public Guid MachineId { get; set; }
-    public Machine Machine { get; set; }
     public Guid MaintenanceTypeId { get; set; }
-    public MaintenanceType MaintenanceType { get; set; }
     public string Description { get; set; }
     public DateTime MaintenanceDate { get; set; }
     public int MachineWorkingTimeOrKilometer { get; set; }
     public string MaintenanceFirm { get; set; }
+    public int? NextMaintenanceHour { get; set; }
+    public string? PartsChanged { get; set; }
+    public string? OilsChanged { get; set; }
 
     public string[] Roles => new[] { Admin, Write, MaintenancesOperationClaims.Create };
 
-    public bool BypassCache { get; }
+    public bool BypassCache { get; } = true;
     public string? CacheKey { get; }
     public string[] CacheGroupKey => new[] {"GetMaintenances"};
 

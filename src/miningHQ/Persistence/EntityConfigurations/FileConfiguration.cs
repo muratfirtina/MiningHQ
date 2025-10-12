@@ -19,7 +19,9 @@ public class FileConfiguration : IEntityTypeConfiguration<File>
         builder.Property(f => f.CreatedDate).HasColumnName("CreatedDate").IsRequired();
         builder.Property(f => f.DeletedDate).HasColumnName("DeletedDate");
         
-        
+        // TPT (Table Per Type) strategy - Her subclass kendi tablosuna sahip
+        // Discriminator kolonu KULLANILMAZ
+        builder.UseTptMappingStrategy();
 
         builder.HasQueryFilter(f => !f.DeletedDate.HasValue);
     }

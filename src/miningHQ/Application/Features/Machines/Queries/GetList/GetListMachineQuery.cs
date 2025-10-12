@@ -41,7 +41,13 @@ public class GetListMachineQuery : IRequest<GetListResponse<GetListMachineListIt
             {
                 
                 var allMachines = await _machineRepository.GetAllAsync(
-                    include:m => m.Include(m => m.Model).Include(m => m.Quarry).Include(m => m.MachineType).Include(m=>m.Model.Brand)
+                    include:m => m.Include(m => m.Model)
+                                  .Include(m => m.Quarry)
+                                  .Include(m => m.MachineType)
+                                  .Include(m => m.Model.Brand)
+                                  .Include(m => m.CurrentOperator)
+                                  .Include(m => m.DailyWorkDatas)
+                                  .Include(m => m.Maintenances)
                     );
                     
                 var machineDto = _mapper.Map<List<GetListMachineListItemDto>>(allMachines);
@@ -63,7 +69,13 @@ public class GetListMachineQuery : IRequest<GetListResponse<GetListMachineListIt
                 IPaginate<Machine> machines = await _machineRepository.GetListAsync(
                     index: request.PageRequest.PageIndex,
                     size: request.PageRequest.PageSize,
-                    include:m => m.Include(m => m.Model).Include(m => m.Quarry).Include(m => m.MachineType).Include(m=>m.Model.Brand),
+                    include:m => m.Include(m => m.Model)
+                                  .Include(m => m.Quarry)
+                                  .Include(m => m.MachineType)
+                                  .Include(m => m.Model.Brand)
+                                  .Include(m => m.CurrentOperator)
+                                  .Include(m => m.DailyWorkDatas)
+                                  .Include(m => m.Maintenances),
                     cancellationToken: cancellationToken
                 );
 

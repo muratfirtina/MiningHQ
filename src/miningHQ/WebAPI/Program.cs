@@ -11,6 +11,7 @@ using Microsoft.OpenApi.Models;
 using Persistence;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using WebAPI;
+using Microsoft.Extensions.FileProviders;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -53,7 +54,11 @@ builder.Services.AddCors(
     opt =>
         opt.AddDefaultPolicy(p =>
         {
-            p.WithOrigins("http://localhost:4200","https://localhost:4200").AllowAnyMethod().AllowAnyHeader();
+            p.WithOrigins("http://localhost:4200","https://localhost:4200")
+             .AllowAnyMethod()
+             .AllowAnyHeader()
+             .AllowCredentials()
+             .WithExposedHeaders("Content-Disposition"); // Download için gerekli
         })
 );
 builder.Services.AddSwaggerGen(opt =>
@@ -90,16 +95,31 @@ if (app.Environment.IsDevelopment())
 if (app.Environment.IsProduction())
     app.ConfigureCustomExceptionMiddleware();
 
-app.UseStaticFiles();
-app.UseAuthentication();
-app.UseAuthorization();
-
-app.MapControllers();
-
+// CORS middleware'i static files'tan ÖNCE
 const string webApiConfigurationSection = "WebAPIConfiguration";
 WebApiConfiguration webApiConfiguration =
     app.Configuration.GetSection(webApiConfigurationSection).Get<WebApiConfiguration>()
     ?? throw new InvalidOperationException($"\"{webApiConfigurationSection}\" section cannot found in configuration.");
 app.UseCors(opt => opt.WithOrigins(webApiConfiguration.AllowedOrigins).AllowAnyHeader().AllowAnyMethod().AllowCredentials());
+
+// Static Files with CORS headers
+app.UseStaticFiles(new StaticFileOptions
+{
+    OnPrepareResponse = ctx =>
+    {
+        // CORS headers for static files
+        ctx.Context.Response.Headers.Append("Access-Control-Allow-Origin", "http://localhost:4200");
+        ctx.Context.Response.Headers.Append("Access-Control-Allow-Methods", "GET, OPTIONS");
+        ctx.Context.Response.Headers.Append("Access-Control-Allow-Headers", "Content-Type");
+        
+        // Cache control
+        ctx.Context.Response.Headers.Append("Cache-Control", "public, max-age=3600");
+    }
+});
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers();
 
 app.Run();

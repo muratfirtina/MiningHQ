@@ -8,9 +8,7 @@ public class UpdateMaintenanceCommandValidator : AbstractValidator<UpdateMainten
     {
         RuleFor(c => c.Id).NotEmpty();
         RuleFor(c => c.MachineId).NotEmpty();
-        RuleFor(c => c.Machine).NotEmpty();
         RuleFor(c => c.MaintenanceTypeId).NotEmpty();
-        RuleFor(c => c.MaintenanceType).NotEmpty();
         RuleFor(c => c.Description).NotEmpty();
         RuleFor(c => c.MaintenanceDate).NotEmpty();
         RuleFor(c => c.MachineWorkingTimeOrKilometer).NotEmpty();

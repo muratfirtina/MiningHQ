@@ -8,4 +8,5 @@ public interface IFileRepository : IAsyncRepository<File, Guid>, IRepository<Fil
 {
     Task AddAsync(List<EmployeeFile> employeeFiles);
     Task AddAsync(List<MachineFile> machineFiles);
+    Task AddAsync(List<MaintenanceFile> maintenanceFiles);
 }

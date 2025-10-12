@@ -22,4 +22,14 @@ public class GetListMachineListItemDto : IDto
     // Additional fields
     public DateTime? PurchaseDate { get; set; }
     public string? Description { get; set; }
+    
+    // Current Operator Information
+    public string? CurrentOperatorId { get; set; }
+    public string? CurrentOperatorName { get; set; }
+    
+    // Working Hours Information
+    public int? CurrentWorkingHours { get; set; }
+    
+    // Maintenance Information
+    public int? NextMaintenanceHour { get; set; }
 }

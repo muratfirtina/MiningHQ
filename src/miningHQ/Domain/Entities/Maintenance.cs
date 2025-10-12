@@ -12,8 +12,10 @@ public class Maintenance:Entity<Guid>
     public DateTime MaintenanceDate { get; set; }
     public int MachineWorkingTimeOrKilometer { get; set; } // Bakımı yapılan makinenin çalışma süresi veya kilometre bilgisi
     public string MaintenanceFirm { get; set; } // Bakımı yapan firma adı
+    public int? NextMaintenanceHour { get; set; } // Bir sonraki bakım saati (makine saati olarak)
+    public string? PartsChanged { get; set; } // Değiştirilen veya eklenen parçalar
+    public string? OilsChanged { get; set; } // Değiştirilen yağlar
     
     // Bakım ile ilgili taranmış evrakların ve fotoğrafların olduğu entity
     public ICollection<MaintenanceFile> MaintenanceFiles { get; set; }
 }
-

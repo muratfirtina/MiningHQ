@@ -52,6 +52,16 @@ public class MappingProfiles : Profile
         .ForMember(d => d.ModelId, opt => opt.MapFrom(s => s.ModelId))
         .ForMember(d => d.MachineTypeId, opt => opt.MapFrom(s => s.MachineTypeId))
         .ForMember(d => d.QuarryId, opt => opt.MapFrom(s => s.QuarryId))
+        .ForMember(d => d.CurrentOperatorId, opt => opt.MapFrom(s => s.CurrentOperatorId))
+        .ForMember(d => d.CurrentOperatorName, opt => opt.MapFrom(s => s.CurrentOperator != null ? s.CurrentOperator.FirstName + " " + s.CurrentOperator.LastName : null))
+        .ForMember(d => d.CurrentWorkingHours, opt => opt.MapFrom(s => 
+            s.InitialWorkingHoursOrKm.HasValue && s.DailyWorkDatas != null && s.DailyWorkDatas.Any() 
+            ? s.InitialWorkingHoursOrKm.Value + s.DailyWorkDatas.Sum(d => d.WorkingHoursOrKm) 
+            : s.InitialWorkingHoursOrKm))
+        .ForMember(d => d.NextMaintenanceHour, opt => opt.MapFrom(s => 
+            s.Maintenances != null && s.Maintenances.Any(m => m.NextMaintenanceHour.HasValue) 
+            ? s.Maintenances.Where(m => m.NextMaintenanceHour.HasValue).Max(m => m.NextMaintenanceHour) 
+            : null))
         .ReverseMap();
         CreateMap<Machine, GetListResponse<GetListDynamicDto>>().ReverseMap();
         CreateMap<IPaginate<Machine>, GetListResponse<GetListMachineListItemDto>>().ReverseMap();

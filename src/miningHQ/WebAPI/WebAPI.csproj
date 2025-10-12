@@ -56,6 +56,9 @@
     <_ContentIncludedByDefault Remove="wwwroot\employee-images\files\murat-firtina\b98aa272-c814-4cf8-8002-1c3d58d95e5b-.png" />
     <_ContentIncludedByDefault Remove="wwwroot\employee-images\files\murat-firtina\clipart548003-.png" />
     <_ContentIncludedByDefault Remove="wwwroot\employee-images\files\murat-firtina\employee-imagesfilesmurat-firtina95a620ee-d544-409d-a43a-81bc2fc7f944-.jpeg" />
+    <_ContentIncludedByDefault Remove="wwwroot\maintenance-documents\maintenance-files803b8ae2-373f-4a19-bc6b-41bf695992ea\adsiz-tasarim-12-20251009110342.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\maintenance-documents\maintenance-filesde9c0b77-f6cd-4e51-9ee4-61c2f5994d59\adsiz-tasarim-12-20251009102408.png" />
+    <_ContentIncludedByDefault Remove="wwwroot\maintenance-documents\maintenance-filesde96379a-9e8c-40f6-84e4-2441ef250e9e\adsiz-tasarim-12-20251009111705.png" />
   </ItemGroup>
 
 </Project>

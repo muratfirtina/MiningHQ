@@ -26,7 +26,7 @@ public class CreateMachineCommand : IRequest<CreatedMachineResponse>//, ISecured
 
     public string[] Roles => new[] { Admin, Write, MachinesOperationClaims.Create };
 
-    public bool BypassCache { get; }
+    public bool BypassCache { get; } = true;
     public string? CacheKey { get; }
     public string[] CacheGroupKey => new[] {"GetMachines"};
 

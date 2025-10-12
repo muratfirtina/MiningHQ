@@ -5,6 +5,7 @@ using AutoMapper;
 using Domain.Entities;
 using Core.Application.Pipelines.Authorization;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using static Application.Features.Maintenances.Constants.MaintenancesOperationClaims;
 
 namespace Application.Features.Maintenances.Queries.GetById;
@@ -30,7 +31,14 @@ public class GetByIdMaintenanceQuery : IRequest<GetByIdMaintenanceResponse>//, I
 
         public async Task<GetByIdMaintenanceResponse> Handle(GetByIdMaintenanceQuery request, CancellationToken cancellationToken)
         {
-            Maintenance? maintenance = await _maintenanceRepository.GetAsync(predicate: m => m.Id == request.Id, cancellationToken: cancellationToken);
+            Maintenance? maintenance = await _maintenanceRepository.GetAsync(
+                predicate: m => m.Id == request.Id,
+                include: m => m
+                    .Include(m => m.Machine)
+                    .Include(m => m.MaintenanceType)
+                    .Include(m => m.MaintenanceFiles),
+                cancellationToken: cancellationToken
+            );
             await _maintenanceBusinessRules.MaintenanceShouldExistWhenSelected(maintenance);
 
             GetByIdMaintenanceResponse response = _mapper.Map<GetByIdMaintenanceResponse>(maintenance);

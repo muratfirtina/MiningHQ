@@ -23,4 +23,10 @@ public class FileRepository : EfRepositoryBase<File, Guid, MiningHQDbContext>, I
         await Context.Set<MachineFile>().AddRangeAsync(machineFiles);
         await Context.SaveChangesAsync();
     }
+
+    public async Task AddAsync(List<MaintenanceFile> maintenanceFiles)
+    {
+        await Context.Set<MaintenanceFile>().AddRangeAsync(maintenanceFiles);
+        await Context.SaveChangesAsync();
+    }
 }

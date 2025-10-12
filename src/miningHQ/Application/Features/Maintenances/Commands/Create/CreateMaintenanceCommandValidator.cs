@@ -7,9 +7,7 @@ public class CreateMaintenanceCommandValidator : AbstractValidator<CreateMainten
     public CreateMaintenanceCommandValidator()
     {
         RuleFor(c => c.MachineId).NotEmpty();
-        RuleFor(c => c.Machine).NotEmpty();
         RuleFor(c => c.MaintenanceTypeId).NotEmpty();
-        RuleFor(c => c.MaintenanceType).NotEmpty();
         RuleFor(c => c.Description).NotEmpty();
         RuleFor(c => c.MaintenanceDate).NotEmpty();
         RuleFor(c => c.MachineWorkingTimeOrKilometer).NotEmpty();

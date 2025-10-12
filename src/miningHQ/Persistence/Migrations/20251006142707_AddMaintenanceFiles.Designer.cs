@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Persistence.Contexts;
@@ -11,9 +12,11 @@ using Persistence.Contexts;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(MiningHQDbContext))]
-    partial class MiningHQDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251006142707_AddMaintenanceFiles")]
+    partial class AddMaintenanceFiles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -928,8 +931,8 @@ namespace Persistence.Migrations
                             Email = "admin@admin.com",
                             FirstName = "Admin",
                             LastName = "NArchitecture",
-                            PasswordHash = new byte[] { 185, 180, 82, 246, 131, 148, 215, 21, 76, 47, 13, 4, 44, 15, 204, 154, 151, 98, 173, 93, 155, 179, 13, 111, 100, 184, 82, 41, 89, 184, 100, 160, 72, 225, 52, 126, 10, 88, 182, 19, 186, 32, 18, 131, 86, 117, 9, 95, 51, 207, 30, 224, 223, 248, 6, 152, 12, 161, 69, 118, 27, 91, 248, 23 },
-                            PasswordSalt = new byte[] { 153, 29, 84, 251, 151, 46, 93, 203, 29, 171, 221, 63, 136, 222, 190, 105, 185, 152, 79, 110, 156, 77, 140, 200, 0, 67, 214, 205, 125, 193, 69, 216, 238, 192, 160, 192, 73, 110, 72, 132, 103, 167, 136, 222, 54, 44, 46, 165, 74, 156, 153, 114, 152, 227, 9, 130, 244, 95, 207, 76, 241, 181, 20, 92, 237, 127, 42, 143, 238, 13, 242, 15, 61, 197, 236, 171, 215, 241, 63, 136, 220, 36, 204, 191, 203, 148, 98, 231, 162, 236, 42, 171, 24, 18, 75, 106, 190, 247, 225, 3, 158, 29, 239, 230, 199, 243, 45, 141, 113, 225, 101, 222, 112, 122, 36, 29, 62, 212, 14, 29, 179, 83, 192, 144, 137, 103, 53, 248 },
+                            PasswordHash = new byte[] { 115, 212, 210, 157, 216, 204, 186, 252, 236, 160, 132, 165, 172, 166, 36, 154, 230, 209, 208, 230, 48, 153, 242, 166, 34, 61, 113, 33, 11, 178, 252, 85, 115, 220, 208, 80, 173, 145, 49, 7, 143, 216, 186, 241, 37, 155, 143, 143, 208, 184, 65, 207, 118, 106, 136, 200, 10, 54, 248, 106, 25, 242, 92, 54 },
+                            PasswordSalt = new byte[] { 148, 173, 66, 25, 212, 212, 22, 4, 13, 157, 193, 124, 153, 14, 93, 239, 24, 144, 136, 217, 250, 9, 145, 0, 193, 212, 191, 140, 20, 96, 252, 64, 6, 163, 68, 161, 171, 222, 245, 94, 158, 90, 184, 165, 14, 32, 41, 131, 163, 81, 174, 214, 251, 212, 87, 254, 210, 36, 178, 11, 83, 191, 118, 189, 236, 21, 212, 58, 50, 187, 192, 116, 108, 76, 34, 128, 90, 42, 11, 212, 75, 214, 149, 250, 188, 221, 37, 90, 80, 65, 118, 101, 97, 233, 101, 236, 250, 100, 20, 129, 25, 211, 251, 28, 28, 197, 152, 56, 207, 69, 50, 233, 103, 16, 158, 163, 66, 175, 29, 83, 117, 130, 115, 139, 62, 165, 127, 25 },
                             Status = true
                         });
                 });
@@ -1743,7 +1746,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("EmployeesId");
 
-                    b.ToTable("EmployeeFileEmployees", (string)null);
+                    b.ToTable("EmployeeEmployeeFile");
                 });
 
             modelBuilder.Entity("EmployeeMachine", b =>
@@ -1788,7 +1791,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("MaintenancesId");
 
-                    b.ToTable("MaintenanceFileMaintenance", (string)null);
+                    b.ToTable("MaintenanceMaintenanceFile");
                 });
 
             modelBuilder.Entity("Domain.Entities.EmployeeFile", b =>
@@ -1796,10 +1799,9 @@ namespace Persistence.Migrations
                     b.HasBaseType("Domain.Entities.File");
 
                     b.Property<bool>("Showcase")
-                        .HasColumnType("boolean")
-                        .HasColumnName("Showcase");
+                        .HasColumnType("boolean");
 
-                    b.ToTable("EmployeeFiles", (string)null);
+                    b.ToTable("EmployeeFiles");
                 });
 
             modelBuilder.Entity("Domain.Entities.EmployeePhoto", b =>
@@ -1830,7 +1832,7 @@ namespace Persistence.Migrations
                 {
                     b.HasBaseType("Domain.Entities.File");
 
-                    b.ToTable("MaintenanceFiles", (string)null);
+                    b.ToTable("MaintenanceFiles");
                 });
 
             modelBuilder.Entity("BrandMachineType", b =>
@@ -2137,26 +2139,11 @@ namespace Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.Entities.EmployeeFile", b =>
-                {
-                    b.HasOne("Domain.Entities.File", null)
-                        .WithOne()
-                        .HasForeignKey("Domain.Entities.EmployeeFile", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Domain.Entities.EmployeePhoto", b =>
                 {
                     b.HasOne("Domain.Entities.Employee", "Employee")
                         .WithOne("EmployeePhoto")
                         .HasForeignKey("Domain.Entities.EmployeePhoto", "EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.File", null)
-                        .WithOne()
-                        .HasForeignKey("Domain.Entities.EmployeePhoto", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

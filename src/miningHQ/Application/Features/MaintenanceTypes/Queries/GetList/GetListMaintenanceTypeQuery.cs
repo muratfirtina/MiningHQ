@@ -18,7 +18,7 @@ public class GetListMaintenanceTypeQuery : IRequest<GetListResponse<GetListMaint
 
     public string[] Roles => new[] { Admin, Read };
 
-    public bool BypassCache { get; }
+    public bool BypassCache { get; } = true;
     public string CacheKey => $"GetListMaintenanceTypes({PageRequest.PageIndex},{PageRequest.PageSize})";
     public string[] CacheGroupKey =>new[] {"GetMaintenanceTypes"};
     public TimeSpan? SlidingExpiration { get; }
