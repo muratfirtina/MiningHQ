@@ -6,6 +6,7 @@ using Application.Features.Machines.Queries.GetById;
 using Application.Features.Machines.Queries.GetList;
 using Application.Features.Machines.Queries.GetFilesByMachineId;
 using Application.Features.Machines.Queries.GetMachineStats;
+using Application.Features.Machines.Queries.GetPerformanceReport;
 using Core.Application.Requests;
 using Core.Application.Responses;
 using Microsoft.AspNetCore.Mvc;
@@ -76,6 +77,14 @@ public class MachinesController : BaseController
     public async Task<IActionResult> GetMachineStats([FromRoute] Guid machineId)
     {
         GetMachineStatsResponse response = await Mediator.Send(new GetMachineStatsQuery { MachineId = machineId });
+        return Ok(response);
+    }
+    
+    // Get Machine Performance Report
+    [HttpGet("{machineId}/performance-report")]
+    public async Task<IActionResult> GetPerformanceReport([FromRoute] Guid machineId)
+    {
+        MachinePerformanceReportDto response = await Mediator.Send(new GetMachinePerformanceReportQuery { MachineId = machineId });
         return Ok(response);
     }
 }

@@ -6,6 +6,7 @@ using Application.Features.Maintenances.Queries.GetById;
 using Application.Features.Maintenances.Queries.GetFilesByMaintenanceId;
 using Application.Features.Maintenances.Queries.GetList;
 using Application.Features.Maintenances.Queries.GetListByMachineId;
+using Application.Features.Maintenances.Queries.GetMaintenanceSchedule;
 using Core.Application.Requests;
 using Core.Application.Responses;
 using Microsoft.AspNetCore.Mvc;
@@ -74,6 +75,14 @@ public class MaintenancesController : BaseController
     public async Task<IActionResult> GetFiles([FromRoute] string maintenanceId)
     {
         List<GetMaintenanceFilesDto> response = await Mediator.Send(new GetFilesByMaintenanceIdQuery { MaintenanceId = maintenanceId });
+        return Ok(response);
+    }
+
+    [HttpGet("schedule")]
+    public async Task<IActionResult> GetMaintenanceSchedule([FromQuery] PageRequest pageRequest)
+    {
+        GetMaintenanceScheduleQuery query = new() { PageRequest = pageRequest };
+        GetListResponse<GetMaintenanceScheduleDto> response = await Mediator.Send(query);
         return Ok(response);
     }
 }
