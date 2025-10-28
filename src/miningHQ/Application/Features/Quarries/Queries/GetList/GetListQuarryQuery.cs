@@ -40,7 +40,10 @@ public class GetListQuarryQuery : IRequest<GetListResponse<GetListQuarryListItem
             if(request.PageRequest.PageIndex == -1 && request.PageRequest.PageSize ==-1){
 
                 var allQuarries = await _quarryRepository.GetAllAsync(
-
+                    include: q => q
+                        .Include(q => q.MiningEngineer)
+                        .Include(q => q.Employees)
+                        .Include(q => q.Machines)
                 );
                 var quarryDto = _mapper.Map<List<GetListQuarryListItemDto>>(allQuarries);
 
@@ -59,6 +62,10 @@ public class GetListQuarryQuery : IRequest<GetListResponse<GetListQuarryListItem
             else
             {
                 IPaginate<Quarry> quarries = await _quarryRepository.GetListAsync(
+                    include: q => q
+                        .Include(q => q.MiningEngineer)
+                        .Include(q => q.Employees)
+                        .Include(q => q.Machines),
                     index: request.PageRequest.PageIndex,
                     size: request.PageRequest.PageSize,
                     cancellationToken: cancellationToken

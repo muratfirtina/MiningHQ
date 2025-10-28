@@ -5,6 +5,7 @@ using AutoMapper;
 using Domain.Entities;
 using Core.Application.Pipelines.Authorization;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using static Application.Features.Quarries.Constants.QuarriesOperationClaims;
 
 namespace Application.Features.Quarries.Queries.GetById;
@@ -30,7 +31,22 @@ public class GetByIdQuarryQuery : IRequest<GetByIdQuarryResponse>//, ISecuredReq
 
         public async Task<GetByIdQuarryResponse> Handle(GetByIdQuarryQuery request, CancellationToken cancellationToken)
         {
-            Quarry? quarry = await _quarryRepository.GetAsync(predicate: q => q.Id == request.Id, cancellationToken: cancellationToken);
+            Quarry? quarry = await _quarryRepository.GetAsync(
+                predicate: q => q.Id == request.Id,
+                include: q => q
+                    .Include(q => q.MiningEngineer)
+                    .Include(q => q.Employees)
+                        .ThenInclude(e => e.Job)
+                    .Include(q => q.Employees)
+                        .ThenInclude(e => e.Department)
+                    .Include(q => q.Machines)
+                        .ThenInclude(m => m.MachineType)
+                    .Include(q => q.Machines)
+                        .ThenInclude(m => m.Model)
+                            .ThenInclude(m => m.Brand)
+                    .Include(q => q.QuarryFiles)
+                    .Include(q => q.QuarryProductions),
+                cancellationToken: cancellationToken);
             await _quarryBusinessRules.QuarryShouldExistWhenSelected(quarry);
 
             GetByIdQuarryResponse response = _mapper.Map<GetByIdQuarryResponse>(quarry);

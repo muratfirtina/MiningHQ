@@ -31,7 +31,9 @@ public class MiningHQDbContext : DbContext
     public DbSet<EmployeeFile> EmployeeFiles { get; set; }
     public DbSet<MachineFile> MachineFiles { get; set; }
     public DbSet<MaintenanceFile> MaintenanceFiles { get; set; }
+    public DbSet<QuarryFile> QuarryFiles { get; set; }
     public DbSet<Employee> Employees { get; set; }
+    public DbSet<QuarryProduction> QuarryProductions { get; set; }
     public DbSet<EntitledLeave> EntitledLeaves { get; set; }
     public DbSet<Timekeeping> Timekeepings { get; set; }
     public DbSet<Overtime> Overtimes { get; set; }
