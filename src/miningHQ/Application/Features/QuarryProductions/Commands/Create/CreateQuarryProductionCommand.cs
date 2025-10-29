@@ -47,6 +47,44 @@ public class CreateQuarryProductionCommand : IRequest<CreatedQuarryProductionRes
             QuarryProduction quarryProduction = _mapper.Map<QuarryProduction>(request);
             quarryProduction.Id = Guid.NewGuid();
             
+            // STOK HESAPLAMA MANTĞI
+            // Eğer satış > üretim ise, fark önceki stoktan gidiyor demektir
+            // Yani: Yeni Stok = Önceki Toplam Stok + Üretim - Satış
+            
+            // Önceki haftanın toplam stokunu hesapla
+            var previousProductions = await _quarryProductionRepository.GetListAsync(
+                predicate: p => p.QuarryId == request.QuarryId && p.WeekEndDate < request.WeekStartDate,
+                orderBy: query => query.OrderByDescending(p => p.WeekEndDate),
+                cancellationToken: cancellationToken
+            );
+            
+            // Önceki toplam stok (tüm önceki haftalardaki stok toplamı)
+            decimal previousTotalStock = previousProductions.Items.Sum(p => p.StockAmount);
+            
+            // Yeni hesaplama: 
+            // Girilen stok değeri = Bu hafta elde kalan stok
+            // Ama eğer satış > üretim ise, farkı önceki stoktan düşmeliyiz
+            
+            if (request.SalesAmount > request.ProductionAmount)
+            {
+                // Satış fazla ise, farkı stoktan karşılamışız demektir
+                decimal deficit = request.SalesAmount - request.ProductionAmount;
+                
+                Console.WriteLine(string.Format(CultureInfo.InvariantCulture,
+                    "[CreateQuarryProduction] Sales > Production. Deficit: {0}", deficit));
+                
+                // Eğer kullanıcı manuel stok girdiyse, o değeri kullan
+                // Yoksa otomatik hesapla: önceki stok - açık
+                if (request.StockAmount == 0)
+                {
+                    quarryProduction.StockAmount = previousTotalStock - deficit;
+                }
+                
+                Console.WriteLine(string.Format(CultureInfo.InvariantCulture,
+                    "[CreateQuarryProduction] Previous stock: {0}, New stock: {1}", 
+                    previousTotalStock, quarryProduction.StockAmount));
+            }
+            
             // UTM koordinatlarını WGS84'e çevir (Google Maps için)
             if (request.UtmEasting.HasValue && request.UtmNorthing.HasValue)
             {
