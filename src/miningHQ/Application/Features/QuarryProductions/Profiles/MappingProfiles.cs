@@ -12,10 +12,15 @@ public class MappingProfiles : Profile
 {
     public MappingProfiles()
     {
-        CreateMap<QuarryProduction, CreateQuarryProductionCommand>().ReverseMap();
-        CreateMap<QuarryProduction, CreatedQuarryProductionResponse>().ReverseMap();
-        CreateMap<QuarryProduction, GetByIdQuarryProductionResponse>().ReverseMap();
-        CreateMap<QuarryProduction, GetListQuarryProductionListItemDto>().ReverseMap();
+        // CRITICAL: Latitude ve Longitude otomatik hesaplanacak, AutoMapper bunları null yapmasın!
+        CreateMap<CreateQuarryProductionCommand, QuarryProduction>()
+            .ForMember(dest => dest.Latitude, opt => opt.Ignore())
+            .ForMember(dest => dest.Longitude, opt => opt.Ignore());
+        
+        CreateMap<QuarryProduction, CreateQuarryProductionCommand>();
+        CreateMap<QuarryProduction, CreatedQuarryProductionResponse>();
+        CreateMap<QuarryProduction, GetByIdQuarryProductionResponse>();
+        CreateMap<QuarryProduction, GetListQuarryProductionListItemDto>();
         CreateMap<IPaginate<QuarryProduction>, GetListResponse<GetListQuarryProductionListItemDto>>().ReverseMap();
     }
 }

@@ -8,9 +8,18 @@ public class GetListQuarryListItemDto : IDto
     public string Name { get; set; }
     public string? Location { get; set; }
     public string? Description { get; set; }
+    
+    // Konum bilgileri (UTM 35T)
+    public double? UtmEasting { get; set; }
+    public double? UtmNorthing { get; set; }
+    public double? Altitude { get; set; }
+    public string? Pafta { get; set; }
+    
+    // GPS koordinatları
     public double? Latitude { get; set; }
     public double? Longitude { get; set; }
     public string? CoordinateDescription { get; set; }
+    
     public string? MiningEngineerId { get; set; }
     
     // Navigation properties for display

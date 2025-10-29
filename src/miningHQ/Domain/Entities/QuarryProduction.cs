@@ -23,6 +23,17 @@ public class QuarryProduction : Entity<Guid>
     public decimal SalesAmount { get; set; }
     public string? SalesUnit { get; set; }
     
+    // Konum bilgileri (UTM 35T)
+    public double? UtmEasting { get; set; }  // UTM X (Doğu)
+    public double? UtmNorthing { get; set; } // UTM Y (Kuzey)
+    public double? Altitude { get; set; }    // Yükseklik (metre)
+    public string? Pafta { get; set; }       // Pafta bilgisi
+    
+    // Dönüştürülmüş WGS84 koordinatları (Google Maps için)
+    public double? Latitude { get; set; }    // Enlem
+    public double? Longitude { get; set; }   // Boylam
+    public string? CoordinateDescription { get; set; }
+    
     // Ek bilgiler
     public string? Notes { get; set; }
     

@@ -16,10 +16,22 @@ public class MappingProfiles : Profile
 {
     public MappingProfiles()
     {
-        CreateMap<Quarry, CreateQuarryCommand>().ReverseMap();
-        CreateMap<Quarry, CreatedQuarryResponse>().ReverseMap();
-        CreateMap<Quarry, UpdateQuarryCommand>().ReverseMap();
-        CreateMap<Quarry, UpdatedQuarryResponse>().ReverseMap();
+        // CRITICAL: Latitude ve Longitude otomatik hesaplanacak, AutoMapper bunları null yapmasın!
+        CreateMap<CreateQuarryCommand, Quarry>()
+            .ForMember(dest => dest.Latitude, opt => opt.Ignore())
+            .ForMember(dest => dest.Longitude, opt => opt.Ignore());
+        
+        CreateMap<Quarry, CreateQuarryCommand>();
+        CreateMap<Quarry, CreatedQuarryResponse>();
+        
+        // CRITICAL: Update için de aynı şekilde ignore et
+        CreateMap<UpdateQuarryCommand, Quarry>()
+            .ForMember(dest => dest.Latitude, opt => opt.Ignore())
+            .ForMember(dest => dest.Longitude, opt => opt.Ignore());
+        
+        CreateMap<Quarry, UpdateQuarryCommand>();
+        CreateMap<Quarry, UpdatedQuarryResponse>();
+        
         CreateMap<Quarry, DeleteQuarryCommand>().ReverseMap();
         CreateMap<Quarry, DeletedQuarryResponse>().ReverseMap();
         
@@ -68,7 +80,16 @@ public class MappingProfiles : Profile
                 StockUnit = p.StockUnit,
                 SalesAmount = p.SalesAmount,
                 SalesUnit = p.SalesUnit,
-                Notes = p.Notes
+                Notes = p.Notes,
+                // Konum bilgileri (UTM 35T)
+                UtmEasting = p.UtmEasting,
+                UtmNorthing = p.UtmNorthing,
+                Altitude = p.Altitude,
+                Pafta = p.Pafta,
+                // GPS koordinatları
+                Latitude = p.Latitude,
+                Longitude = p.Longitude,
+                CoordinateDescription = p.CoordinateDescription
             }).ToList() : null));
         
         CreateMap<GetByIdQuarryResponse, Quarry>();
