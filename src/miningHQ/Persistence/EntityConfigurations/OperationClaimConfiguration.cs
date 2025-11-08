@@ -1,5 +1,6 @@
 using Application.Features.OperationClaims.Constants;
 using Core.Security.Entities;
+using Domain.Constants;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -283,6 +284,39 @@ public class OperationClaimConfiguration : IEntityTypeConfiguration<OperationCla
         seeds.Add(new OperationClaim { Id = ++id, Name = "Departments.Update" });
         seeds.Add(new OperationClaim { Id = ++id, Name = "Departments.Delete" });
         
+        #endregion
+        
+        
+        #region QuarryModerators   
+        seeds.Add(new OperationClaim { Id = ++id, Name = "QuarryModerators.Admin" });
+        
+        seeds.Add(new OperationClaim { Id = ++id, Name = "QuarryModerators.Read" });
+        seeds.Add(new OperationClaim { Id = ++id, Name = "QuarryModerators.Write" });
+        
+        seeds.Add(new OperationClaim { Id = ++id, Name = "QuarryModerators.Add" });
+        seeds.Add(new OperationClaim { Id = ++id, Name = "QuarryModerators.Update" });
+        seeds.Add(new OperationClaim { Id = ++id, Name = "QuarryModerators.Delete" });
+        
+        // Admin role claims
+        new OperationClaim { Id = ++id, Name = Roles.Admin };
+        new OperationClaim { Id = ++id, Name = Roles.Claims.AdminPanel };
+        new OperationClaim { Id = ++id, Name = Roles.Claims.UsersRead };
+        new OperationClaim { Id = ++id, Name = Roles.Claims.UsersWrite };
+        
+        // Moderator role claims
+        new OperationClaim { Id = ++id, Name = Roles.Moderator };
+        new OperationClaim { Id = ++id, Name = Roles.Claims.EmployeesRead };
+
+        new OperationClaim { Id = ++id, Name = Roles.Claims.MachinesRead };
+        new OperationClaim { Id = ++id, Name = Roles.Claims.MachinesWrite };
+        new OperationClaim { Id = ++id, Name = Roles.Claims.QuarriesRead };
+        new OperationClaim { Id = ++id, Name = Roles.Claims.QuarriesWrite };
+        
+        // HR Assistant role claims
+        new OperationClaim { Id = ++id, Name = Roles.HRAssistant };
+        new OperationClaim { Id = ++id, Name = Roles.Claims.EmployeesRead };
+        new OperationClaim { Id = ++id, Name = Roles.Claims.EmployeesWrite };
+
         #endregion
         
         return seeds;

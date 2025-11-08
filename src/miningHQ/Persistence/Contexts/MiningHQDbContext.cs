@@ -38,6 +38,8 @@ public class MiningHQDbContext : DbContext
     public DbSet<Timekeeping> Timekeepings { get; set; }
     public DbSet<Overtime> Overtimes { get; set; }
     public DbSet<Department> Departments { get; set; }
+    public DbSet<QuarryModerator> QuarryModerators { get; set; }
+
 
     public MiningHQDbContext(DbContextOptions<MiningHQDbContext> dbContextOptions): base(dbContextOptions)
     {

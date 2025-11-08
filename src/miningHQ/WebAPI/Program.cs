@@ -120,6 +120,9 @@ app.UseStaticFiles(new StaticFileOptions
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Custom Data Filter Middleware
+app.UseMiddleware<WebAPI.Middleware.DataFilterMiddleware>();
+
 app.MapControllers();
 
 app.Run();

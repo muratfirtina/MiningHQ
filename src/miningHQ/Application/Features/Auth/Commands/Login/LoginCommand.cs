@@ -2,11 +2,14 @@
 using Application.Services.AuthenticatorService;
 using Application.Services.AuthService;
 using Application.Services.UsersService;
+using Application.Services.Repositories;
 using Core.Application.Dtos;
 using Core.Security.Entities;
 using Core.Security.Enums;
 using Core.Security.JWT;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Domain.Constants;
 
 namespace Application.Features.Auth.Commands.Login;
 
@@ -33,18 +36,21 @@ public class LoginCommand : IRequest<LoggedResponse>
         private readonly IAuthenticatorService _authenticatorService;
         private readonly IAuthService _authService;
         private readonly IUserService _userService;
+        private readonly IUserOperationClaimRepository _userOperationClaimRepository;
 
         public LoginCommandHandler(
             IUserService userService,
             IAuthService authService,
             AuthBusinessRules authBusinessRules,
-            IAuthenticatorService authenticatorService
+            IAuthenticatorService authenticatorService,
+            IUserOperationClaimRepository userOperationClaimRepository
         )
         {
             _userService = userService;
             _authService = authService;
             _authBusinessRules = authBusinessRules;
             _authenticatorService = authenticatorService;
+            _userOperationClaimRepository = userOperationClaimRepository;
         }
 
         public async Task<LoggedResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
@@ -76,8 +82,22 @@ public class LoginCommand : IRequest<LoggedResponse>
             Core.Security.Entities.RefreshToken addedRefreshToken = await _authService.AddRefreshToken(createdRefreshToken);
             await _authService.DeleteOldRefreshTokens(user.Id);
 
+            // Get user roles
+            var userOperationClaims = await _userOperationClaimRepository.GetListAsync(
+                predicate: uoc => uoc.UserId == user.Id,
+                include: query => query.Include(uoc => uoc.OperationClaim),
+                cancellationToken: cancellationToken
+            );
+            
+            var roles = userOperationClaims.Items
+                .Select(uoc => uoc.OperationClaim.Name)
+                .Where(name => Roles.All.Contains(name))
+                .Distinct()
+                .ToList();
+
             loggedResponse.AccessToken = createdAccessToken;
             loggedResponse.RefreshToken = addedRefreshToken;
+            loggedResponse.Roles = roles;
             return loggedResponse;
         }
     }

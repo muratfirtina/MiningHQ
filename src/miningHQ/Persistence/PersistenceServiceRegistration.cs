@@ -31,6 +31,7 @@ public static class PersistenceServiceRegistration
         services.AddScoped<IQuarryRepository, QuarryRepository>();
         services.AddScoped<IQuarryFileRepository, QuarryFileRepository>();
         services.AddScoped<IQuarryProductionRepository, QuarryProductionRepository>();
+        services.AddScoped<IQuarryModeratorRepository, QuarryModeratorRepository>();
         services.AddScoped<IDailyWorkDataRepository, DailyWorkDataRepository>();
         services.AddScoped<IModelRepository, ModelRepository>();
         services.AddScoped<IEmployeeLeaveUsageRepository, EmployeeLeaveUsageRepository>();
