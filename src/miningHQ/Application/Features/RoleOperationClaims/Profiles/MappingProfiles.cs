@@ -1,4 +1,5 @@
 using Application.Features.RoleOperationClaims.Commands.AssignClaim;
+using Application.Features.RoleOperationClaims.Commands.RemoveClaim;
 using AutoMapper;
 using Core.Security.Entities;
 
@@ -10,5 +11,7 @@ public class MappingProfiles : Profile
     {
         CreateMap<RoleOperationClaim, AssignClaimToRoleCommand>().ReverseMap();
         CreateMap<RoleOperationClaim, AssignedClaimToRoleResponse>().ReverseMap();
+        CreateMap<RoleOperationClaim, RemoveClaimFromRoleCommand>().ReverseMap();
+        CreateMap<RoleOperationClaim, RemovedClaimFromRoleResponse>().ReverseMap();
     }
 }

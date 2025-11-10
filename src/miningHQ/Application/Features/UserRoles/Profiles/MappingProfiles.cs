@@ -1,4 +1,5 @@
 using Application.Features.UserRoles.Commands.AssignRole;
+using Application.Features.UserRoles.Commands.RemoveRole;
 using AutoMapper;
 using Core.Security.Entities;
 
@@ -10,5 +11,7 @@ public class MappingProfiles : Profile
     {
         CreateMap<UserRole, AssignRoleToUserCommand>().ReverseMap();
         CreateMap<UserRole, AssignedRoleToUserResponse>().ReverseMap();
+        CreateMap<UserRole, RemoveRoleFromUserCommand>().ReverseMap();
+        CreateMap<UserRole, RemovedRoleFromUserResponse>().ReverseMap();
     }
 }
