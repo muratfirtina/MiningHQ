@@ -36,21 +36,21 @@ public class LoginCommand : IRequest<LoggedResponse>
         private readonly IAuthenticatorService _authenticatorService;
         private readonly IAuthService _authService;
         private readonly IUserService _userService;
-        private readonly IUserOperationClaimRepository _userOperationClaimRepository;
+        private readonly IUserRoleRepository _userRoleRepository;
 
         public LoginCommandHandler(
             IUserService userService,
             IAuthService authService,
             AuthBusinessRules authBusinessRules,
             IAuthenticatorService authenticatorService,
-            IUserOperationClaimRepository userOperationClaimRepository
+            IUserRoleRepository userRoleRepository
         )
         {
             _userService = userService;
             _authService = authService;
             _authBusinessRules = authBusinessRules;
             _authenticatorService = authenticatorService;
-            _userOperationClaimRepository = userOperationClaimRepository;
+            _userRoleRepository = userRoleRepository;
         }
 
         public async Task<LoggedResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
@@ -82,22 +82,18 @@ public class LoginCommand : IRequest<LoggedResponse>
             Core.Security.Entities.RefreshToken addedRefreshToken = await _authService.AddRefreshToken(createdRefreshToken);
             await _authService.DeleteOldRefreshTokens(user.Id);
 
-            // Get user roles
-            var userOperationClaims = await _userOperationClaimRepository.GetListAsync(
-                predicate: uoc => uoc.UserId == user.Id,
-                include: query => query.Include(uoc => uoc.OperationClaim),
-                cancellationToken: cancellationToken
-            );
-            
-            var roles = userOperationClaims.Items
-                .Select(uoc => uoc.OperationClaim.Name)
-                .Where(name => DomainRoles.All.Contains(name))
+            // Get user roles from UserRoles table (includes ALL roles: system + dynamic)
+            var userRoles = await _userRoleRepository
+                .Query()
+                .Where(ur => ur.UserId == user.Id)
+                .Include(ur => ur.Role)
+                .Select(ur => ur.Role.Name)
                 .Distinct()
-                .ToList();
+                .ToListAsync(cancellationToken);
 
             loggedResponse.AccessToken = createdAccessToken;
             loggedResponse.RefreshToken = addedRefreshToken;
-            loggedResponse.Roles = roles;
+            loggedResponse.Roles = userRoles;
             return loggedResponse;
         }
     }
