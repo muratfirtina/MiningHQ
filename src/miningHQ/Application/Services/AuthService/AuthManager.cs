@@ -14,9 +14,13 @@ public class AuthManager : IAuthService
     private readonly TokenOptions _tokenOptions;
     private readonly AuthBusinessRules _authBusinessRules;
     private readonly IUserOperationClaimRepository _userOperationClaimRepository;
+    private readonly IUserRoleRepository _userRoleRepository;
+    private readonly IRoleOperationClaimRepository _roleOperationClaimRepository;
 
     public AuthManager(
         IUserOperationClaimRepository userOperationClaimRepository,
+        IUserRoleRepository userRoleRepository,
+        IRoleOperationClaimRepository roleOperationClaimRepository,
         IRefreshTokenRepository refreshTokenRepository,
         ITokenHelper tokenHelper,
         IConfiguration configuration,
@@ -24,6 +28,8 @@ public class AuthManager : IAuthService
     )
     {
         _userOperationClaimRepository = userOperationClaimRepository;
+        _userRoleRepository = userRoleRepository;
+        _roleOperationClaimRepository = roleOperationClaimRepository;
         _refreshTokenRepository = refreshTokenRepository;
         _tokenHelper = tokenHelper;
         _authBusinessRules = authBusinessRules;
@@ -36,14 +42,31 @@ public class AuthManager : IAuthService
 
     public async Task<AccessToken> CreateAccessToken(User user)
     {
-        IList<OperationClaim> operationClaims = await _userOperationClaimRepository
+        // Get direct operation claims assigned to user
+        IList<OperationClaim> userDirectClaims = await _userOperationClaimRepository
             .Query()
             .AsNoTracking()
             .Where(p => p.UserId == user.Id)
             .Select(p => new OperationClaim { Id = p.OperationClaimId, Name = p.OperationClaim.Name })
             .ToListAsync();
 
-        AccessToken accessToken = _tokenHelper.CreateToken(user, operationClaims);
+        // Get operation claims from user's roles
+        IList<OperationClaim> roleBasedClaims = await _userRoleRepository
+            .Query()
+            .AsNoTracking()
+            .Where(ur => ur.UserId == user.Id)
+            .SelectMany(ur => ur.Role.RoleOperationClaims)
+            .Select(roc => new OperationClaim { Id = roc.OperationClaimId, Name = roc.OperationClaim.Name })
+            .ToListAsync();
+
+        // Combine and deduplicate claims
+        var allClaims = userDirectClaims
+            .Concat(roleBasedClaims)
+            .GroupBy(c => c.Id)
+            .Select(g => g.First())
+            .ToList();
+
+        AccessToken accessToken = _tokenHelper.CreateToken(user, allClaims);
         return accessToken;
     }
 

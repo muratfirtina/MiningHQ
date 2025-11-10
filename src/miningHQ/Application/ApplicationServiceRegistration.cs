@@ -1,6 +1,9 @@
 using Application.Services.AuthenticatorService;
 using Application.Services.AuthService;
 using Application.Services.UsersService;
+using Application.Services.Roles;
+using Application.Services.UserRoles;
+using Application.Services.RoleOperationClaims;
 using Core.Application.Pipelines.Authorization;
 using Core.Application.Pipelines.Caching;
 using Core.Application.Pipelines.Logging;
@@ -62,6 +65,9 @@ public static class ApplicationServiceRegistration
         services.AddScoped<IAuthService, AuthManager>();
         services.AddScoped<IAuthenticatorService, AuthenticatorManager>();
         services.AddScoped<IUserService, UserManager>();
+        services.AddScoped<IRoleService, RoleManager>();
+        services.AddScoped<IUserRoleService, UserRoleManager>();
+        services.AddScoped<IRoleOperationClaimService, RoleOperationClaimManager>();
 
         services.AddScoped<IBrandsService, BrandsManager>();
         services.AddScoped<IDailyFuelConsumptionDatasService, DailyFuelConsumptionDatasManager>();

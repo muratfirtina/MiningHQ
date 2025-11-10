@@ -7,6 +7,7 @@ public class OperationClaim : Entity<int>
     public string Name { get; set; }
 
     public virtual ICollection<UserOperationClaim> UserOperationClaims { get; set; } = null!;
+    public virtual ICollection<RoleOperationClaim> RoleOperationClaims { get; set; } = null!;
 
     public OperationClaim()
     {

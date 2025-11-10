@@ -20,6 +20,9 @@ public static class PersistenceServiceRegistration
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IUserOperationClaimRepository, UserOperationClaimRepository>();
+        services.AddScoped<IRoleRepository, RoleRepository>();
+        services.AddScoped<IUserRoleRepository, UserRoleRepository>();
+        services.AddScoped<IRoleOperationClaimRepository, RoleOperationClaimRepository>();
 
         services.AddScoped<IBrandRepository, BrandRepository>();
         services.AddScoped<IDailyFuelConsumptionDataRepository, DailyFuelConsumptionDataRepository>();
