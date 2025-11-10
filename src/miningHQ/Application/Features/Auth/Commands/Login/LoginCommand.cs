@@ -9,7 +9,7 @@ using Core.Security.Enums;
 using Core.Security.JWT;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Domain.Constants;
+using DomainRoles = Domain.Constants.Roles;
 
 namespace Application.Features.Auth.Commands.Login;
 
@@ -91,7 +91,7 @@ public class LoginCommand : IRequest<LoggedResponse>
             
             var roles = userOperationClaims.Items
                 .Select(uoc => uoc.OperationClaim.Name)
-                .Where(name => Roles.All.Contains(name))
+                .Where(name => DomainRoles.All.Contains(name))
                 .Distinct()
                 .ToList();
 
