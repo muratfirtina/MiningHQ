@@ -50,6 +50,15 @@ public class AuthManager : IAuthService
             .Select(p => new OperationClaim { Id = p.OperationClaimId, Name = p.OperationClaim.Name })
             .ToListAsync();
 
+        // Get user's roles (to add role names as claims)
+        IList<OperationClaim> userRoleNames = await _userRoleRepository
+            .Query()
+            .AsNoTracking()
+            .Where(ur => ur.UserId == user.Id)
+            .Select(ur => new OperationClaim { Id = ur.RoleId, Name = ur.Role.Name })
+            .Distinct()
+            .ToListAsync();
+
         // Get operation claims from user's roles
         IList<OperationClaim> roleBasedClaims = await _userRoleRepository
             .Query()
@@ -59,10 +68,11 @@ public class AuthManager : IAuthService
             .Select(roc => new OperationClaim { Id = roc.OperationClaimId, Name = roc.OperationClaim.Name })
             .ToListAsync();
 
-        // Combine and deduplicate claims
-        var allClaims = userDirectClaims
+        // Combine role names, direct claims, and role-based claims, then deduplicate
+        var allClaims = userRoleNames
+            .Concat(userDirectClaims)
             .Concat(roleBasedClaims)
-            .GroupBy(c => c.Id)
+            .GroupBy(c => c.Name) // Group by Name instead of Id to avoid conflicts between roles and claims
             .Select(g => g.First())
             .ToList();
 
