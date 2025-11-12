@@ -26,6 +26,21 @@ public class AssignRoleToUserCommand : IRequest<AssignedRoleToUserResponse>, ISe
 
         public async Task<AssignedRoleToUserResponse> Handle(AssignRoleToUserCommand request, CancellationToken cancellationToken)
         {
+            // Check if user already has this role to prevent duplicate key violation
+            UserRole? existingUserRole = await _userRoleRepository.GetAsync(
+                predicate: ur => ur.UserId == request.UserId && ur.RoleId == request.RoleId,
+                enableTracking: false,
+                cancellationToken: cancellationToken
+            );
+
+            if (existingUserRole != null)
+            {
+                // User already has this role, return the existing assignment
+                AssignedRoleToUserResponse existingResponse = _mapper.Map<AssignedRoleToUserResponse>(existingUserRole);
+                return existingResponse;
+            }
+
+            // User doesn't have this role yet, assign it
             UserRole userRole = new(userId: request.UserId, roleId: request.RoleId);
             UserRole assignedUserRole = await _userRoleRepository.AddAsync(userRole);
             AssignedRoleToUserResponse response = _mapper.Map<AssignedRoleToUserResponse>(assignedUserRole);
