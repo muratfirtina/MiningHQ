@@ -26,16 +26,26 @@ public class AssignRoleToUserCommand : IRequest<AssignedRoleToUserResponse>, ISe
 
         public async Task<AssignedRoleToUserResponse> Handle(AssignRoleToUserCommand request, CancellationToken cancellationToken)
         {
-            // Check if user already has this role to prevent duplicate key violation
+            // Check if user already has this role (including soft-deleted ones) to prevent duplicate key violation
             UserRole? existingUserRole = await _userRoleRepository.GetAsync(
                 predicate: ur => ur.UserId == request.UserId && ur.RoleId == request.RoleId,
-                enableTracking: false,
+                withDeleted: true, // Include soft-deleted records
+                enableTracking: true, // Enable tracking for potential update
                 cancellationToken: cancellationToken
             );
 
             if (existingUserRole != null)
             {
-                // User already has this role, return the existing assignment
+                // If the role was soft-deleted, restore it
+                if (existingUserRole.DeletedDate != null)
+                {
+                    existingUserRole.DeletedDate = null;
+                    UserRole restoredUserRole = await _userRoleRepository.UpdateAsync(existingUserRole);
+                    AssignedRoleToUserResponse restoredResponse = _mapper.Map<AssignedRoleToUserResponse>(restoredUserRole);
+                    return restoredResponse;
+                }
+
+                // User already has this active role, return the existing assignment
                 AssignedRoleToUserResponse existingResponse = _mapper.Map<AssignedRoleToUserResponse>(existingUserRole);
                 return existingResponse;
             }
