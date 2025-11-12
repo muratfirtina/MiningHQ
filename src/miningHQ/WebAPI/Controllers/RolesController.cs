@@ -1,4 +1,5 @@
 using Application.Features.Roles.Commands.Create;
+using Application.Features.Roles.Commands.Update;
 using Application.Features.Roles.Queries.GetList;
 using Core.Application.Requests;
 using Core.Application.Responses;
@@ -23,5 +24,12 @@ public class RolesController : BaseController
     {
         CreatedRoleResponse result = await Mediator.Send(createRoleCommand);
         return Created(uri: "", result);
+    }
+
+    [HttpPut]
+    public async Task<IActionResult> Update([FromBody] UpdateRoleCommand updateRoleCommand)
+    {
+        UpdatedRoleResponse result = await Mediator.Send(updateRoleCommand);
+        return Ok(result);
     }
 }

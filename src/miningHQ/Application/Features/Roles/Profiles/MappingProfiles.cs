@@ -1,4 +1,5 @@
 using Application.Features.Roles.Commands.Create;
+using Application.Features.Roles.Commands.Update;
 using Application.Features.Roles.Queries.GetList;
 using AutoMapper;
 using Core.Application.Responses;
@@ -13,6 +14,9 @@ public class MappingProfiles : Profile
     {
         CreateMap<Role, CreateRoleCommand>().ReverseMap();
         CreateMap<Role, CreatedRoleResponse>().ReverseMap();
+
+        CreateMap<Role, UpdateRoleCommand>().ReverseMap();
+        CreateMap<Role, UpdatedRoleResponse>().ReverseMap();
 
         CreateMap<Role, GetListRoleListItemDto>()
             .ForMember(dest => dest.Claims, opt => opt.MapFrom(src =>

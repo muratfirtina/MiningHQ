@@ -57,13 +57,18 @@ public class UpdateUserCommand : IRequest<UpdatedUserResponse>//, ISecuredReques
             await _userBusinessRules.UserEmailShouldNotExistsWhenUpdate(user!.Id, user.Email);
             user = _mapper.Map(request, user);
 
-            HashingHelper.CreatePasswordHash(
-                request.Password,
-                passwordHash: out byte[] passwordHash,
-                passwordSalt: out byte[] passwordSalt
-            );
-            user!.PasswordHash = passwordHash;
-            user.PasswordSalt = passwordSalt;
+            // Only update password if a new password is provided
+            if (!string.IsNullOrEmpty(request.Password))
+            {
+                HashingHelper.CreatePasswordHash(
+                    request.Password,
+                    passwordHash: out byte[] passwordHash,
+                    passwordSalt: out byte[] passwordSalt
+                );
+                user!.PasswordHash = passwordHash;
+                user.PasswordSalt = passwordSalt;
+            }
+            
             await _userRepository.UpdateAsync(user);
 
             UpdatedUserResponse response = _mapper.Map<UpdatedUserResponse>(user);

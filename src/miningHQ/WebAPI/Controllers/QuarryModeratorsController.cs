@@ -1,6 +1,9 @@
 using Application.Features.QuarryModerators.Commands.Create;
 using Application.Features.QuarryModerators.Commands.Delete;
 using Application.Features.QuarryModerators.Queries.GetByUserId;
+using Application.Features.QuarryModerators.Queries.GetList;
+using Core.Application.Requests;
+using Core.Application.Responses;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Attributes;
 using Domain.Constants;
@@ -11,6 +14,15 @@ namespace WebAPI.Controllers;
 [ApiController]
 public class QuarryModeratorsController : BaseController
 {
+    [HttpGet]
+    [RoleAuthorize(Roles.Admin)]
+    public async Task<IActionResult> GetList([FromQuery] PageRequest pageRequest)
+    {
+        GetListQuarryModeratorQuery query = new() { PageRequest = pageRequest };
+        GetListResponse<GetListQuarryModeratorListItemDto> result = await Mediator.Send(query);
+        return Ok(result);
+    }
+
     [HttpPost]
     [RoleAuthorize(Roles.Admin)]
     public async Task<IActionResult> Add([FromBody] CreateQuarryModeratorCommand command)
